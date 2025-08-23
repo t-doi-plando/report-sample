@@ -51,7 +51,7 @@ const server = http.createServer(async (req, res) => {
       await page.goto(`http://${hostname}:${port}/report-html`, { waitUntil: 'networkidle0' });
       
       // Emulate screen media type to apply screen styles
-      await page.emulateMediaType('screen');
+      await page.emulateMediaType('print');
 
       const pdf = await page.pdf({
         format: 'A4',
