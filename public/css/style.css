@@ -1,0 +1,107 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #FAFAFA;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    margin: 10mm auto;
+    border: 1px #D3D3D3 solid;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex-grow: 1;
+}
+
+.report-header {
+    text-align: center;
+    margin-bottom: 2em;
+    padding: 1.5em;
+    background: linear-gradient(135deg, #007BFF, #0056b3);
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.report-header h1 {
+    margin: 0;
+    font-size: 2.2em;
+    font-weight: bold;
+}
+
+.report-header p {
+    margin: 0.5em 0 0;
+    font-size: 1.2em;
+    opacity: 0.9;
+}
+
+.store-report {
+    page-break-after: always;
+}
+
+.store-report:last-child {
+    page-break-after: avoid;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+td.sales {
+    text-align: right;
+}
+
+.total-row td {
+    font-weight: bold;
+    background-color: #f2f2f2;
+}
+
+.footer {
+    text-align: center;
+    padding-top: 1em;
+    margin-top: 2em;
+    border-top: 1px solid #CCC;
+    font-size: 0.8em;
+}
+
+@page {
+    size: A4;
+    margin: 0;
+}
+
+@media print {
+    body {
+        background-color: #FFF;
+    }
+    .page {
+        margin: 0;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+    }
+}
