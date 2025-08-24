@@ -1,0 +1,44 @@
+<%- include('../partials/header') %>
+
+<% stores.forEach(function(store, index) { %>
+  <div class="page store-report">
+    <header class="report-header">
+      <h1><%= reportTitle %></h1>
+      <p><%= reportDate %></p>
+    </header>
+
+    <main class="content">
+      <h2><%= store.name %></h2>
+      <table>
+        <thead>
+          <tr>
+            <th>部門</th>
+            <th>売上</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% let totalSales = 0; %>
+          <% store.departments.forEach(function(dept) { %>
+            <% totalSales += dept.sales; %>
+            <tr>
+              <td><%= dept.name %></td>
+              <td class="sales"><%= new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(dept.sales) %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td>合計</td>
+            <td class="sales"><%= new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(totalSales) %></td>
+          </tr>
+        </tfoot>
+      </table>
+    </main>
+
+    <footer class="footer">
+      <p>- <%= index + 1 %> / <%= stores.length %> -</p>
+    </footer>
+  </div>
+<% }); %>
+
+<%- include('../partials/footer') %>

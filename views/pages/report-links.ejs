@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>レポートダウンロード</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    h1 {
+      color: #0056b3;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 15px;
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    li span {
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #333;
+      margin-right: 20px;
+    }
+    .button-group a {
+      display: inline-block;
+      padding: 10px 15px;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+      margin-left: 10px; /* Space between buttons */
+    }
+    .button-group a.download-pdf {
+      background-color: #28a745; /* Green for download */
+    }
+    .button-group a.download-pdf:hover {
+      background-color: #218838;
+    }
+    .button-group a.view-html {
+      background-color: #007BFF; /* Blue for view HTML */
+    }
+    .button-group a.view-html:hover {
+      background-color: #0056b3;
+    }
+    .all-stores-zip {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .all-stores-zip a {
+      background-color: #6c757d;
+    }
+    .all-stores-zip a:hover {
+      background-color: #5a6268;
+    }
+  </style>
+</head>
+<body>
+  <h1><%= salesData.reportTitle %> - レポートオプション</h1>
+  <p>以下のオプションから、各店舗のレポートを選択してください。</p>
+  <ul>
+    <% salesData.stores.forEach(function(store, index) { %>
+      <li>
+        <span><%= store.name %></span>
+        <div class="button-group">
+          <a href="/download-pdf-puppeteer/<%= index %>" class="download-pdf" target="_blank">PDFをダウンロード</a>
+          <a href="/report-store/<%= index %>" class="view-html" target="_blank">HTMLを表示</a>
+        </div>
+      </li>
+    <% }); %>
+  </ul>
+  <div class="all-stores-zip">
+    <p>または、</p>
+    <a href="/report">全店舗のレポートをZIPでダウンロード</a>
+  </div>
+</body>
+</html>
