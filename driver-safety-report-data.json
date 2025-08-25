@@ -1,0 +1,47 @@
+{
+  "pageTitle": "運転診断結果レポート｜概要",
+  "officeName": "東京事業所",
+  "driverName": "安全 運転手",
+  "avgViolationRatePct": 8.5,
+  "rank": {
+    "total": 25,
+    "position": 5
+  },
+  "highlights": [
+    {
+      "kind": "danger",
+      "badge": "！ 危険疑い回数が多い項目",
+      "title": "左折前安全確認",
+      "text": "250回のうち15回の危険疑いがありました。左折時には、バイクや自転車の巻き込みに特に注意しましょう。"
+    },
+    {
+      "kind": "warn",
+      "badge": "！ 違反疑い割合が高い項目",
+      "title": "右折中速度",
+      "text": "50回のうち10回(20%)の違反疑いがありました。右折時は徐行し、いつでも停止できる速度で運転することが重要です。"
+    },
+    {
+      "kind": "good",
+      "badge": "◎ 高評価ポイント",
+      "title": "バック前安全確認",
+      "text": "30回のうち違反疑いは0回でした。安全運転を継続してください。"
+    }
+  ],
+  "sections": [
+    {
+      "title": "左折",
+      "rows": [
+        { "no": 1, "name": "左折前安全確認", "tag": "!", "tone": "danger", "rate": 6, "detail": "(15回/250回)", "count": 15, "page": "2ページ" },
+        { "no": 2, "name": "左折中安全確認", "tag": "", "tone": "", "rate": 5, "detail": "(12回/250回)", "count": 12, "page": "3ページ" },
+        { "no": 3, "name": "左折中速度", "tag": "", "tone": "", "rate": 4, "detail": "(10回/250回)", "count": 10, "page": "4ページ" }
+      ]
+    },
+    {
+      "title": "バック",
+      "rows": [
+        { "no": 7, "name": "バック前の確認", "tag": "", "tone": "", "rate": 5, "detail": "(2回/40回)", "count": 2, "page": "8ページ" },
+        { "no": 8, "name": "バック中の確認", "tag": "good", "tone": "good", "rate": 0, "detail": "(0回/40回)", "count": 0, "page": "9ページ" }
+      ]
+    }
+  ]
+}
