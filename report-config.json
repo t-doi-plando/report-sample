@@ -1,0 +1,27 @@
+{
+  "pageTitle": "運転診断結果レポート｜概要",
+  "itemMap": {
+    "1": { "maneuver": "左折", "name": "左折前安全確認", "page": "2ページ" },
+    "2": { "maneuver": "左折", "name": "左折中安全確認", "page": "3ページ" },
+    "3": { "maneuver": "左折", "name": "左折中速度", "page": "4ページ" },
+    "7": { "maneuver": "バック", "name": "バック前の確認", "page": "8ページ" },
+    "8": { "maneuver": "バック", "name": "バック中の確認", "page": "9ページ" }
+  },
+  "highlights": {
+    "danger": {
+      "id": 1,
+      "badge": "！ 危険疑い回数が多い項目",
+      "text_template": "%TOTAL%回のうち%VIOLATIONS%回の危険疑いがありました。左折時には、バイクや自転車の巻き込みに特に注意しましょう。"
+    },
+    "warn": {
+      "id": 3,
+      "badge": "！ 違反疑い割合が高い項目",
+      "text_template": "%TOTAL%回のうち%VIOLATIONS%回(%RATE%%)の違反疑いがありました。右折時は徐行し、いつでも停止できる速度で運転することが重要です。"
+    },
+    "good": {
+      "id": 8,
+      "badge": "◎ 高評価ポイント",
+      "text_template": "%TOTAL%回のうち違反疑いは%VIOLATIONS%回でした。安全運転を継続してください。"
+    }
+  }
+}

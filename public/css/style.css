@@ -7,13 +7,13 @@ body {
 
 .page {
     width: 210mm;
-    min-height: 297mm;
+    height: 297mm; /* Use fixed height for PDF rendering context */
     padding: 20mm;
     margin: 10mm auto;
     border: 1px #D3D3D3 solid;
     border-radius: 5px;
     background: white;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
 }
@@ -23,23 +23,28 @@ body {
 }
 
 .report-header {
-    text-align: center;
+    text-align: center; /* This will be overridden by flexbox for horizontal alignment */
     margin-bottom: 2em;
     padding: 1.5em;
     background: linear-gradient(135deg, #007BFF, #0056b3);
     color: white;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    /* ADD THESE FOR FLEXBOX LAYOUT */
+    display: flex;
+    justify-content: space-between; /* Pushes items to ends */
+    align-items: center; /* Vertically centers items */
 }
 
 .report-header h1 {
-    margin: 0;
+    margin: 0; /* Ensure no extra margin pushes it */
     font-size: 2.2em;
     font-weight: bold;
 }
 
 .report-header p {
-    margin: 0.5em 0 0;
+    margin: 0; /* Ensure no extra margin pushes it */
     font-size: 1.2em;
     opacity: 0.9;
 }
@@ -52,29 +57,80 @@ body {
     page-break-after: avoid;
 }
 
+main .content h2 {
+    background: linear-gradient(to right, #f8f9fa, #e9ecef);
+    color: #343a40;
+    padding: 12px 18px;
+    border-radius: 6px;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.07);
+    margin-bottom: 1.5em;
+    font-size: 1.8em;
+    border-left: 5px solid #007BFF;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 1em;
+    border-radius: 8px;
+    overflow: hidden; /* This is key for border-radius on tables */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
 th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
+    padding: 16px 20px;
     text-align: left;
+    border: none;
+    border-bottom: 1px solid #dee2e6;
+}
+
+thead tr {
+    background-color: #343a40;
 }
 
 th {
-    background-color: #f2f2f2;
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.5px;
+    background-color: transparent; /* Remove individual background to let thead control it */
+}
+
+thead th:first-child {
+    background: linear-gradient(to right, #007BFF, #0056b3);
+    box-shadow: inset -3px 0px 5px rgba(0,0,0,0.15);
+}
+
+
+tbody tr {
+    transition: background-color 0.2s ease-in-out;
+}
+
+tbody tr:last-child td {
+    border-bottom: none; /* Remove bottom border from the last row */
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: #f8f9fa;
+}
+
+tbody tr:hover {
+    background-color: #e9ecef;
 }
 
 td.sales {
     text-align: right;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-weight: 500;
 }
 
 .total-row td {
     font-weight: bold;
-    background-color: #f2f2f2;
+    font-size: 1.1em;
+    background-color: #e9ecef;
+    color: #212529;
+    border-top: 2px solid #343a40;
 }
 
 .footer {
@@ -83,6 +139,7 @@ td.sales {
     margin-top: 2em;
     border-top: 1px solid #CCC;
     font-size: 0.8em;
+    color: #6c757d;
 }
 
 @page {
@@ -104,4 +161,100 @@ td.sales {
         background: initial;
         page-break-after: always;
     }
+    main .content h2 {
+        background: #f2f2f2;
+        color: #333;
+    }
+}
+
+/* Styles moved from report-links.ejs */
+body {
+  margin: 20px;
+  background-color: #f4f4f4;
+  color: #333;
+}
+h1 {
+  color: #0056b3;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+li {
+  margin-bottom: 15px;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+li span {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #333;
+  margin-right: 20px;
+}
+.button-group a {
+  display: inline-block;
+  padding: 10px 15px;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  margin-left: 10px; /* Space between buttons */
+}
+.button-group a.download-pdf {
+  background-color: #28a745; /* Green for download */
+}
+.button-group a.download-pdf:hover {
+  background-color: #218838;
+}
+.button-group a.view-html {
+  background-color: #007BFF; /* Blue for view HTML */
+}
+.button-group a.view-html:hover {
+  background-color: #0056b3;
+}
+.all-stores-zip {
+  margin-top: 30px;
+  text-align: center;
+}
+.all-stores-zip a {
+  background-color: #6c757d;
+}
+.all-stores-zip a:hover {
+  background-color: #5a6268;
+}
+
+/* New styles for report-details */
+.report-details {
+    text-align: right; /* Right align the whole block */
+    display: flex;
+    flex-direction: column; /* Stack elements vertically within the right-aligned block */
+    align-items: flex-end; /* Align items to the right within the column */
+}
+
+.report-label {
+    font-size: 12pt;
+    color: #007BFF; /* Blue color */
+}
+
+.report-value {
+    font-size: 32pt;
+    color: black;
+    font-weight: bold;
+}
+
+.report-rank {
+    font-size: 9pt;
+    color: black;
+}
+
+.report-date-info {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
 }

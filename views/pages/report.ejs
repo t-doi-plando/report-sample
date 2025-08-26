@@ -1,44 +1,123 @@
-<%- include('../partials/header') %>
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title><%= pageTitle || "診断結果｜概要" %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/report.css" />
+</head>
+<body class="print-a4">
+  <main class="sheet">
 
-<% stores.forEach(function(store, index) { %>
-  <div class="page store-report">
-    <header class="report-header">
-      <h1><%= reportTitle %></h1>
-      <p><%= reportDate %></p>
+    <!-- ===== ヘッダー（青帯） ===== -->
+    <header class="topbar">
+      <h1 class="topbar__title">
+        <span>診断結果</span><span class="sep">｜</span><span>概要</span>
+      </h1>
+      <dl class="meta">
+        <div class="meta__item">
+          <dt>事業所</dt><dd><%= officeName || "矢崎事業所" %></dd>
+        </div>
+        <div class="meta__item">
+          <dt>氏名</dt><dd><%= driverName || "安全 太郎" %></dd>
+        </div>
+      </dl>
     </header>
 
-    <main class="content">
-      <h2><%= store.name %></h2>
-      <table>
+    <!-- ===== KPI（平均と順位） ===== -->
+    <section class="headline">
+      <div class="headline__label">違反疑い割合平均</div>
+      <div class="headline__value"><%= (avgViolationRatePct ?? 10.9) %>%</div>
+      <div class="headline__rank">(<%= (rank?.total ?? 10) %>人中<%= (rank?.position ?? 8) %>位)</div>
+    </section>
+
+    <!-- ===== ハイライト3カード ===== -->
+    <section class="highlights">
+      <% const cards = highlights || [
+        {
+          kind: "danger",
+          badge: "！ 危険疑い回数が多い項目",
+          title: "左折前安全確認",
+          text: "200回左折したうち、11回の危険疑いがありました。左折時には、バイクや自転車の巻き込みをしないよう注意しましょう。"
+        },
+        {
+          kind: "warn",
+          badge: "！ 違反疑い割合が高い項目",
+          title: "右折中速度",
+          text: "200回右折したうち、50回違反（25%）の疑いがありました。右折時には左折時と比べて見通しも悪く、徐行を心がけいつでも停止できる速度で右折することが重要です。"
+        },
+        {
+          kind: "good",
+          badge: "◎ 高評価ポイント",
+          title: "一時停止",
+          text: "200回一時停止したうち違反疑いの回数は0回でした。"
+        }
+      ]; %>
+      <% cards.forEach(c => { %>
+        <article class="hl hl--<%= c.kind %>">
+          <div class="hl__band"><%= c.badge %></div>
+          <h2 class="hl__title"><%= c.title %></h2>
+          <p class="hl__text"><%= c.text %></p>
+        </article>
+      <% }) %>
+    </section>
+
+
+
+    <% const groups = sections || []; %>
+    <% groups.forEach(g => { %>
+      <table class="group-table">
         <thead>
           <tr>
-            <th>部門</th>
-            <th>売上</th>
+            <th class="cell--no"><%= g.title %></th>
+            <th class="cell--name">項目</th>
+            <th class="cell--tag">指導提案</th>
+            <th class="cell--rate">違反疑い割合</th>
+            <th class="cell--count">危険疑い回数</th>
+            <th class="cell--page">詳細</th>
           </tr>
         </thead>
         <tbody>
-          <% let totalSales = 0; %>
-          <% store.departments.forEach(function(dept) { %>
-            <% totalSales += dept.sales; %>
-            <tr>
-              <td><%= dept.name %></td>
-              <td class="sales"><%= new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(dept.sales) %></td>
+          <% g.rows.forEach(r => { %>
+            <tr class="<%= r.tone ? 'row--' + r.tone : '' %>">
+              <td class="cell--no">
+                <% if (r.no !== "") { %>
+                  <span class="no"><%= r.no %></span>
+                <% } else { %>
+                  -
+                <% } %>
+              </td>
+              <td class="cell--name"><%= r.name %></td>
+              <td class="cell--tag"><%= r.tag || '-' %></td>
+              <td class="cell--rate">
+                <% if (r.rate !== "" && r.rate !== null && r.rate !== undefined) { %>
+                  <strong class="rate"><%= r.rate %>%</strong>
+                  <div class="detail"><%= r.detail %></div>
+                <% } else { %>
+                  -
+                <% } %>
+              </td>
+              <td class="cell--count">
+                <% if (r.count !== "" && r.count !== null && r.count !== undefined) { %>
+                  <strong><%= r.count %>回</strong>
+                <% } else { %>
+                  -
+                <% } %>
+              </td>
+              <td class="cell--page">
+                <% if (r.page) { %>
+                  <span class="btn"><%= r.page %> ▶</span>
+                <% } else { %>
+                  -
+                <% } %>
+              </td>
             </tr>
-          <% }); %>
+          <% }) %>
         </tbody>
-        <tfoot>
-          <tr class="total-row">
-            <td>合計</td>
-            <td class="sales"><%= new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(totalSales) %></td>
-          </tr>
-        </tfoot>
       </table>
-    </main>
+    <% }) %>
 
-    <footer class="footer">
-      <p>- <%= index + 1 %> / <%= stores.length %> -</p>
-    </footer>
-  </div>
-<% }); %>
-
-<%- include('../partials/footer') %>
+    
+  </main>
+</body>
+</html>
