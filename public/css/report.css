@@ -35,6 +35,7 @@ body.print-a4 {
 .sheet{
   display:grid; gap:4mm;
   align-content: start;
+  page-break-after: always;
 }
 
 /* ===== ヘッダー（青帯） ===== */
