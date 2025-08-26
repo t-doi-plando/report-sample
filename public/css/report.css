@@ -126,9 +126,9 @@ body.print-a4 {
 
 /* Column widths and alignments */
 .group-table .cell--no    { width: 20mm; } /* Removed text-align */
-.group-table .cell--name  { /* takes remaining space */ }
-.group-table .cell--tag   { width: 25mm; } /* Removed text-align */
-.group-table .cell--rate  { width: 35mm; } /* Reduced */
+.group-table .cell--name  { width: 45mm; } /* Set width */
+.group-table .cell--tag   { width: 23mm; } /* Adjusted */
+.group-table .cell--rate  { width: 42mm; } /* Increased */
 .group-table .cell--count { width: 28mm; } /* Reduced */
 .group-table .cell--page  { width: 28mm; text-align: left; } /* Changed to left */
 

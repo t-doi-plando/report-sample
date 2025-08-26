@@ -18,13 +18,97 @@ app.get(('/'), (req, res) => {
 
 // Route for /report
 app.get('/report', (req, res) => {
-  fs.readFile(path.join(__dirname, 'driver-safety-report-data.json'), 'utf8', (err, data) => {
+  const dataPath = path.join(__dirname, 'driver-data.json');
+  const configPath = path.join(__dirname, 'report-config.json');
+
+  fs.readFile(dataPath, 'utf8', (err, dataRaw) => {
     if (err) {
       console.error(err);
-      return res.status(500).send('Error reading report data');
+      return res.status(500).send('Error reading driver data');
     }
-    const reportData = JSON.parse(data);
-    res.render('pages/report', reportData);
+    fs.readFile(configPath, 'utf8', (err, configRaw) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error reading report config');
+      }
+
+      const data = JSON.parse(dataRaw);
+      const config = JSON.parse(configRaw);
+      
+      const eventMap = data.events.reduce((map, event) => {
+        map[event.id] = event;
+        return map;
+      }, {});
+
+      const finalReportData = {
+        pageTitle: config.pageTitle,
+        officeName: data.officeName,
+        driverName: data.driverName,
+        avgViolationRatePct: data.stats.avgViolationRatePct,
+        rank: data.stats.rank,
+        highlights: [],
+        sections: []
+      };
+      
+      // Generate Highlights
+      for (const kind in config.highlights) {
+        const highlightInfo = config.highlights[kind];
+        const eventData = eventMap[highlightInfo.id];
+        if (eventData) {
+          const rate = Math.round((eventData.violations / eventData.total) * 100);
+          let text = highlightInfo.text_template
+            .replace('%TOTAL%', eventData.total)
+            .replace('%VIOLATIONS%', eventData.violations)
+            .replace('%RATE%', rate);
+          
+          finalReportData.highlights.push({
+            kind: kind,
+            badge: highlightInfo.badge,
+            title: config.itemMap[eventData.id].name,
+            text: text
+          });
+        }
+      }
+
+      // Generate Sections
+      const sectionsMap = {};
+      data.events.forEach(event => {
+        const itemInfo = config.itemMap[event.id];
+        if (itemInfo) {
+          if (!sectionsMap[itemInfo.maneuver]) {
+            sectionsMap[itemInfo.maneuver] = {
+              title: itemInfo.maneuver,
+              rows: []
+            };
+          }
+          
+          const rate = Math.round((event.violations / event.total) * 100);
+          let tone = '';
+          if (rate >= 25) tone = 'danger';
+          else if (rate > 0) tone = 'warn';
+          else if (rate === 0) tone = 'good';
+
+          let tag = '';
+          if (tone === 'danger' || tone === 'warn') tag = '!';
+          if (tone === 'good') tag = 'good';
+
+
+          sectionsMap[itemInfo.maneuver].rows.push({
+            no: event.id,
+            name: itemInfo.name,
+            tag: tag,
+            tone: tone,
+            rate: rate,
+            detail: `(${event.violations}回/${event.total}回)`,
+            count: event.violations,
+            page: itemInfo.page
+          });
+        }
+      });
+      finalReportData.sections = Object.values(sectionsMap);
+
+      res.render('pages/report', finalReportData);
+    });
   });
 });
 

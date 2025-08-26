@@ -1,0 +1,19 @@
+{
+  "driverName": "安全 太郎",
+  "officeName": "東京事業所",
+  "reportDate": "2025-08-26",
+  "stats": {
+    "avgViolationRatePct": 8.5,
+    "rank": {
+      "total": 25,
+      "position": 5
+    }
+  },
+  "events": [
+    { "id": 1, "violations": 100, "total": 250 },
+    { "id": 2, "violations": 12, "total": 250 },
+    { "id": 3, "violations": 10, "total": 250 },
+    { "id": 7, "violations": 2, "total": 40 },
+    { "id": 8, "violations": 0, "total": 40 }
+  ]
+}
