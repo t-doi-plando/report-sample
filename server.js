@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -5,7 +6,7 @@ const { generateReports } = require('./report-generator.js');
 const { generatePdfFromUrl } = require('./pdf-generator.js');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Set EJS as the view engine
 app.set('view engine', 'ejs');
@@ -88,7 +89,10 @@ app.get('/reports/:driverId', (req, res) => {
 // PDF Download: All drivers
 app.get('/download/all', async (req, res) => {
   try {
-    const url = `http://localhost:${port}/reports/all`;
+    const domain = process.env.APP_DOMAIN || 'localhost';
+    const port = process.env.APP_PORT || 3000;
+    const url = `${req.protocol}://${domain}:${port}/reports/all`;
+    
     const pdfBuffer = await generatePdfFromUrl(url);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename="report-all-drivers.pdf"');
@@ -102,7 +106,10 @@ app.get('/download/all', async (req, res) => {
 app.get('/download/:driverId', async (req, res) => {
   const driverId = req.params.driverId;
   try {
-    const url = `http://localhost:${port}/reports/${driverId}`;
+    const domain = process.env.APP_DOMAIN || 'localhost';
+    const port = process.env.APP_PORT || 3000;
+    const url = `${req.protocol}://${domain}:${port}/reports/${driverId}`;
+
     const pdfBuffer = await generatePdfFromUrl(url);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="report-${driverId}.pdf"`);
