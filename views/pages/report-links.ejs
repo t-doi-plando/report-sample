@@ -158,6 +158,46 @@
       background-color: var(--secondary-color);
       color: white;
     }
+
+    .file-input-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .file-input-group .button-group {
+      margin-left: auto;
+    }
+
+    /* Toast Notification Styles */
+    #toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background-color: #4CAF50; /* Green for success */
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: opacity 0.5s, transform 0.5s;
+      transform: translateY(20px);
+      min-width: 250px;
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -167,6 +207,20 @@
       <p class="subtitle">表示したいレポートの形式（PDFまたはHTML）を選択してください。</p>
     </header>
     
+    <div class="section file-upload-section">
+      <h2>JSONファイル取り込み</h2>
+      <div class="file-input-group">
+        <label for="jsonFileInput" class="custom-file-upload">
+          <input type="file" id="jsonFileInput" accept=".json" style="display: none;">
+          <span class="upload-button">ファイルを選択して下さい</span>
+        </label>
+        <span id="filePathDisplay" class="file-path-display"></span>
+        <div class="button-group">
+          <a href="javascript:void(0);" id="importButton" class="download-pdf">取り込み</a>
+        </div>
+      </div>
+    </div>
+
     <div class="section">
       <h2>全体のレポート</h2>
       <ul>
@@ -195,5 +249,96 @@
       </ul>
     </div>
   </div>
+  </body>
+  <div id="toast-container"></div>
+  <script>
+    function showToast(message, type = 'success') {
+      const toastContainer = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.classList.add('toast');
+      if (type === 'error') {
+        toast.style.backgroundColor = '#f44336'; // Red for error
+      }
+      toast.textContent = message;
+      toastContainer.appendChild(toast);
+
+      // Show toast
+      setTimeout(() => {
+        toast.classList.add('show');
+      }, 100);
+
+      // Hide toast after 3 seconds
+      setTimeout(() => {
+        toast.classList.remove('show');
+        toast.addEventListener('transitionend', () => {
+          toast.remove();
+        }, { once: true });
+      }, 3000);
+    }
+
+    document.getElementById('jsonFileInput').addEventListener('change', function() {
+      const filePathDisplay = document.getElementById('filePathDisplay');
+      const uploadButton = document.querySelector('.custom-file-upload .upload-button'); // upload-buttonを取得
+      if (this.files && this.files.length > 0) {
+        filePathDisplay.textContent = ''; // filePathDisplayは常に空にする
+        if (uploadButton) {
+          uploadButton.textContent = this.files[0].name; // upload-buttonのテキストをファイル名に差し替え
+        }
+
+        // ファイルが選択されたら、その内容を読み込み、サーバーにPOSTする
+        const file = this.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          try {
+            const jsonData = JSON.parse(e.target.result);
+            // サーバーにJSONデータをPOST
+            fetch('/upload-json-data', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(jsonData),
+            })
+            .then(response => response.json())
+            .then(data => {
+              showToast(data.message, 'success'); // トースト表示
+              // トーストが表示されるのを待ってからページを再読み込み
+              setTimeout(() => {
+                window.location.reload();
+              }, 3500); // トーストの表示時間（3秒）より少し長めに設定
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+              showToast('JSONデータのアップロード中にエラーが発生しました。', 'error'); // トースト表示
+              // エラーメッセージが表示されるのを待ってからページを再読み込み（任意）
+              setTimeout(() => {
+                window.location.reload();
+              }, 3500); // トーストの表示時間より少し長めに設定
+            });
+          } catch (parseError) {
+            showToast('選択されたファイルは有効なJSONではありません。', 'error'); // トースト表示
+            console.error('JSON parse error:', parseError);
+            // エラーメッセージが表示されるのを待ってからページを再読み込み（任意）
+            setTimeout(() => {
+              window.location.reload();
+            }, 3500); // トーストの表示時間より少し長めに設定
+          }
+        };
+
+        reader.readAsText(file); // ファイルをテキストとして読み込む
+
+      } else {
+        filePathDisplay.textContent = ''; // ファイルが選択されていない場合は空にする
+        if (uploadButton) {
+          uploadButton.textContent = 'ファイルを選択して下さい'; // デフォルトの文言に戻す
+        }
+      }
+    });
+
+    document.getElementById('importButton').addEventListener('click', function() {
+      document.getElementById('jsonFileInput').click(); // ファイル選択ダイアログを開く
+    });
+  </script>
 </body>
 </html>

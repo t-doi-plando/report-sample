@@ -14,75 +14,109 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json()); // JSONボディをパースするためのミドルウェア
+
+let uploadedDriversData = null; // アップロードされたドライバーデータを一時的に保持する変数
 
 // --- Endpoints ---
 
+// JSONデータアップロード用エンドポイント
+app.post('/upload-json-data', (req, res) => {
+  try {
+    uploadedDriversData = req.body; // アップロードされたJSONデータを保存
+    console.log('Uploaded driver data received:', uploadedDriversData.length, 'drivers');
+    res.status(200).json({ message: 'JSONデータが正常にアップロードされました。' });
+  } catch (error) {
+    console.error('Error processing uploaded JSON data:', error);
+    res.status(400).json({ message: '無効なJSONデータです。' });
+  }
+});
+
 // Root: Dashboard page
 app.get('/', (req, res) => {
-  const dataPath = path.join(__dirname, 'driver-data.json');
-  fs.readFile(dataPath, 'utf8', (err, dataRaw) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send('Error reading driver data');
+  let driversDataToUse;
+  if (uploadedDriversData) {
+    driversDataToUse = uploadedDriversData;
+  } else {
+    const dataPath = path.join(__dirname, 'driver-data.json');
+    try {
+      const dataRaw = fs.readFileSync(dataPath, 'utf8'); // 同期的に読み込む
+      driversDataToUse = JSON.parse(dataRaw);
+    } catch (readErr) {
+      console.error(readErr);
+      return res.status(500).send('Error reading default driver data');
     }
-    const driversData = JSON.parse(dataRaw);
-    res.render('pages/report-links', {
-      reportTitle: '運転診断レポート一覧',
-      drivers: driversData
-    });
+  }
+
+  res.render('pages/report-links', {
+    reportTitle: '運転診断レポート一覧',
+    drivers: driversDataToUse
   });
 });
 
 // HTML Preview: All drivers
 app.get('/reports/all', (req, res) => {
-  const dataPath = path.join(__dirname, 'driver-data.json');
   const configPath = path.join(__dirname, 'report-config.json');
 
-  fs.readFile(dataPath, 'utf8', (err, dataRaw) => {
+  fs.readFile(configPath, 'utf8', (err, configRaw) => {
     if (err) {
       console.error(err);
-      return res.status(500).send('Error reading driver data');
+      return res.status(500).send('Error reading report config');
     }
-    fs.readFile(configPath, 'utf8', (err, configRaw) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send('Error reading report config');
+    const config = JSON.parse(configRaw);
+
+    let driversDataToUse;
+    if (uploadedDriversData) {
+      driversDataToUse = uploadedDriversData;
+    } else {
+      const dataPath = path.join(__dirname, 'driver-data.json');
+      try {
+        const dataRaw = fs.readFileSync(dataPath, 'utf8'); // 同期的に読み込む
+        driversDataToUse = JSON.parse(dataRaw);
+      } catch (readErr) {
+        console.error(readErr);
+        return res.status(500).send('Error reading default driver data');
       }
-      const driversData = JSON.parse(dataRaw);
-      const config = JSON.parse(configRaw);
-      const reports = generateReports(driversData, config);
-      res.render('pages/report', { reports: reports });
-    });
+    }
+    
+    const reports = generateReports(driversDataToUse, config);
+    res.render('pages/report', { reports: reports });
   });
 });
 
 // HTML Preview: Single driver
 app.get('/reports/:driverId', (req, res) => {
   const driverId = req.params.driverId;
-  const dataPath = path.join(__dirname, 'driver-data.json');
   const configPath = path.join(__dirname, 'report-config.json');
 
-  fs.readFile(dataPath, 'utf8', (err, dataRaw) => {
+  fs.readFile(configPath, 'utf8', (err, configRaw) => {
     if (err) {
       console.error(err);
-      return res.status(500).send('Error reading driver data');
+      return res.status(500).send('Error reading report config');
     }
-    fs.readFile(configPath, 'utf8', (err, configRaw) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send('Error reading report config');
-      }
-      const driversData = JSON.parse(dataRaw);
-      const config = JSON.parse(configRaw);
-      
-      const singleDriverData = driversData.find(d => d.driverId === driverId);
-      if (!singleDriverData) {
-        return res.status(404).send('Driver not found');
-      }
+    const config = JSON.parse(configRaw);
 
-      const reports = generateReports([singleDriverData], config);
-      res.render('pages/report', { reports: reports });
-    });
+    let driversDataToUse;
+    if (uploadedDriversData) {
+      driversDataToUse = uploadedDriversData;
+    } else {
+      const dataPath = path.join(__dirname, 'driver-data.json');
+      try {
+        const dataRaw = fs.readFileSync(dataPath, 'utf8'); // 同期的に読み込む
+        driversDataToUse = JSON.parse(dataRaw);
+      } catch (readErr) {
+        console.error(readErr);
+        return res.status(500).send('Error reading default driver data');
+      }
+    }
+    
+    const singleDriverData = driversDataToUse.find(d => d.driverId === driverId);
+    if (!singleDriverData) {
+      return res.status(404).send('Driver not found');
+    }
+
+    const reports = generateReports([singleDriverData], config);
+    res.render('pages/report', { reports: reports });
   });
 });
 
