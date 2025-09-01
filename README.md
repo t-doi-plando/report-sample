@@ -24,49 +24,14 @@
 npm install
 ```
 
-## 2. 環境変数の設定
-
-このアプリケーションは、PDFを生成する際に自身のURLを知る必要があります。設定は `.env` ファイルで行います。
-
-まず、プロジェクトのルートにある `.env.example` ファイルをコピーして `.env` ファイルを作成します。
-
-```bash
-cp .env.example .env
-```
-
-次に、`.env` ファイルを環境に合わせて編集します。
-
-```
-# .envファイルの内容
-
-# アプリケーションが動作するドメイン名
-APP_DOMAIN=localhost
-
-# アプリケーションが使用するポート番号
-APP_PORT=3000
-```
-
-**重要**: ここの `APP_DOMAIN` と `APP_PORT` の値は、**サーバーの公開設定により適宜変更してください。** 例えば、本番環境のドメインが `https://reports.example.com` であれば、`APP_DOMAIN` は `reports.example.com` に、`APP_PORT`は `443` または `80` （もしくはプロキシ設定に応じた値）になります。
-
-## 3. アプリケーションの実行
-
-以下のコマンドでWebサーバーを起動します。
-
-```bash
-node server.js
-```
-
-サーバーが起動したら、Webブラウザで `http://localhost:3000` にアクセスしてください。
-
-
-## 4. Puppeteer PDF 生成環境のセットアップ (Amazon Linux)
+## 2. Puppeteer PDF 生成環境のセットアップ (Amazon Linux)
 
 このプロジェクトでは Puppeteer を使用して PDF を生成しています。  
 Amazon Linux (EC2) 環境では Chromium が必要とするライブラリを事前にインストールしてください。  
 
 ## セットアップ手順 (Amazon Linux 2 / Amazon Linux 2023)
 
-### 1. システムライブラリのインストール
+## 3. システムライブラリのインストール
 ```bash
 sudo yum update -y
 sudo yum install -y \
@@ -78,3 +43,25 @@ sudo yum install -y \
   xorg-x11-xauth \
   xorg-x11-utils \
   ipa-gothic-fonts ipa-mincho-fonts
+
+## 4. 環境変数の設定
+## 環境変数設定（Local, Railway, EC2 共通）
+
+アプリ内で公開URLを参照するために、以下の環境変数を設定してください。
+
+| Key    | Value                                    |
+|--------|-------------------------------------------|
+| DOMAIN | https://your-domain.xxx                   |
+
+- **Railway**: ダッシュボード > 対象サービス > **Variables** タブで追加
+- **EC2 等のサーバー**: `/etc/profile.d/env.sh` に `export DOMAIN=https://...` を記載し、再起動または `source` で反映
+- **Local 環境**: ハードコーディングで127.0.01:3000を設定
+
+
+## 3. アプリケーションの実行
+
+以下のコマンドでWebサーバーを起動します。
+
+```bash
+node server.js
+```
