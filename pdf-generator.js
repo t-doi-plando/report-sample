@@ -1,11 +1,23 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer'); // puppeteer に戻す
 
 async function generatePdfFromUrl(url) {
   let browser;
   try {
+    // 環境変数 CHROMIUM_PATH が設定されていればそれを使用し、なければ Puppeteer に任せる
+    const executablePath = process.env.CHROMIUM_PATH || undefined;
+
     browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'] // Important for running in many environments
+      executablePath: executablePath,
+      headless: true, // Render環境では 'new' または 'true' が推奨される場合がある
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage', // Renderのようなコンテナ環境でメモリ不足を防ぐ
+        '--disable-gpu', // GPUアクセラレーションを無効化
+        '--no-zygote', // プロセス起動を高速化
+        '--single-process' // シングルプロセスモードで実行
+      ],
+      ignoreHTTPSErrors: true,
     });
     const page = await browser.newPage();
     
