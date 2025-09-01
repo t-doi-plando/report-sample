@@ -123,13 +123,12 @@ app.get('/reports/:driverId', (req, res) => {
 // PDF Download: All drivers
 app.get('/download/all', async (req, res) => {
   try {
-    // ドメインの決定: APP_DOMAIN -> RAILWAY_PUBLIC_DOMAIN/RAILWAY_URL -> localhost
-    const domain = process.env.APP_DOMAIN || process.env.RAILWAY_PUBLIC_DOMAIN || process.env.RAILWAY_URL || 'localhost';
-    // ポートの決定: APP_PORT -> PORT (Railway) -> 3000
-    const port = process.env.APP_PORT || process.env.PORT || 3000;
+    // ポート、ドメインの設定
+    const PORT = process.env.PORT || 3000;
+    const DOMAIN = process.env.DOMAIN || `127.0.0.1:${PORT}`;
 
     // プロトコルは req.protocol を使用
-    const url = `${req.protocol}://${domain}:${port}/reports/all`;
+    const url = `${req.protocol}://${DOMAIN}/reports/all`;
     
     const pdfBuffer = await generatePdfFromUrl(url);
     res.setHeader('Content-Type', 'application/pdf');
@@ -145,15 +144,13 @@ app.get('/download/:driverId', async (req, res) => {
   const driverId = req.params.driverId;
   try {
 
-    // ポート、URLの設定
+    // ポート、ドメインの設定
     const PORT = process.env.PORT || 3000;
-    const DOMAIN = process.env.DOMAIN || `127.0.0.1`;
+    const DOMAIN = process.env.DOMAIN || `127.0.0.1:${PORT}`;
 
-    // プロトコルは req.protocol を使用
-    //const url = `${req.protocol}://${DOMAIN}:${PORT}/reports/${driverId}`;
 
-    // テスト用
-    const url = `https://${DOMAIN}/reports/${driverId}`;
+    // URLの設定
+    const url = `${req.protocol}://${DOMAIN}/reports/${driverId}`;
 
     const pdfBuffer = await generatePdfFromUrl(url);
     res.setHeader('Content-Type', 'application/pdf');
