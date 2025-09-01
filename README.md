@@ -53,10 +53,10 @@ sudo yum install -y \
 
 | Key    | Value                                    |
 |--------|-------------------------------------------|
-| DOMAIN | https://your-domain.xxx                   |
+| DOMAIN | your-domain.xxx                   |
 
 - **Railway**: ダッシュボード > 対象サービス > **Variables** タブで追加
-- **EC2 等のサーバー**: `/etc/profile.d/env.sh` に `export DOMAIN=https://...` を記載し、再起動または `source` で反映
+- **EC2 等のサーバー**: `/etc/profile.d/env.sh` に `export DOMAIN=your-domain.xxx` を記載し、再起動または `source` で反映
 - **Local 環境**: ハードコーディングで127.0.01:3000を設定
 
 
