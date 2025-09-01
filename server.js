@@ -144,13 +144,13 @@ app.get('/download/all', async (req, res) => {
 app.get('/download/:driverId', async (req, res) => {
   const driverId = req.params.driverId;
   try {
-    // ドメインの決定: APP_DOMAIN -> RAILWAY_PUBLIC_DOMAIN/RAILWAY_URL -> localhost
-    const domain = process.env.APP_DOMAIN || process.env.RAILWAY_PUBLIC_DOMAIN || process.env.RAILWAY_URL || 'localhost';
-    // ポートの決定: APP_PORT -> PORT (Railway) -> 3000
-    const port = process.env.APP_PORT || process.env.PORT || 3000;
+
+    // ポート、URLの設定
+    const port = process.env.PORT || 3000;
+    const baseUrl = `http://127.0.0.1:${PORT}`;
 
     // プロトコルは req.protocol を使用
-    const url = `${req.protocol}://${domain}:${port}/reports/${driverId}`;
+    const url = `${req.protocol}://${baseUrl}/reports/${driverId}`;
 
     const pdfBuffer = await generatePdfFromUrl(url);
     res.setHeader('Content-Type', 'application/pdf');
