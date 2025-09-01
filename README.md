@@ -57,3 +57,24 @@ node server.js
 ```
 
 サーバーが起動したら、Webブラウザで `http://localhost:3000` にアクセスしてください。
+
+
+## 4. Puppeteer PDF 生成環境のセットアップ (Amazon Linux)
+
+このプロジェクトでは Puppeteer を使用して PDF を生成しています。  
+Amazon Linux (EC2) 環境では Chromium が必要とするライブラリを事前にインストールしてください。  
+
+## セットアップ手順 (Amazon Linux 2 / Amazon Linux 2023)
+
+### 1. システムライブラリのインストール
+```bash
+sudo yum update -y
+sudo yum install -y \
+  chromium \
+  nss \
+  atk \
+  gtk3 \
+  xorg-x11-server-Xvfb \
+  xorg-x11-xauth \
+  xorg-x11-utils \
+  ipa-gothic-fonts ipa-mincho-fonts

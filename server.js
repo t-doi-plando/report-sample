@@ -123,8 +123,12 @@ app.get('/reports/:driverId', (req, res) => {
 // PDF Download: All drivers
 app.get('/download/all', async (req, res) => {
   try {
-    const domain = process.env.APP_DOMAIN || 'localhost';
-    const port = process.env.APP_PORT || 3000;
+    // ドメインの決定: APP_DOMAIN -> RAILWAY_PUBLIC_DOMAIN/RAILWAY_URL -> localhost
+    const domain = process.env.APP_DOMAIN || process.env.RAILWAY_PUBLIC_DOMAIN || process.env.RAILWAY_URL || 'localhost';
+    // ポートの決定: APP_PORT -> PORT (Railway) -> 3000
+    const port = process.env.APP_PORT || process.env.PORT || 3000;
+
+    // プロトコルは req.protocol を使用
     const url = `${req.protocol}://${domain}:${port}/reports/all`;
     
     const pdfBuffer = await generatePdfFromUrl(url);
@@ -140,8 +144,12 @@ app.get('/download/all', async (req, res) => {
 app.get('/download/:driverId', async (req, res) => {
   const driverId = req.params.driverId;
   try {
-    const domain = process.env.APP_DOMAIN || 'localhost';
-    const port = process.env.APP_PORT || 3000;
+    // ドメインの決定: APP_DOMAIN -> RAILWAY_PUBLIC_DOMAIN/RAILWAY_URL -> localhost
+    const domain = process.env.APP_DOMAIN || process.env.RAILWAY_PUBLIC_DOMAIN || process.env.RAILWAY_URL || 'localhost';
+    // ポートの決定: APP_PORT -> PORT (Railway) -> 3000
+    const port = process.env.APP_PORT || process.env.PORT || 3000;
+
+    // プロトコルは req.protocol を使用
     const url = `${req.protocol}://${domain}:${port}/reports/${driverId}`;
 
     const pdfBuffer = await generatePdfFromUrl(url);
