@@ -146,11 +146,11 @@ app.get('/download/:driverId', async (req, res) => {
   try {
 
     // ポート、URLの設定
-    const port = process.env.PORT || 3000;
-    const baseUrl = `http://127.0.0.1:${PORT}`;
+    const PORT = process.env.PORT || 3000;
+    const DOMAIN = process.env.DOMAIN || `127.0.0.1`;
 
     // プロトコルは req.protocol を使用
-    const url = `${req.protocol}://${baseUrl}/reports/${driverId}`;
+    const url = `${req.protocol}://${DOMAIN}:${PORT}/reports/${driverId}`;
 
     const pdfBuffer = await generatePdfFromUrl(url);
     res.setHeader('Content-Type', 'application/pdf');

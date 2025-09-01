@@ -48,7 +48,7 @@ async function generatePdfFromUrl(url) {
     return pdfBuffer;
   } catch (error) {
     console.error('Error generating PDF:', error);
-    throw new Error('Could not generate PDF.');
+    throw new Error(`Could not generate PDF for URL: ${url}. Original error: ${error.message}`);
   } finally {
     if (browser) {
       await browser.close();
