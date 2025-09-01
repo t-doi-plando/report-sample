@@ -150,7 +150,10 @@ app.get('/download/:driverId', async (req, res) => {
     const DOMAIN = process.env.DOMAIN || `127.0.0.1`;
 
     // プロトコルは req.protocol を使用
-    const url = `${req.protocol}://${DOMAIN}:${PORT}/reports/${driverId}`;
+    //const url = `${req.protocol}://${DOMAIN}:${PORT}/reports/${driverId}`;
+
+    // テスト用
+    const url = `https://report-sample-production.up.railway.app/reports/${driverId}`;
 
     const pdfBuffer = await generatePdfFromUrl(url);
     res.setHeader('Content-Type', 'application/pdf');
