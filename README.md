@@ -43,9 +43,11 @@ sudo yum install -y \
   xorg-x11-xauth \
   xorg-x11-utils \
   ipa-gothic-fonts ipa-mincho-fonts
+```
 
 ## 4. 環境変数の設定
-## 環境変数設定（Local, Railway, EC2 共通）
+
+### 環境変数設定（Local, Railway, EC2 共通）
 
 アプリ内で公開URLを参照するために、以下の環境変数を設定してください。
 
@@ -58,7 +60,7 @@ sudo yum install -y \
 - **Local 環境**: ハードコーディングで127.0.01:3000を設定
 
 
-## 3. アプリケーションの実行
+## 5. アプリケーションの実行
 
 以下のコマンドでWebサーバーを起動します。
 
