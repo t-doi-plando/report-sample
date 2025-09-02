@@ -1,0 +1,81 @@
+      <!-- ===== KPI（平均と順位） ===== -->
+      <section class="headline">
+        <div class="headline__label">違反疑い割合平均</div>
+        <div class="headline__value"><%= (report.avgViolationRatePct ?? 10.9) %>%</div>
+        <div class="headline__rank">(<%= (report.rank?.total ?? 10) %>人中<%= (report.rank?.position ?? 8) %>位)</div>
+      </section>
+
+      <!-- ===== ハイライト3カード ===== -->
+      <section class="highlights">
+        <% const cards = report.highlights || []; %>
+        <% cards.forEach(c => { %>
+          <article class="hl hl--<%= c.kind %>">
+            <div class="hl__band"><%= c.badge %></div>
+            <h2 class="hl__title"><%= c.title %></h2>
+            <p class="hl__text"><%= c.text %></p>
+          </article>
+        <% }) %>
+      </section>
+
+      <% const groups = report.sections || []; %>
+      <% groups.forEach(g => { %>
+        <table class="group-table">
+          <thead>
+            <tr>
+              <th class="cell--no"><%= g.title %></th>
+              <th class="cell--name">項目</th>
+              <th class="cell--tag">指導提案</th>
+              <th class="cell--rate">違反疑い割合</th>
+              <th class="cell--count">危険疑い回数</th>
+              <th class="cell--page">詳細</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% g.rows.forEach(r => { %>
+              <tr class="<%= r.tone ? 'row--' + r.tone : '' %>">
+                <td class="cell--no">
+                  <% if (r.no !== "") { %>
+                    <span class="no"><%= r.no %></span>
+                  <% } else { %>
+                    -
+                  <% } %>
+                </td>
+                <td class="cell--name"><%= r.name %></td>
+                <td class="cell--tag"><%= r.tag || '-' %></td>
+                <td class="cell--rate">
+                  <% if (r.rate !== "" && r.rate !== null && r.rate !== undefined) { %>
+                    <strong class="rate"><%= r.rate %>%</strong>
+                    <div class="detail"><%= r.detail %></div>
+                  <% } else { %>
+                    -
+                  <% } %>
+                </td>
+                <td class="cell--count">
+                  <% if (r.count !== "" && r.count !== null && r.count !== undefined) { %>
+                    <strong><%= r.count %>回</strong>
+                  <% } else { %>
+                    -
+                  <% } %>
+                </td>
+                <td class="cell--page">
+                  <% if (r.page) { %>
+                    <span class="btn"><%= r.page %> ▶</span>
+                  <% } else { %>
+                    -
+                  <% } %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% }) %>
+      <div class="summary-frame">
+        <div class="summary-column left-column">
+          <p>BOX動画再生 確認用</p>
+        </div>
+        <div class="summary-column right-column">
+          <a href="https://app.box.com/file/1962444890135?s=g215xtzrz2unrh1cvn4595xf079dm8p0" target="_blank" class="play-button-mock">
+            <span class="play-icon">▶</span>
+          </a>
+        </div>
+      </div>

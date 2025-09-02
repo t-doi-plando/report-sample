@@ -67,3 +67,11 @@ sudo yum install -y \
 ```bash
 node server.js
 ```
+
+## ６. その他
+
+Railway用のビルドコマンドは以下。
+
+```bash
+apt-get update && apt-get install -y chromium libnss3 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 libatk-bridge2.0-0 libgtk-3-0 xdg-utils && rm -rf /var/lib/apt/lists/* && npm install
+```

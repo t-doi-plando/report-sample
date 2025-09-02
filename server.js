@@ -32,26 +32,27 @@ app.post('/upload-json-data', (req, res) => {
   }
 });
 
+// JSONデータをリセット用エンドポイント
+app.post('/reset-json-data', (req, res) => {
+  uploadedDriversData = null;
+  console.log('Uploaded driver data has been reset.');
+  res.status(200).json({ message: '表示をリセットしました。' });
+});
+
 // Root: Dashboard page
 app.get('/', (req, res) => {
-  let driversDataToUse;
-  if (uploadedDriversData) {
-    driversDataToUse = uploadedDriversData;
-  } else {
-    const dataPath = path.join(__dirname, 'driver-data.json');
-    try {
-      const dataRaw = fs.readFileSync(dataPath, 'utf8'); // 同期的に読み込む
-      driversDataToUse = JSON.parse(dataRaw);
-    } catch (readErr) {
-      console.error(readErr);
-      return res.status(500).send('Error reading default driver data');
-    }
+  const dataPath = path.join(__dirname, 'driver-data.json');
+  try {
+    const dataRaw = fs.readFileSync(dataPath, 'utf8');
+    const driversDataToUse = JSON.parse(dataRaw);
+    res.render('pages/report-links', {
+      reportTitle: '運転診断レポート一覧',
+      drivers: driversDataToUse
+    });
+  } catch (readErr) {
+    console.error(readErr);
+    return res.status(500).send('Error reading default driver data');
   }
-
-  res.render('pages/report-links', {
-    reportTitle: '運転診断レポート一覧',
-    drivers: driversDataToUse
-  });
 });
 
 // HTML Preview: All drivers
