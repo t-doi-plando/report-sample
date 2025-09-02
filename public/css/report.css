@@ -59,6 +59,59 @@ body.print-a4 {
 .headline__value{ font-size:22pt; font-weight:800; line-height:1; }
 .headline__rank{ color:var(--ink-400); font-size:10pt; }
 
+.sidou-headline{
+  display:flex; flex-direction: column; align-items:flex-start; justify-content:flex-start;   gap:1mm; padding:0 2mm;
+}
+.sidou-item-number-label{ color:var(--blue-700); font-size:10pt; text-align: left; font-weight: bold; }
+
+.sidou-border-box{
+  border: 1px solid var(--blue-700);
+  border-radius: 4px;
+  min-height: 16mm;
+  width: 100%;
+  padding: 2mm;
+}
+
+.sidou-example-text{
+  color: var(--ink-600);
+  font-size: 9pt;
+  margin-top: 1mm;
+}
+
+.sidou-checkbox-text{
+  color: var(--ink-600);
+  font-size: 9pt;
+  margin-top: auto;
+  vertical-align: text-top; /* 調整 */
+}
+
+.checkbox-square{
+  font-size: 2em;
+  margin-right: 0.2em;
+  vertical-align: -0.20em; /* 文言と縦位置があうように調整 */
+  line-height: 1;
+}
+
+.sidou-content-headline{
+  margin-top: 10mm;
+}
+
+.sidou-driver-response-headline{
+  margin-top: 10mm;
+}
+
+.sidou-content-border-box{
+  border: 1px solid var(--blue-700);
+  border-radius: 4px;
+  min-height: 80mm;
+  width: 100%;
+  padding: 2mm;
+  margin-top: 1mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 /* ===== ハイライト3カード ===== */
 .highlights{
   display:grid; grid-template-columns:1fr 1fr 1fr; gap:5mm;
