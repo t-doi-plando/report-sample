@@ -135,6 +135,8 @@
       transition: all 0.2s ease-in-out;
       font-weight: 500;
       border: 1px solid transparent;
+      min-width: 160px;
+      text-align: center;
     }
 
     .button-group a:hover {
@@ -204,7 +206,7 @@
   <div class="container">
     <header>
       <h1><%= reportTitle %></h1>
-      <p class="subtitle">表示したいレポートの形式（PDFまたはHTML）を選択してください。</p>
+      <p class="subtitle">PDFダウンロード: PDF形式でレポートをローカルPCに保存します。<br>HTMLプレビュー: ブラウザの別タブでレポートの内容を確認できます。</p>
     </header>
     
     <div class="section file-upload-section">
@@ -216,7 +218,7 @@
         </label>
         <span id="filePathDisplay" class="file-path-display"></span>
         <div class="button-group">
-          <a href="javascript:void(0);" id="importButton" class="download-pdf">取り込み</a>
+          <a href="javascript:void(0);" id="uploadButton" class="download-pdf">ファイル選択</a>
         </div>
       </div>
     </div>
@@ -236,7 +238,7 @@
 
     <div class="section">
       <h2>個人のレポート</h2>
-      <ul>
+      <ul id="individual-reports-list">
         <% drivers.forEach(function(driver) { %>
           <li>
             <span><%= driver.driverName %> (<%= driver.officeName %>)</span>
@@ -276,68 +278,106 @@
       }, 3000);
     }
 
-    document.getElementById('jsonFileInput').addEventListener('change', function() {
-      const filePathDisplay = document.getElementById('filePathDisplay');
-      const uploadButton = document.querySelector('.custom-file-upload .upload-button'); // upload-buttonを取得
-      if (this.files && this.files.length > 0) {
-        filePathDisplay.textContent = ''; // filePathDisplayは常に空にする
-        if (uploadButton) {
-          uploadButton.textContent = this.files[0].name; // upload-buttonのテキストをファイル名に差し替え
-        }
+    const fileInput = document.getElementById('jsonFileInput');
+    const uploadButton = document.getElementById('uploadButton');
+    const uploadButtonSpan = document.querySelector('.custom-file-upload .upload-button');
+    const customFileUpload = document.querySelector('.custom-file-upload');
+    const individualReportsList = document.getElementById('individual-reports-list');
 
-        // ファイルが選択されたら、その内容を読み込み、サーバーにPOSTする
+    function updateReportsList(drivers) {
+      individualReportsList.innerHTML = ''; // Clear existing list
+
+      if (!drivers || drivers.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = '表示するデータがありません。';
+        individualReportsList.appendChild(li);
+        return;
+      }
+
+      drivers.forEach(driver => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <span>${driver.driverName} (${driver.officeName})</span>
+          <div class="button-group">
+            <a href="/download/${driver.driverId}" class="download-pdf" target="_blank">PDFダウンロード</a>
+            <a href="/reports/${driver.driverId}" class="view-html" target="_blank">HTMLプレビュー</a>
+          </div>
+        `;
+        individualReportsList.appendChild(li);
+      });
+    }
+
+    fileInput.addEventListener('change', function() {
+      if (this.files && this.files.length > 0) {
         const file = this.files[0];
+        const fileName = file.name;
         const reader = new FileReader();
 
         reader.onload = function(e) {
           try {
             const jsonData = JSON.parse(e.target.result);
-            // サーバーにJSONデータをPOST
+            
+            // 1. Send data to server in the background
             fetch('/upload-json-data', {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(jsonData),
             })
             .then(response => response.json())
-            .then(data => {
-              showToast(data.message, 'success'); // トースト表示
-              // トーストが表示されるのを待ってからページを再読み込み
-              setTimeout(() => {
-                window.location.reload();
-              }, 3500); // トーストの表示時間（3秒）より少し長めに設定
-            })
-            .catch((error) => {
+            .then(data => showToast(data.message, 'success'))
+            .catch(error => {
               console.error('Error:', error);
-              showToast('JSONデータのアップロード中にエラーが発生しました。', 'error'); // トースト表示
-              // エラーメッセージが表示されるのを待ってからページを再読み込み（任意）
-              setTimeout(() => {
-                window.location.reload();
-              }, 3500); // トーストの表示時間より少し長めに設定
+              showToast('JSONデータのアップロード中にエラーが発生しました。', 'error');
             });
+
+            // 2. Update the UI dynamically
+            updateReportsList(jsonData);
+
+            // 3. Update the file selection display
+            uploadButtonSpan.innerHTML = ''; // Clear existing content
+            const deleteBtn = document.createElement('span');
+            deleteBtn.textContent = '✖️';
+            deleteBtn.style.cursor = 'pointer';
+            deleteBtn.style.marginRight = '8px';
+            deleteBtn.onclick = function(ev) {
+              ev.preventDefault();
+              ev.stopPropagation();
+              fetch('/reset-json-data', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                  showToast(data.message, 'success');
+                  setTimeout(() => { window.location.reload(); }, 1500);
+                })
+                .catch(err => {
+                  console.error('Error:', err);
+                  showToast('リセット中にエラーが発生しました。', 'error');
+                });
+            };
+            const fileNameSpan = document.createElement('span');
+            fileNameSpan.textContent = fileName;
+            fileNameSpan.style.textDecoration = 'underline';
+            uploadButtonSpan.appendChild(deleteBtn);
+            uploadButtonSpan.appendChild(fileNameSpan);
+
           } catch (parseError) {
-            showToast('選択されたファイルは有効なJSONではありません。', 'error'); // トースト表示
+            showToast('選択されたファイルは有効なJSONではありません。', 'error');
             console.error('JSON parse error:', parseError);
-            // エラーメッセージが表示されるのを待ってからページを再読み込み（任意）
-            setTimeout(() => {
-              window.location.reload();
-            }, 3500); // トーストの表示時間より少し長めに設定
           }
         };
-
-        reader.readAsText(file); // ファイルをテキストとして読み込む
-
-      } else {
-        filePathDisplay.textContent = ''; // ファイルが選択されていない場合は空にする
-        if (uploadButton) {
-          uploadButton.textContent = 'ファイルを選択して下さい'; // デフォルトの文言に戻す
-        }
+        reader.readAsText(file);
       }
     });
 
-    document.getElementById('importButton').addEventListener('click', function() {
-      document.getElementById('jsonFileInput').click(); // ファイル選択ダイアログを開く
+    // The "ファイル選択" button just opens the file dialog
+    uploadButton.addEventListener('click', function() {
+      fileInput.click();
+    });
+    
+    // Also allow clicking the text area to open the dialog
+    customFileUpload.addEventListener('click', function(e) {
+      if (e.target.textContent !== '✖️') {
+        fileInput.click();
+      }
     });
   </script>
 </body>

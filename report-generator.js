@@ -49,8 +49,8 @@ function generateReports(driversData, config) {
         
         const rate = Math.round((event.violations / event.total) * 100);
         let tone = '';
-        if (rate > 5) tone = 'danger';
-        else if (rate > 0) tone = 'warn';
+        if (rate >= 10) tone = 'danger';
+        else if (rate >= 5) tone = 'warn';
         else if (rate === 0) tone = 'good';
 
         let tag = '';

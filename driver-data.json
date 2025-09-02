@@ -12,8 +12,8 @@
       }
     },
     "events": [
-      { "id": 1, "violations": 15, "total": 250 },
-      { "id": 2, "violations": 12, "total": 250 },
+      { "id": 1, "violations": 25, "total": 250 },
+      { "id": 2, "violations": 13, "total": 250 },
       { "id": 3, "violations": 10, "total": 250 },
       { "id": 7, "violations": 2, "total": 40 },
       { "id": 8, "violations": 0, "total": 40 }
@@ -32,7 +32,7 @@
       }
     },
     "events": [
-      { "id": 1, "violations": 1, "total": 280 },
+      { "id": 1, "violations": 56, "total": 280 },
       { "id": 2, "violations": 2, "total": 280 },
       { "id": 3, "violations": 0, "total": 280 },
       { "id": 7, "violations": 0, "total": 50 },
