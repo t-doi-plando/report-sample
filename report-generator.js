@@ -11,13 +11,16 @@ function generateReports(driversData, config) {
       driverName: driverData.driverName,
       avgViolationRatePct: driverData.stats.avgViolationRatePct,
       rank: driverData.stats.rank,
-      highlights: [],
+      highlights_gaiyou: [],
+      highlights_sasetumae: [], // この行を追加
       sections: []
     };
 
-    // Generate Highlights
-    for (const kind in config.highlights) {
-      const highlightInfo = config.highlights[kind];
+    // Generate Highlights(概要)
+    // 仮置きのため、ロジックが決まり次第差し替えが必要
+    // 現状はreport-config.jsonのidとdriver-data.jsonのidを紐づけてテンプレートにpushしている
+    for (const kind in config.highlights_gaiyou) {
+      const highlightInfo = config.highlights_gaiyou[kind];
       const eventData = eventMap[highlightInfo.id];
       if (eventData) {
         const rate = Math.round((eventData.violations / eventData.total) * 100);
@@ -26,7 +29,7 @@ function generateReports(driversData, config) {
           .replace('%VIOLATIONS%', eventData.violations)
           .replace('%RATE%', rate);
         
-        finalReportData.highlights.push({
+        finalReportData.highlights_gaiyou.push({
           kind: kind,
           badge: highlightInfo.badge,
           title: config.itemMap[eventData.id].name,
@@ -34,6 +37,32 @@ function generateReports(driversData, config) {
         });
       }
     }
+
+    // Generate Highlights(詳細)
+    // だだし、現状は左折前のみ
+    for (const kind in config.highlights_sasetumae) {
+      const highlightInfo = config.highlights_sasetumae[kind];
+      const eventData = eventMap[highlightInfo.id];
+      if (eventData) {
+        const rate = Math.round((eventData.violations / eventData.total) * 100);
+        let text = highlightInfo.text_template
+          .replace('%TOTAL%', eventData.total)
+          .replace('%VIOLATIONS%', eventData.violations)
+          .replace('%RATE%', rate);
+        
+        finalReportData.highlights_sasetumae.push({
+          kind: kind,
+          badge: highlightInfo.badge,
+          title: config.itemMap[eventData.id].name,
+          text: text,
+          risk: eventData.risk,
+          rate: rate,
+          violations: eventData.violations, // この行を追加
+          total: eventData.total // この行を追加
+        });
+      }
+    }
+
 
     // Generate Sections
     const sectionsMap = {};
@@ -65,6 +94,7 @@ function generateReports(driversData, config) {
           rate: rate,
           detail: `(${event.violations}回/${event.total}回)`,
           count: event.violations,
+          risk: event.risk,
           page: itemInfo.page
         });
       }

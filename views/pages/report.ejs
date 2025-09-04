@@ -17,6 +17,11 @@
     </main>
 
     <main class="sheet" style="page-break-before: always;">
+      <%- include('../partials/header_sasetumae', { report: report }) %>
+      <%- include('../partials/body_sasetumae', { report: report }) %>
+    </main>
+
+    <main class="sheet" style="page-break-before: always;">
       <%- include('../partials/header_sidou', { report: report }) %>
       <%- include('../partials/body_sidou', { report: report }) %>
     </main>

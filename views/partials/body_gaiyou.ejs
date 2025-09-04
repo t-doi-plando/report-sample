@@ -7,7 +7,7 @@
 
       <!-- ===== ハイライト3カード ===== -->
       <section class="highlights">
-        <% const cards = report.highlights || []; %>
+        <% const cards = report.highlights_gaiyou || []; %>
         <% cards.forEach(c => { %>
           <article class="hl hl--<%= c.kind %>">
             <div class="hl__band"><%= c.badge %></div>
@@ -51,8 +51,8 @@
                   <% } %>
                 </td>
                 <td class="cell--count">
-                  <% if (r.count !== "" && r.count !== null && r.count !== undefined) { %>
-                    <strong><%= r.count %>回</strong>
+                  <% if (r.risk !== "" && r.risk !== null && r.risk !== undefined) { %>
+                    <strong><%= r.risk %>回</strong>
                   <% } else { %>
                     -
                   <% } %>
