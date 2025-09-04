@@ -16,10 +16,20 @@
       <%- include('../partials/body_gaiyou', { report: report }) %>
     </main>
 
-    <main class="sheet" style="page-break-before: always;">
-      <%- include('../partials/header_sasetumae', { report: report }) %>
-      <%- include('../partials/body_sasetumae', { report: report }) %>
-    </main>
+    <% const pages = report.sasetumaePages || []; %>
+    <% if (pages.length === 0) { %>
+      <main class="sheet" style="page-break-before: always;">
+        <%- include('../partials/header_sasetumae', { report: report, pageIndex: 0, totalPages: 1 }) %>
+        <%- include('../partials/body_sasetumae', { report: report, page: null, pageIndex: 0, totalPages: 1 }) %>
+      </main>
+    <% } else { %>
+      <% pages.forEach((page, idx) => { %>
+        <main class="sheet" style="page-break-before: always;">
+          <%- include('../partials/header_sasetumae', { report: report, pageIndex: idx, totalPages: pages.length }) %>
+          <%- include('../partials/body_sasetumae', { report: report, page: page, pageIndex: idx, totalPages: pages.length }) %>
+        </main>
+      <% }) %>
+    <% } %>
 
     <main class="sheet" style="page-break-before: always;">
       <%- include('../partials/header_sidou', { report: report }) %>

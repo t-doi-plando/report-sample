@@ -1,36 +1,37 @@
-      <!-- ===== ハイライト3カード ===== -->
-      <section class="highlights">
-        <% const cards = report.highlights_sasetumae || []; %>
-        <% cards.forEach(c => { %>
-          <article class="hl hl--<%= c.kind %>">
-            <div class="hl__band hl__band--sasetumae">
-              <span><%= c.badge %></span>
-              <% if (c.kind === 'danger' && c.risk !== undefined && c.risk !== null) { %>
-                <span class="hl__risk-count">
-                  <span class="hl__main-value">
-                    <span class="hl__value-with-exclamation"><%= c.risk %></span>回
+      <% const isFirstPage = (typeof pageIndex === 'number' ? pageIndex === 0 : true); %>
+      <% if (isFirstPage) { %>
+        <!-- ===== ハイライト3カード（1ページ目のみ） ===== -->
+        <section class="highlights">
+          <% const cards = report.highlights_sasetumae || []; %>
+          <% cards.forEach(c => { %>
+            <article class="hl hl--<%= c.kind %>">
+              <div class="hl__band hl__band--sasetumae">
+                <span><%= c.badge %></span>
+                <% if (c.kind === 'danger' && c.risk !== undefined && c.risk !== null) { %>
+                  <span class="hl__risk-count">
+                    <span class="hl__main-value">
+                      <span class="hl__value-with-exclamation"><%= c.risk %></span>回
+                    </span>
                   </span>
-                </span>
-              <% } else if (c.kind === 'warn' && c.rate !== undefined && c.rate !== null) { %>
-                <span class="hl__risk-count">
-                  <span class="hl__main-value">
-                    <span class="hl__value-with-exclamation"><%= c.rate %></span>%
+                <% } else if (c.kind === 'warn' && c.rate !== undefined && c.rate !== null) { %>
+                  <span class="hl__risk-count">
+                    <span class="hl__main-value">
+                      <span class="hl__value-with-exclamation"><%= c.rate %></span>%
+                    </span>
+                    <span class="hl__sub-value">
+                      (<%= c.violations %>回/<%= c.total %>回)
+                    </span>
                   </span>
-                  <span class="hl__sub-value">
-                    (<%= c.violations %>回/<%= c.total %>回)
-                  </span>
-                </span>
-              <% } %>
-            </div>
-            
-            <div class="hl__divider"></div>
-            <p class="hl__text"><%= c.text %></p>
-          </article>
-        <% }) %>
-      </section>
+                <% } %>
+              </div>
+              <div class="hl__divider"></div>
+              <p class="hl__text"><%= c.text %></p>
+            </article>
+          <% }) %>
+        </section>
+      <% } %>
 
       <div class="violations-scene-title">違反疑いシーン一覧</div>
-      <!-- モック：違反疑いシーン一覧テーブル -->
       <table class="scenes-table">
         <thead>
           <tr>
@@ -41,77 +42,49 @@
           </tr>
         </thead>
         <tbody>
-          <!-- 2025年（モック） -->
-          <tr>
-            <td class="scenes-year" rowspan="10">2025</td>
-            <td class="scenes-date" rowspan="3">7/8</td>
-            <td class="scenes-time">19:20</td>
-            <td class="scenes-item"><span class="scenes-item-icon">[急]</span><span class="scenes-item--danger">急ブレーキ</span></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">▶</span>動画を確認する</a></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">📍</span>地図を確認する</a></td>
-          </tr>
-          <tr>
-            <td class="scenes-time">18:20</td>
-            <td class="scenes-item"></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">▶</span>動画を確認する</a></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">📍</span>地図を確認する</a></td>
-          </tr>
-          <tr>
-            <td class="scenes-time">17:20</td>
-            <td class="scenes-item"></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">▶</span>動画を確認する</a></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">📍</span>地図を確認する</a></td>
-          </tr>
-
-          <tr>
-            <td class="scenes-date" rowspan="3">7/7</td>
-            <td class="scenes-time">19:20</td>
-            <td class="scenes-item"><span class="scenes-item-icon">[急]</span><span class="scenes-item--danger">急ブレーキ</span></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">▶</span>動画を確認する</a></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">📍</span>地図を確認する</a></td>
-          </tr>
-          <tr>
-            <td class="scenes-time">18:20</td>
-            <td class="scenes-item"><span class="scenes-item-icon">[接]</span><span class="scenes-item--warn">接触未遂</span></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">▶</span>動画を確認する</a></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">📍</span>地図を確認する</a></td>
-          </tr>
-          <tr>
-            <td class="scenes-time">17:20</td>
-            <td class="scenes-item"><span class="scenes-item-icon">[接]</span><span class="scenes-item--warn">接触未遂</span></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">▶</span>動画を確認する</a></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">📍</span>地図を確認する</a></td>
-          </tr>
-
-          <tr>
-            <td class="scenes-date" rowspan="2">7/6</td>
-            <td class="scenes-time">19:20</td>
-            <td class="scenes-item"></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">▶</span>動画を確認する</a></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">📍</span>地図を確認する</a></td>
-          </tr>
-          <tr>
-            <td class="scenes-time">18:20</td>
-            <td class="scenes-item"></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">▶</span>動画を確認する</a></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">📍</span>地図を確認する</a></td>
-          </tr>
-
-          <tr>
-            <td class="scenes-date">7/5</td>
-            <td class="scenes-time">19:20</td>
-            <td class="scenes-item"></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">▶</span>動画を確認する</a></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">📍</span>地図を確認する</a></td>
-          </tr>
-
-          <tr>
-            <td class="scenes-date" rowspan="2">7/4</td>
-            <td class="scenes-time">19:20</td>
-            <td class="scenes-item"></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">▶</span>動画を確認する</a></td>
-            <td class="scenes-actions"><a href="#" class="scenes-btn"><span class="icon">📍</span>地図を確認する</a></td>
-          </tr>
-
+          <% if (!page || !page.groups || page.groups.length === 0) { %>
+            <tr>
+              <td colspan="6" style="text-align:center; color: var(--ink-600);">表示できるシーンがありません</td>
+            </tr>
+          <% } else { %>
+            <% page.groups.forEach((yg, yi) => { %>
+              <% const yearRowCount = yg.dates.reduce((acc, d) => acc + d.scenes.length, 0); %>
+              <% yg.dates.forEach((dg, di) => { %>
+                <% dg.scenes.forEach((s, si) => { %>
+                  <% const timeStr = new Intl.DateTimeFormat('ja-JP', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Tokyo' }).format(new Date(s.capturedAt)); %>
+                  <tr>
+                    <% if (di === 0 && si === 0) { %>
+                      <td class="scenes-year" rowspan="<%= yearRowCount %>"><%= yg.year %></td>
+                    <% } %>
+                    <% if (si === 0) { %>
+                      <td class="scenes-date" rowspan="<%= dg.scenes.length %>"><%= dg.dateLabel %></td>
+                    <% } %>
+                    <td class="scenes-time"><%= timeStr %></td>
+                    <td class="scenes-item">
+                      <% const riskCls = s.riskLevel === 'danger' ? 'scenes-item--danger' : (s.riskLevel === 'warn' ? 'scenes-item--warn' : ''); %>
+                      <span class="scenes-item-icon">[<%= s.type === 'hard_brake' ? '急' : (s.type === 'near_miss_contact' ? '接' : '・') %>]</span>
+                      <span class="<%= riskCls %>">
+                        <%= s.type === 'hard_brake' ? '急ブレーキ' : (s.type === 'near_miss_contact' ? '接触未遂' : s.type) %>
+                      </span>
+                    </td>
+                    <td class="scenes-actions">
+                      <% if (s.videoUrl) { %>
+                        <a href="<%= s.videoUrl %>" class="scenes-btn" target="_blank"><span class="icon">▶</span>動画を確認する</a>
+                      <% } else { %>
+                        -
+                      <% } %>
+                    </td>
+                    <td class="scenes-actions">
+                      <% if (s.streetViewUrl) { %>
+                        <a href="<%= s.streetViewUrl %>" class="scenes-btn" target="_blank"><span class="icon">📍</span>地図を確認する</a>
+                      <% } else { %>
+                        -
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% }) %>
+            <% }) %>
+          <% } %>
         </tbody>
       </table>
