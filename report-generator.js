@@ -13,7 +13,9 @@ function generateReports(driversData, config) {
       rank: driverData.stats.rank,
       highlights_gaiyou: [],
       highlights_sasetumae: [], // この行を追加
-      sections: []
+      sections: [],
+      // シーンページ（左折前のみ）
+      sasetumaePages: []
     };
 
     // Generate Highlights(概要)
@@ -100,6 +102,80 @@ function generateReports(driversData, config) {
       }
     });
     finalReportData.sections = Object.values(sectionsMap);
+
+    // Build scenes pages for 「左折前安全確認」(id=1 固定想定)
+    try {
+      const targetEventId = 1;
+      const targetEvent = driverData.events.find(e => e.id === targetEventId);
+      const scenes = (targetEvent && Array.isArray(targetEvent.scenes)) ? targetEvent.scenes.slice() : [];
+      // 並びを新→旧
+      scenes.sort((a, b) => new Date(b.capturedAt) - new Date(a.capturedAt));
+
+      // 年→月日でグルーピング
+      const groups = [];
+      const byYear = new Map();
+      // JSTで年/月日を計算
+      const ymdFmt = new Intl.DateTimeFormat('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'numeric', day: 'numeric' });
+      scenes.forEach(s => {
+        const dt = new Date(s.capturedAt);
+        const parts = ymdFmt.formatToParts(dt);
+        const year = Number(parts.find(p => p.type === 'year')?.value || '1970');
+        const month = Number(parts.find(p => p.type === 'month')?.value || '1');
+        const day = Number(parts.find(p => p.type === 'day')?.value || '1');
+        const md = `${month}/${day}`;
+        if (!byYear.has(year)) byYear.set(year, new Map());
+        const mapMd = byYear.get(year);
+        if (!mapMd.has(md)) mapMd.set(md, []);
+        mapMd.get(md).push(s);
+      });
+      // Map -> 配列（保持順は scenes の降順に準拠）
+      for (const [year, mdMap] of byYear.entries()) {
+        const dates = [];
+        for (const [md, list] of mdMap.entries()) {
+          dates.push({ dateLabel: md, scenes: list });
+        }
+        groups.push({ year, dates });
+      }
+
+      // ページ分割（固定上限、日付グループ単位）
+      const FIRST_PAGE_LIMIT = 14; // データ行の上限
+      const OTHER_PAGE_LIMIT = 22;
+      const pages = [];
+      let current = { groups: [], rowCount: 0, limit: FIRST_PAGE_LIMIT };
+
+      const pushGroup = (year, dateObj) => {
+        // current.groups 内に同一yearが最後にあればマージ、なければ新規追加
+        const last = current.groups[current.groups.length - 1];
+        if (last && last.year === year) {
+          last.dates.push(dateObj);
+        } else {
+          current.groups.push({ year, dates: [dateObj] });
+        }
+        current.rowCount += dateObj.scenes.length;
+      };
+
+      const closePage = () => {
+        if (current.rowCount > 0) {
+          pages.push({ groups: current.groups });
+        }
+        current = { groups: [], rowCount: 0, limit: OTHER_PAGE_LIMIT };
+      };
+
+      for (const g of groups) {
+        for (const d of g.dates) {
+          const need = d.scenes.length;
+          if (current.rowCount + need > current.limit && current.rowCount > 0) {
+            closePage();
+          }
+          pushGroup(g.year, d);
+        }
+      }
+      closePage();
+      finalReportData.sasetumaePages = pages;
+    } catch (e) {
+      // 失敗しても他の出力に影響しないように無視
+      finalReportData.sasetumaePages = [];
+    }
     return finalReportData;
   });
 
