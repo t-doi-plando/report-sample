@@ -75,8 +75,17 @@
                       <% } %>
                     </td>
                     <td class="scenes-actions">
-                      <% if (s.streetViewUrl) { %>
-                        <a href="<%= s.streetViewUrl %>" class="scenes-btn" target="_blank"><span class="icon">📍</span>地図を確認する</a>
+                      <% 
+                        let mapUrl = s.MapViewUrl || s.streetViewUrl;
+                        if (!s.MapViewUrl && s.streetViewUrl && s.streetViewUrl.includes('map_action=pano') && s.streetViewUrl.includes('viewpoint=')) {
+                          try {
+                            const qp = s.streetViewUrl.split('viewpoint=')[1];
+                            if (qp) { mapUrl = 'https://www.google.com/maps/search/?api=1&query=' + qp; }
+                          } catch (e) {}
+                        }
+                      %>
+                      <% if (mapUrl) { %>
+                        <a href="<%= mapUrl %>" class="scenes-btn" target="_blank"><span class="icon">📍</span>地図を確認する</a>
                       <% } else { %>
                         -
                       <% } %>
