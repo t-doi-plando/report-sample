@@ -100,7 +100,27 @@
         { "id": "sc-20250622-2010-1", "capturedAt": "2025-06-22T20:10:00+09:00", "riskLevel": "warn",   "type": "near_miss_contact", "videoUrl": null, "streetViewUrl": "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=35.7600,139.8200" },
         { "id": "sc-20250622-1855-1", "capturedAt": "2025-06-22T18:55:00+09:00", "riskLevel": "info",   "type": "hard_brake", "videoUrl": null, "streetViewUrl": null }
       ] },
-      { "id": 2, "violations": 2, "total": 280, "risk": 9  },
+      { "id": 2, "violations": 2, "total": 280, "risk": 9, "scenes": [
+        { "id": "sc2-20250709-2015-1", "capturedAt": "2025-07-09T20:15:00+09:00", "riskLevel": "danger", "type": "hard_brake", "videoUrl": "https://www.google.co.jp/", "streetViewUrl": null },
+        { "id": "sc2-20250709-1935-1", "capturedAt": "2025-07-09T19:35:00+09:00", "riskLevel": "warn",   "type": "near_miss_contact", "videoUrl": null, "streetViewUrl": null },
+        { "id": "sc2-20250709-1810-1", "capturedAt": "2025-07-09T18:10:00+09:00", "riskLevel": "info",   "type": "hard_brake", "videoUrl": null, "streetViewUrl": null },
+
+        { "id": "sc2-20250708-2050-1", "capturedAt": "2025-07-08T20:50:00+09:00", "riskLevel": "warn",   "type": "near_miss_contact", "videoUrl": "https://www.google.co.jp/", "streetViewUrl": null },
+        { "id": "sc2-20250708-1930-1", "capturedAt": "2025-07-08T19:30:00+09:00", "riskLevel": "danger", "type": "hard_brake", "videoUrl": null, "streetViewUrl": "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=35.7005,139.7705" },
+        { "id": "sc2-20250708-1845-1", "capturedAt": "2025-07-08T18:45:00+09:00", "riskLevel": "info",   "type": "near_miss_contact", "videoUrl": null, "streetViewUrl": null },
+        { "id": "sc2-20250708-1735-1", "capturedAt": "2025-07-08T17:35:00+09:00", "riskLevel": "warn",   "type": "near_miss_contact", "videoUrl": null, "streetViewUrl": null },
+
+        { "id": "sc2-20250707-2010-1", "capturedAt": "2025-07-07T20:10:00+09:00", "riskLevel": "danger", "type": "hard_brake", "videoUrl": null, "streetViewUrl": null },
+        { "id": "sc2-20250707-1900-1", "capturedAt": "2025-07-07T19:00:00+09:00", "riskLevel": "warn",   "type": "near_miss_contact", "videoUrl": "https://www.google.co.jp/", "streetViewUrl": null },
+        { "id": "sc2-20250707-1825-1", "capturedAt": "2025-07-07T18:25:00+09:00", "riskLevel": "info",   "type": "near_miss_contact", "videoUrl": null, "streetViewUrl": null },
+        { "id": "sc2-20250707-1740-1", "capturedAt": "2025-07-07T17:40:00+09:00", "riskLevel": "warn",   "type": "near_miss_contact", "videoUrl": null, "streetViewUrl": "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=35.6890,139.6920" },
+        { "id": "sc2-20250707-1710-1", "capturedAt": "2025-07-07T17:10:00+09:00", "riskLevel": "info",   "type": "hard_brake", "videoUrl": null, "streetViewUrl": null },
+        { "id": "sc2-20250706-2020-1", "capturedAt": "2025-07-06T20:20:00+09:00", "riskLevel": "danger", "type": "hard_brake", "videoUrl": null, "streetViewUrl": null },
+        { "id": "sc2-20250706-1855-1", "capturedAt": "2025-07-06T18:55:00+09:00", "riskLevel": "warn",   "type": "near_miss_contact", "videoUrl": "https://www.google.co.jp/", "streetViewUrl": null },
+        { "id": "sc2-20250706-1730-1", "capturedAt": "2025-07-06T17:30:00+09:00", "riskLevel": "info",   "type": "near_miss_contact", "videoUrl": null, "streetViewUrl": "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=35.7010,139.7710" },
+        { "id": "sc2-20250705-1910-1", "capturedAt": "2025-07-05T19:10:00+09:00", "riskLevel": "warn",   "type": "near_miss_contact", "videoUrl": null, "streetViewUrl": null },
+        { "id": "sc2-20250705-1840-1", "capturedAt": "2025-07-05T18:40:00+09:00", "riskLevel": "info",   "type": "hard_brake", "videoUrl": "https://www.google.co.jp/", "streetViewUrl": null }
+      ] },
       { "id": 3, "violations": 0, "total": 280, "risk": 9  },
       { "id": 7, "violations": 0, "total": 50, "risk": 9  },
       { "id": 8, "violations": 0, "total": 50, "risk": 9  }
