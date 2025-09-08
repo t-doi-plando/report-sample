@@ -1,7 +1,7 @@
       <!-- ===== ヘッダー（青帯） ===== -->
       <header class="topbar">
         <h1 class="topbar__title">
-          <span>診断結果</span><span class="sep">｜</span><span>左折前安全確認</span>
+          <span>診断結果</span><span class="sep">｜</span><span><%= section.title %></span>
           <% const _cur = (typeof pageIndex === 'number') ? (pageIndex + 1) : 1; %>
           <% const _total = (typeof totalPages === 'number') ? totalPages : 1; %>
           <span class="page-of">(<%= _cur %> / <%= _total %>)</span>
@@ -15,3 +15,4 @@
           </div>
         </dl>
       </header>
+

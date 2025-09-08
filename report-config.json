@@ -42,4 +42,27 @@
       "text_template": "%TOTAL%回のうち違反疑いは%VIOLATIONS%回でした。安全運転を継続してください。"
     }
   }
+  ,
+  "highlights_sasetuchuu": {
+    "danger": {
+      "id": 2,
+      "badge": "危険疑い回数",
+      "text_template": "%TOTAL%回のうち%VIOLATIONS%回の危険疑いがありました。左折中は歩行者や二輪車の動きに注意し、徐行を徹底しましょう。"
+    },
+    "warn": {
+      "id": 2,
+      "badge": "違反疑い割合",
+      "text_template": "%TOTAL%回のうち%VIOLATIONS%回(%RATE%%)の違反疑いがありました。左折中は巻き込みに注意し、視線移動とミラー確認を強化しましょう。"
+    },
+    "good": {
+      "id": 2,
+      "badge": "高評価ポイント",
+      "text_template": "%TOTAL%回のうち違反疑いは%VIOLATIONS%回でした。左折中の安全確認を継続してください。"
+    }
+  }
+  ,
+  "detailSections": [
+    { "key": "sasetumae",  "title": "左折前安全確認",  "eventId": 1, "highlightsKey": "highlights_sasetumae" },
+    { "key": "sasetuchuu", "title": "左折中安全確認", "eventId": 2, "highlightsKey": "highlights_sasetuchuu" }
+  ]
 }
