@@ -41,8 +41,7 @@
       "badge": "高評価ポイント",
       "text_template": "%TOTAL%回のうち違反疑いは%VIOLATIONS%回でした。安全運転を継続してください。"
     }
-  }
-  ,
+  },
   "highlights_sasetuchuu": {
     "danger": {
       "id": 2,
@@ -59,10 +58,27 @@
       "badge": "高評価ポイント",
       "text_template": "%TOTAL%回のうち違反疑いは%VIOLATIONS%回でした。左折中の安全確認を継続してください。"
     }
-  }
-  ,
+  },
+  "highlights_sasetuchuu_speed": {
+    "danger": {
+      "id": 3,
+      "badge": "危険疑い回数",
+      "text_template": "%TOTAL%回のうち%VIOLATIONS%回の危険疑いがありました。左折中は速度を抑え、いつでも停止できる速度を心がけましょう。"
+    },
+    "warn": {
+      "id": 3,
+      "badge": "違反疑い割合",
+      "text_template": "%TOTAL%回のうち%VIOLATIONS%回(%RATE%%)の違反疑いがありました。左折中の速度超過は巻き込み事故のリスクを高めます。"
+    },
+    "good": {
+      "id": 3,
+      "badge": "高評価ポイント",
+      "text_template": "%TOTAL%回のうち違反疑いは%VIOLATIONS%回でした。現在の左折中速度は適切です。"
+    }
+  },
   "detailSections": [
     { "key": "sasetumae",  "title": "左折前安全確認",  "eventId": 1, "highlightsKey": "highlights_sasetumae" },
-    { "key": "sasetuchuu", "title": "左折中安全確認", "eventId": 2, "highlightsKey": "highlights_sasetuchuu" }
+    { "key": "sasetuchuu", "title": "左折中安全確認", "eventId": 2, "highlightsKey": "highlights_sasetuchuu" },
+    { "key": "sasetuchuu_sokudo", "title": "左折中速度", "eventId": 3, "highlightsKey": "highlights_sasetuchuu_speed" }
   ]
 }
