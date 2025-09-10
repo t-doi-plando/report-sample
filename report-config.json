@@ -1,26 +1,11 @@
 {
   "pageTitle": "運転診断結果レポート｜概要",
   "itemMap": {
-    "1": {
-      "maneuver": "左折",
-      "name": "左折前安全確認"
-    },
-    "2": {
-      "maneuver": "左折",
-      "name": "左折中安全確認"
-    },
-    "3": {
-      "maneuver": "左折",
-      "name": "左折中速度"
-    },
-    "7": {
-      "maneuver": "バック",
-      "name": "バック前安全確認"
-    },
-    "8": {
-      "maneuver": "バック",
-      "name": "バック中安全確認"
-    }
+    "1": { "maneuver": "左折", "name": "左折前安全確認", "page": "2ページ" },
+    "2": { "maneuver": "左折", "name": "左折中安全確認", "page": "3ページ" },
+    "3": { "maneuver": "左折", "name": "左折中速度", "page": "4ページ" },
+    "7": { "maneuver": "バック", "name": "バック前の確認", "page": "8ページ" },
+    "8": { "maneuver": "バック", "name": "バック中の確認", "page": "9ページ" }
   },
   "highlights_gaiyou": {
     "danger": {
@@ -39,6 +24,7 @@
       "text_template": "%TOTAL%回のうち違反疑いは%VIOLATIONS%回でした。安全運転を継続してください。"
     }
   },
+
   "highlights_sasetumae": {
     "danger": {
       "id": 1,
@@ -91,23 +77,8 @@
     }
   },
   "detailSections": [
-    {
-      "key": "sasetumae",
-      "title": "左折前安全確認",
-      "eventId": 1,
-      "highlightsKey": "highlights_sasetumae"
-    },
-    {
-      "key": "sasetuchuu",
-      "title": "左折中安全確認",
-      "eventId": 2,
-      "highlightsKey": "highlights_sasetuchuu"
-    },
-    {
-      "key": "sasetuchuu_sokudo",
-      "title": "左折中速度",
-      "eventId": 3,
-      "highlightsKey": "highlights_sasetuchuu_speed"
-    }
+    { "key": "sasetumae",  "title": "左折前安全確認",  "eventId": 1, "highlightsKey": "highlights_sasetumae" },
+    { "key": "sasetuchuu", "title": "左折中安全確認", "eventId": 2, "highlightsKey": "highlights_sasetuchuu" },
+    { "key": "sasetuchuu_sokudo", "title": "左折中速度", "eventId": 3, "highlightsKey": "highlights_sasetuchuu_speed" }
   ]
 }

@@ -419,8 +419,6 @@ body.print-a4 {
   font-size:9pt; color:#2a5db6; background:#f6faff;
   white-space: nowrap; /* Prevent wrapping */
 }
-/* Anchor-style buttons should not show underline */
-.btn, .btn:visited, .btn:hover, .btn:active{ text-decoration: none; }
 
 .group-table tbody .cell--rate {
   display: flex;

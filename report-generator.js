@@ -6,7 +6,6 @@ function generateReports(driversData, config) {
     }, {});
 
     const finalReportData = {
-      driverId: driverData.driverId,
       pageTitle: config.pageTitle,
       officeName: driverData.officeName,
       driverName: driverData.driverName,
@@ -77,7 +76,7 @@ function generateReports(driversData, config) {
           detail: `(${event.violations}回/${event.total}回)`,
           count: event.violations,
           risk: event.risk,
-          // 動的ページ番号は後段で pageNumber に付与。静的pageは使用しない
+          page: itemInfo.page
         });
       }
     });
@@ -142,7 +141,7 @@ function generateReports(driversData, config) {
           }
         }
 
-        details.push({ key: sec.key, title: sec.title, pages, highlights, eventId: sec.eventId });
+        details.push({ key: sec.key, title: sec.title, pages, highlights });
       });
       finalReportData.detailSections = details;
       // 後方互換フィールドへ反映
@@ -156,25 +155,6 @@ function generateReports(driversData, config) {
         finalReportData.sasetuchuuPages = chuu.pages;
         finalReportData.highlights_sasetuchuu = chuu.highlights;
       }
-      // 概要テーブル向け: 各イベントIDの開始ページ番号を計算
-      const startPageByEventId = {};
-      let pageCounter = 1; // 概要が1ページ
-      details.forEach(sec => {
-        const effectivePages = Math.max(1, (sec.pages || []).length);
-        const startPage = pageCounter + 1; // 次ページからセクション開始
-        if (sec.eventId != null) {
-          startPageByEventId[sec.eventId] = startPage;
-        }
-        pageCounter += effectivePages;
-      });
-      // 既に生成済みの概要 rows へ動的ページ番号を反映
-      (finalReportData.sections || []).forEach(group => {
-        (group.rows || []).forEach(row => {
-          if (row && typeof row.no === 'number' && startPageByEventId[row.no]) {
-            row.pageNumber = startPageByEventId[row.no];
-          }
-        });
-      });
     } catch (e) {
       finalReportData.detailSections = [];
     }

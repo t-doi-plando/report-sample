@@ -58,11 +58,10 @@
                   <% } %>
                 </td>
                 <td class="cell--page">
-                  <% const dynPageNum = (typeof r.pageNumber === 'number') ? r.pageNumber : null; %>
-                  <% if (dynPageNum) { %>
-                    <a class="btn" href="#<%= report.driverId %>-page-<%= dynPageNum %>"><%= dynPageNum %>ページ ▶</a>
+                  <% if (r.page) { %>
+                    <span class="btn"><%= r.page %> ▶</span>
                   <% } else { %>
-                    <span class="btn" style="opacity:.7;">ページなし</span>
+                    -
                   <% } %>
                 </td>
               </tr>
