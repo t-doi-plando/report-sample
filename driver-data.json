@@ -121,7 +121,14 @@
         { "id": "sc2-20250705-1910-1", "capturedAt": "2025-07-05T19:10:00+09:00", "riskLevel": "warn",   "type": "near_miss_contact", "videoUrl": null, "streetViewUrl": null },
         { "id": "sc2-20250705-1840-1", "capturedAt": "2025-07-05T18:40:00+09:00", "riskLevel": "info",   "type": "hard_brake", "videoUrl": "https://www.google.co.jp/", "streetViewUrl": null }
       ] },
-      { "id": 3, "violations": 0, "total": 280, "risk": 9  },
+      { "id": 3, "violations": 0, "total": 280, "risk": 9, "scenes": [
+        { "id": "sc3-20250708-1925-1", "capturedAt": "2025-07-08T19:25:00+09:00", "riskLevel": "info",   "type": "hard_brake", "videoUrl": null, "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.7001,139.7701" },
+        { "id": "sc3-20250708-1845-1", "capturedAt": "2025-07-08T18:45:00+09:00", "riskLevel": "warn",   "type": "hard_brake", "videoUrl": "https://www.google.co.jp/", "MapViewUrl": null },
+        { "id": "sc3-20250707-2015-1", "capturedAt": "2025-07-07T20:15:00+09:00", "riskLevel": "danger", "type": "hard_brake", "videoUrl": null, "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.6899,139.6921" },
+        { "id": "sc3-20250707-1930-1", "capturedAt": "2025-07-07T19:30:00+09:00", "riskLevel": "info",   "type": "hard_brake", "videoUrl": null, "MapViewUrl": null },
+        { "id": "sc3-20250706-1820-1", "capturedAt": "2025-07-06T18:20:00+09:00", "riskLevel": "warn",   "type": "hard_brake", "videoUrl": null, "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.7052,139.7602" },
+        { "id": "sc3-20250706-1715-1", "capturedAt": "2025-07-06T17:15:00+09:00", "riskLevel": "info",   "type": "hard_brake", "videoUrl": null, "MapViewUrl": null }
+      ] },
       { "id": 7, "violations": 0, "total": 50, "risk": 9  },
       { "id": 8, "violations": 0, "total": 50, "risk": 9  }
     ]
