@@ -243,7 +243,7 @@
           <li>
             <span><%= driver.driverName %> (<%= driver.officeName %>)</span>
             <div class="button-group">
-              <a href="/download/<%= driver.driverId %>" class="download-pdf" target="_blank">PDFダウンロード</a>
+              <a href="/download/<%= driver.driverId %>" class="download-pdf">PDFダウンロード</a>
               <a href="/reports/<%= driver.driverId %>" class="view-html" target="_blank">HTMLプレビュー</a>
             </div>
           </li>
@@ -299,7 +299,7 @@
         li.innerHTML = `
           <span>${driver.driverName} (${driver.officeName})</span>
           <div class="button-group">
-            <a href="/download/${driver.driverId}" class="download-pdf" target="_blank">PDFダウンロード</a>
+            <a href="/download/${driver.driverId}" class="download-pdf">PDFダウンロード</a>
             <a href="/reports/${driver.driverId}" class="view-html" target="_blank">HTMLプレビュー</a>
           </div>
         `;
