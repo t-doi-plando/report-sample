@@ -131,9 +131,25 @@ app.get('/download/all', async (req, res) => {
     // プロトコルは req.protocol を使用
     const url = `${req.protocol}://${DOMAIN}/reports/all`;
     
+    // タイムスタンプ付きファイル名（report-all-drivers-YYYYMMDD-hhmmss.pdf）
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const yyyy = now.getFullYear();
+    const mm = pad(now.getMonth() + 1);
+    const dd = pad(now.getDate());
+    const hh = pad(now.getHours());
+    const mi = pad(now.getMinutes());
+    const ss = pad(now.getSeconds());
+    const timestamp = `${yyyy}${mm}${dd}-${hh}${mi}${ss}`;
+    const filename = `report-all-drivers-${timestamp}.pdf`;
+
+    const encodeRFC5987 = (str) => encodeURIComponent(str)
+      .replace(/['()]/g, escape)
+      .replace(/\*/g, '%2A');
+
     const pdfBuffer = await generatePdfFromUrl(url);
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename="report-all-drivers.pdf"');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"; filename*=UTF-8''${encodeRFC5987(filename)}`);
     res.send(pdfBuffer);
   } catch (error) {
     res.status(500).send('Failed to generate PDF.');
@@ -144,18 +160,71 @@ app.get('/download/all', async (req, res) => {
 app.get('/download/:driverId', async (req, res) => {
   const driverId = req.params.driverId;
   try {
-
     // ポート、ドメインの設定
     const PORT = process.env.PORT || 3000;
     const DOMAIN = process.env.DOMAIN || `127.0.0.1:${PORT}`;
 
+    // URLの設定（driverIdはURLエンコード）
+    const url = `${req.protocol}://${DOMAIN}/reports/${encodeURIComponent(driverId)}`;
 
-    // URLの設定
-    const url = `${req.protocol}://${DOMAIN}/reports/${driverId}`;
+    // ダウンロード用ファイル名の生成（ドライバーID-事業所名-ドライバー名-YYYYMMDD-hhmmss.pdf）
+    // アップロード済みのデータがあればそれを使用、なければデフォルトJSONを参照
+    let driversDataToUse;
+    if (uploadedDriversData) {
+      driversDataToUse = uploadedDriversData;
+    } else {
+      const dataPath = path.join(__dirname, 'driver-data.json');
+      try {
+        const dataRaw = fs.readFileSync(dataPath, 'utf8');
+        driversDataToUse = JSON.parse(dataRaw);
+      } catch (readErr) {
+        console.error(readErr);
+        driversDataToUse = [];
+      }
+    }
+
+    const driver = Array.isArray(driversDataToUse)
+      ? driversDataToUse.find((d) => d.driverId === driverId)
+      : null;
+
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const yyyy = now.getFullYear();
+    const mm = pad(now.getMonth() + 1);
+    const dd = pad(now.getDate());
+    const hh = pad(now.getHours());
+    const mi = pad(now.getMinutes());
+    const ss = pad(now.getSeconds());
+    const timestamp = `${yyyy}${mm}${dd}-${hh}${mi}${ss}`;
+
+    // Windows等で使用不可の文字を排除
+    const sanitize = (s) => String(s).replace(/[\\/:*?"<>|]/g, '_').trim();
+    let baseName;
+    if (driver) {
+      const officeName = sanitize(driver.officeName || '');
+      const driverName = sanitize(driver.driverName || '');
+      baseName = `${driverId}-${officeName}-${driverName}-${timestamp}`;
+    } else {
+      baseName = `report-${driverId}-${timestamp}`; // フォールバック
+    }
+    // 日本語等を含むフル名（filename* に使用）
+    const fullFilename = `${baseName}.pdf`;
+    // ASCII のみの安全なファイル名（filename に使用）
+    const toAscii = (s) => String(s).replace(/[^\x00-\x7F]/g, '_');
+    const safeId = toAscii(sanitize(driverId));
+    const safeFilename = `report-${safeId}-${timestamp}.pdf`;
+
+    // RFC 5987 準拠の filename* も併記（日本語対応強化）
+    const encodeRFC5987 = (str) => encodeURIComponent(str)
+      .replace(/['()]/g, escape)
+      .replace(/\*/g, '%2A');
 
     const pdfBuffer = await generatePdfFromUrl(url);
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="report-${driverId}.pdf"`);
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${safeFilename}"; filename*=UTF-8''${encodeRFC5987(fullFilename)}`
+    );
     res.send(pdfBuffer);
   } catch (error) {
     res.status(500).send('Failed to generate PDF.');
