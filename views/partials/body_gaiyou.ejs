@@ -80,3 +80,37 @@
           </a>
         </div>
       </div>
+      <% 
+        // Static Maps: compute URL if key + points exist
+        const key = typeof staticMapKey === 'string' ? staticMapKey : '';
+        const pts = Array.isArray(report.mapPoints) ? report.mapPoints : [];
+        const validPts = pts.filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lon));
+        const maxMarkers = 60; // limit to avoid URL length issues
+        const usePts = validPts.slice(0, maxMarkers);
+        const size = '640x400';
+        let mapUrl = '';
+        if (key && usePts.length > 0) {
+          const markers = usePts.map(p => `${p.lat},${p.lon}`).join('|');
+          mapUrl = `https://maps.googleapis.com/maps/api/staticmap?size=${size}&maptype=roadmap&markers=color:red|${markers}&key=${key}`;
+        }
+        // Fallback interactive Maps URL (first point) so the button is always clickable
+        // Prefer server-produced Google Maps KML link if available (multiple pins, no API key)
+        let fallbackUrl = (report.kmlLink || 'https://www.google.com/maps');
+        if (!mapUrl && !report.kmlLink && usePts.length > 0) {
+          const p = usePts[0];
+          fallbackUrl = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lon}`;
+        }
+      %>
+      <div class="summary-frame" style="margin-top: 8px;">
+        <div class="summary-column left-column">
+          <p>地図表示（静的）</p>
+        </div>
+        <div class="summary-column right-column">
+          <a href="<%= mapUrl || fallbackUrl %>" target="_blank" class="play-button-mock" title="違反地点を地図ですべて確認（確認用）">
+            <span class="play-icon">🗺️</span>
+          </a>
+          <div style="margin-top:4px; text-align:right;">
+            <a href="<%= mapUrl || fallbackUrl %>" target="_blank" class="btn">違反地点を地図ですべて確認（確認用）</a>
+          </div>
+        </div>
+      </div>

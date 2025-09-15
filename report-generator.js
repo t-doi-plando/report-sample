@@ -1,3 +1,57 @@
+// Extract lat/lng from known map URL formats and return normalized values
+function extractLatLng(mapViewUrl, streetViewUrl) {
+  let lat = null, lon = null, mapUrl = null;
+  // Try MapViewUrl: https://www.google.com/maps/search/?api=1&query=lat,lng
+  if (mapViewUrl) {
+    try {
+      const u = new URL(mapViewUrl);
+      const q = u.searchParams.get('query');
+      if (q) {
+        const parts = q.split(',').map(s => s.trim());
+        if (parts.length >= 2) {
+          const lt = parseFloat(parts[0]);
+          const lg = parseFloat(parts[1]);
+          if (Number.isFinite(lt) && Number.isFinite(lg)) {
+            lat = lt; lon = lg;
+            mapUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
+          }
+        }
+      }
+    } catch (_) {}
+  }
+  // Fallback: Street View URL with viewpoint=lat,lng
+  if ((lat === null || lon === null) && streetViewUrl) {
+    try {
+      let vp = null;
+      try {
+        const u = new URL(streetViewUrl);
+        vp = u.searchParams.get('viewpoint');
+      } catch (_) {}
+      if (!vp && streetViewUrl.includes('viewpoint=')) {
+        vp = streetViewUrl.split('viewpoint=')[1].split(/[&#]/)[0];
+      }
+      if (vp) {
+        const parts = vp.split(',').map(s => s.trim());
+        if (parts.length >= 2) {
+          const lt = parseFloat(parts[0]);
+          const lg = parseFloat(parts[1]);
+          if (Number.isFinite(lt) && Number.isFinite(lg)) {
+            lat = (lat === null) ? lt : lat;
+            lon = (lon === null) ? lg : lon;
+            if (!mapUrl) {
+              mapUrl = `https://www.google.com/maps/search/?api=1&query=${lt},${lg}`;
+            }
+          }
+        }
+      }
+    } catch (_) {}
+  }
+  if (!mapUrl) {
+    mapUrl = mapViewUrl || streetViewUrl || null;
+  }
+  return { lat, lon, mapUrl };
+}
+
 function generateReports(driversData, config) {
   const reports = driversData.map(driverData => {
     const eventMap = driverData.events.reduce((map, event) => {
@@ -18,7 +72,9 @@ function generateReports(driversData, config) {
       sections: [],
       // シーンページ
       sasetumaePages: [],
-      sasetuchuuPages: []
+      sasetuchuuPages: [],
+      // 地図用ポイント（lat/lon）
+      mapPoints: []
     };
 
     // Generate Highlights(概要)
@@ -42,6 +98,20 @@ function generateReports(driversData, config) {
         });
       }
     }
+
+    // 地図用ポイントを収集（全イベントのシーンから）
+    try {
+      const pts = [];
+      (driverData.events || []).forEach(ev => {
+        (ev.scenes || []).forEach(s => {
+          const { lat, lon } = extractLatLng(s.MapViewUrl, s.streetViewUrl);
+          if (Number.isFinite(lat) && Number.isFinite(lon)) {
+            pts.push({ lat, lon });
+          }
+        });
+      });
+      finalReportData.mapPoints = pts;
+    } catch (_) {}
 
     // 詳細ハイライトは detailSections 生成時に一括で作成します
 
@@ -87,12 +157,19 @@ function generateReports(driversData, config) {
     
     // 既存の左折中ページ生成ロジックは廃止（detailSectionsで一括生成）
     // 汎用セクション（config.detailSections 定義順）
-    try {
+  try {
+      console.log(`[report] driver=${driverData.driverId} starting detailSections build`);
       const details = [];
       const list = Array.isArray(config.detailSections) ? config.detailSections : [];
       list.forEach(sec => {
         const ev = driverData.events.find(e => e.id === sec.eventId);
-        const scenes = (ev && Array.isArray(ev.scenes)) ? ev.scenes.slice() : [];
+        const rawScenesCount = ev && Array.isArray(ev.scenes) ? ev.scenes.length : 0;
+        console.log(`[report] driver=${driverData.driverId} sec=${sec.key} evId=${sec.eventId} rawScenes=${rawScenesCount}`);
+        const scenes = (ev && Array.isArray(ev.scenes)) ? ev.scenes.map(s => {
+          const { lat, lon, mapUrl } = extractLatLng(s.MapViewUrl, s.streetViewUrl);
+          return { ...s, lat, lon, mapUrl };
+        }) : [];
+        console.log(`[report] driver=${driverData.driverId} sec=${sec.key} parsedScenes=${scenes.length}`);
         scenes.sort((a, b) => new Date(b.capturedAt) - new Date(a.capturedAt));
         // JSTで年/月日グループ化
         const byYear = new Map();
@@ -109,6 +186,7 @@ function generateReports(driversData, config) {
           if (!mapMd.has(md)) mapMd.set(md, []);
           mapMd.get(md).push(s);
         });
+        console.log(`[report] driver=${driverData.driverId} sec=${sec.key} groupedYears=${byYear.size}`);
         const groups = [];
         for (const [year, mdMap] of byYear.entries()) {
           const dates = [];
@@ -130,6 +208,7 @@ function generateReports(driversData, config) {
         for (const g of groups) { for (const d of g.dates) { const need = d.scenes.length; if (current.rowCount + need > current.limit && current.rowCount > 0) closePage(); pushGroup(g.year, d); } }
         closePage();
         const pages = pagesTmp;
+        console.log(`[report] driver=${driverData.driverId} sec=${sec.key} pages=${pages.length}`);
 
         // ハイライト生成
         const highlights = [];
@@ -141,10 +220,13 @@ function generateReports(driversData, config) {
             highlights.push({ kind, badge: hl.badge, title: config.itemMap[ev.id].name, text, risk: ev.risk, rate, violations: ev.violations, total: ev.total });
           }
         }
+        console.log(`[report] driver=${driverData.driverId} sec=${sec.key} highlights=${highlights.length}`);
 
         details.push({ key: sec.key, title: sec.title, pages, highlights, eventId: sec.eventId });
+        console.log(`[report] driver=${driverData.driverId} detailsSoFar=${details.length}`);
       });
       finalReportData.detailSections = details;
+      console.log(`[report] driver=${driverData.driverId} detailSections total=${details.length}`);
       // 後方互換フィールドへ反映
       const mae = details.find(d => d.key === 'sasetumae');
       if (mae) {
@@ -159,6 +241,7 @@ function generateReports(driversData, config) {
       // 概要テーブル向け: 各イベントIDの開始ページ番号を計算
       const startPageByEventId = {};
       let pageCounter = 1; // 概要が1ページ
+      console.log(`[report] driver=${driverData.driverId} assignPageNumbers start`);
       details.forEach(sec => {
         const effectivePages = Math.max(1, (sec.pages || []).length);
         const startPage = pageCounter + 1; // 次ページからセクション開始
@@ -175,7 +258,9 @@ function generateReports(driversData, config) {
           }
         });
       });
+      console.log(`[report] driver=${driverData.driverId} assignPageNumbers done`);
     } catch (e) {
+      console.error('[report] detailSections generation error for', driverData.driverId, e);
       finalReportData.detailSections = [];
     }
 

@@ -76,8 +76,8 @@
                     </td>
                     <td class="scenes-actions">
                       <% 
-                        let mapUrl = s.MapViewUrl || s.streetViewUrl;
-                        if (!s.MapViewUrl && s.streetViewUrl && s.streetViewUrl.includes('map_action=pano') && s.streetViewUrl.includes('viewpoint=')) {
+                        let mapUrl = s.mapUrl || s.MapViewUrl || s.streetViewUrl;
+                        if (!mapUrl && s.streetViewUrl && s.streetViewUrl.includes('map_action=pano') && s.streetViewUrl.includes('viewpoint=')) {
                           try {
                             const qp = s.streetViewUrl.split('viewpoint=')[1];
                             if (qp) { mapUrl = 'https://www.google.com/maps/search/?api=1&query=' + qp; }

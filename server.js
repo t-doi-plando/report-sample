@@ -81,7 +81,30 @@ app.get('/reports/all', (req, res) => {
     }
     
     const reports = generateReports(driversDataToUse, config);
-    res.render('pages/report', { reports: reports });
+    const staticMapKey = process.env.GOOGLE_STATIC_MAPS_KEY || '';
+    // Prepare KML files and Google Maps KML links (no API key required)
+    try {
+      const mapsDir = path.join(__dirname, 'public', 'maps');
+      if (!fs.existsSync(mapsDir)) fs.mkdirSync(mapsDir, { recursive: true });
+      const PORT = process.env.PORT || 3000;
+      const DOMAIN = process.env.DOMAIN || `127.0.0.1:${PORT}`;
+      reports.forEach(rep => {
+        const pts = Array.isArray(rep.mapPoints) ? rep.mapPoints : [];
+        if (pts.length === 0) return;
+        // Build simple KML with placemarks
+        const kmlPlacemarks = pts.map((p, idx) =>
+          `    <Placemark>\n      <name>${idx + 1}</name>\n      <Point><coordinates>${p.lon},${p.lat},0</coordinates></Point>\n    </Placemark>`
+        ).join('\n');
+        const kml = `<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2">\n  <Document>\n    <name>${rep.driverId}-points</name>\n${kmlPlacemarks}\n  </Document>\n</kml>\n`;
+        const filePath = path.join(mapsDir, `${rep.driverId}.kml`);
+        fs.writeFileSync(filePath, kml, 'utf8');
+        const absKmlUrl = `${req.protocol}://${DOMAIN}/maps/${rep.driverId}.kml`;
+        rep.kmlLink = `https://www.google.com/maps?q=${encodeURIComponent(absKmlUrl)}`;
+      });
+    } catch (e) {
+      console.warn('KML generation skipped due to error:', e.message);
+    }
+    res.render('pages/report', { reports: reports, staticMapKey });
   });
 });
 
@@ -117,7 +140,28 @@ app.get('/reports/:driverId', (req, res) => {
     }
 
     const reports = generateReports([singleDriverData], config);
-    res.render('pages/report', { reports: reports });
+    const staticMapKey = process.env.GOOGLE_STATIC_MAPS_KEY || '';
+    try {
+      const mapsDir = path.join(__dirname, 'public', 'maps');
+      if (!fs.existsSync(mapsDir)) fs.mkdirSync(mapsDir, { recursive: true });
+      const PORT = process.env.PORT || 3000;
+      const DOMAIN = process.env.DOMAIN || `127.0.0.1:${PORT}`;
+      reports.forEach(rep => {
+        const pts = Array.isArray(rep.mapPoints) ? rep.mapPoints : [];
+        if (pts.length === 0) return;
+        const kmlPlacemarks = pts.map((p, idx) =>
+          `    <Placemark>\n      <name>${idx + 1}</name>\n      <Point><coordinates>${p.lon},${p.lat},0</coordinates></Point>\n    </Placemark>`
+        ).join('\n');
+        const kml = `<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n  <Document>\n    <name>${rep.driverId}-points</name>\n${kmlPlacemarks}\n  </Document>\n</kml>\n`;
+        const filePath = path.join(mapsDir, `${rep.driverId}.kml`);
+        fs.writeFileSync(filePath, kml, 'utf8');
+        const absKmlUrl = `${req.protocol}://${DOMAIN}/maps/${rep.driverId}.kml`;
+        rep.kmlLink = `https://www.google.com/maps?q=${encodeURIComponent(absKmlUrl)}`;
+      });
+    } catch (e) {
+      console.warn('KML generation skipped due to error:', e.message);
+    }
+    res.render('pages/report', { reports: reports, staticMapKey });
   });
 });
 
