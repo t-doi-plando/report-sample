@@ -29,6 +29,8 @@ body.print-a4 {
   --red-600:#aa0e0e;  --red-050:#fdeeee;
   --amber-600:#d99712;--amber-050:#fff3de;
   --green-600:#0ca614;--green-050:#eaf7ea;
+  /* 固定メタ幅（右側の事業所/氏名エリア） */
+  --meta-width: 32ch;
 }
 
 /* A4 1枚のシート */
@@ -42,15 +44,30 @@ body.print-a4 {
 .topbar{
   background: linear-gradient(90deg, var(--blue-700), var(--blue-600));
   color:#fff; border-radius:6px; padding:6mm 8mm;
-  display:flex; align-items:center; justify-content:space-between;
+  /* タイトル（左）とメタ（右）を固定2カラムで配置 */
+  display:grid; grid-template-columns: 1fr var(--meta-width); align-items:center;
 }
-.topbar__title{ margin:0; font-size:16pt; font-weight:800; letter-spacing:.02em; }
-.topbar__title .page-of{ margin-left:.6em; font-size:.85em; opacity:.85; }
+.topbar__title{ margin:0; font-size:16pt; font-weight:800; letter-spacing:.02em; white-space: nowrap; }
+.topbar__title .page-of{ margin-left:0; font-size:.8em; opacity:.85; }
 .topbar__title .sep{ opacity:.6; margin:0 .5em; }
-.meta{ display:flex; gap:10mm; margin:0; }
-.meta__item{ display:flex; gap:4mm; align-items:baseline; }
+.meta{ display:flex; gap:1ch; margin:0; justify-content: flex-end; align-items:flex-start; flex-wrap: nowrap; }
+.meta__item{ min-width:0; flex: 0 1 auto; }
 .meta__item dt{ opacity:.85; font-size:9.5pt; }
-.meta__item dd{ margin:0; font-size:10.5pt; font-weight:700; }
+/* メタテキストは2行クランプ（高さ固定）、右寄せ・折返し */
+.meta__item dd{
+  margin:0; font-size:10.5pt; font-weight:700;
+  max-width:100%; white-space: normal; text-align: left;
+  overflow-wrap:anywhere; word-break:break-word;
+  display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; overflow:hidden; text-overflow:ellipsis;
+}
+/* Office name small when too long */
+.meta__office--small{ line-height: 1.2; }
+.meta__item dd.meta__office--small{ font-size: 50%; -webkit-line-clamp:2; }
+/* Driver name small when too long */
+.meta__name--small{ line-height: 1.2; }
+.meta__item dd.meta__name--small{ font-size: 50%; -webkit-line-clamp:2; }
+/* Office name: force earlier breaks to avoid layout push */
+.meta__office{ overflow-wrap:anywhere; word-break: break-all; }
 
 /* ===== KPI 行 ===== */
 .headline{

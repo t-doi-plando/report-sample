@@ -121,6 +121,11 @@
       margin-right: 20px;
     }
 
+    /* Long names wrap within their column while buttons stay to the right */
+    #individual-reports-list li { flex-wrap: nowrap; }
+    #individual-reports-list .driver-label { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; word-break: break-word; }
+    #individual-reports-list .button-group { flex-shrink: 0; }
+
     .button-group {
       display: flex;
       gap: 12px;
@@ -229,8 +234,8 @@
         <li>
           <span>全ドライバーのレポート</span>
           <div class="button-group">
-            <a href="/download/all" class="download-pdf">PDFダウンロード</a>
-            <a href="/reports/all" class="view-html" target="_blank">HTMLプレビュー</a>
+            <a href="/download/all<%= token ? ('?t=' + token) : '' %>" class="download-pdf">PDFダウンロード</a>
+            <a href="/reports/all<%= token ? ('?t=' + token) : '' %>" class="view-html" target="_blank">HTMLプレビュー</a>
           </div>
         </li>
       </ul>
@@ -241,10 +246,10 @@
       <ul id="individual-reports-list">
         <% drivers.forEach(function(driver) { %>
           <li>
-            <span><%= driver.driverName %> (<%= driver.officeName %>)</span>
+            <span class="driver-label"><%= driver.driverName %> (<%= driver.officeName %>)</span>
             <div class="button-group">
-              <a href="/download/<%= driver.driverId %>" class="download-pdf">PDFダウンロード</a>
-              <a href="/reports/<%= driver.driverId %>" class="view-html" target="_blank">HTMLプレビュー</a>
+              <a href="/download/<%= driver.driverId %><%= token ? ('?t=' + token) : '' %>" class="download-pdf">PDFダウンロード</a>
+              <a href="/reports/<%= driver.driverId %><%= token ? ('?t=' + token) : '' %>" class="view-html" target="_blank">HTMLプレビュー</a>
             </div>
           </li>
         <% }); %>
@@ -254,6 +259,8 @@
   </body>
   <div id="toast-container"></div>
   <script>
+    // Current URL token (from server render). Empty string if none.
+    let currentToken = <%- (token ? JSON.stringify(token) : '""') %>;
     function showToast(message, type = 'success') {
       const toastContainer = document.getElementById('toast-container');
       const toast = document.createElement('div');
@@ -296,11 +303,12 @@
 
       drivers.forEach(driver => {
         const li = document.createElement('li');
+        const tSuffix = currentToken ? `?t=${currentToken}` : '';
         li.innerHTML = `
-          <span>${driver.driverName} (${driver.officeName})</span>
+          <span class=\"driver-label\">${driver.driverName} (${driver.officeName})</span>
           <div class="button-group">
-            <a href="/download/${driver.driverId}" class="download-pdf">PDFダウンロード</a>
-            <a href="/reports/${driver.driverId}" class="view-html" target="_blank">HTMLプレビュー</a>
+            <a href="/download/${driver.driverId}${tSuffix}" class="download-pdf">PDFダウンロード</a>
+            <a href="/reports/${driver.driverId}${tSuffix}" class="view-html" target="_blank">HTMLプレビュー</a>
           </div>
         `;
         individualReportsList.appendChild(li);
@@ -324,14 +332,25 @@
               body: JSON.stringify(jsonData),
             })
             .then(response => response.json())
-            .then(data => showToast(data.message, 'success'))
+            .then(data => {
+              showToast(data.message, 'success');
+              if (data.token) {
+                currentToken = data.token;
+                // Update "all" section links to include token
+                const allPdf = document.querySelector('a.download-pdf[href^="/download/all"]');
+                if (allPdf) allPdf.href = `/download/all?t=${encodeURIComponent(currentToken)}`;
+                const allHtml = document.querySelector('a.view-html[href^="/reports/all"]');
+                if (allHtml) allHtml.href = `/reports/all?t=${encodeURIComponent(currentToken)}`;
+              }
+              // Re-render individual list so that each link includes ?t=
+              updateReportsList(jsonData);
+            })
             .catch(error => {
               console.error('Error:', error);
               showToast('JSONデータのアップロード中にエラーが発生しました。', 'error');
             });
 
-            // 2. Update the UI dynamically
-            updateReportsList(jsonData);
+            // 2. Update the UI dynamically (moved after token assignment)
 
             // 3. Update the file selection display
             uploadButtonSpan.innerHTML = ''; // Clear existing content

@@ -4,11 +4,14 @@
           <span>診断結果</span><span class="sep">｜</span><span>概要</span>
         </h1>
         <dl class="meta">
+          <% function wrapEvery10Html(s){ s = String(s || ''); return s.replace(/(.{10})/g, '$1<wbr>'); } %>
+          <% const _officeName = report.officeName || "矢崎事業所"; const _officeLong = String(_officeName).length >= 10; %>
           <div class="meta__item">
-            <dt>事業所</dt><dd><%= report.officeName || "矢崎事業所" %></dd>
+            <dd class="meta__office <%= _officeLong ? 'meta__office--small' : '' %>"><%- wrapEvery10Html(_officeName) %></dd>
           </div>
+          <% const _driverName = report.driverName || "安全 太郎"; const _driverLong = String(_driverName).length >= 10; %>
           <div class="meta__item">
-            <dt>氏名</dt><dd><%= report.driverName || "安全 太郎" %></dd>
+            <dd class="meta__name <%= _driverLong ? 'meta__name--small' : '' %>"><%- wrapEvery10Html(_driverName) %></dd>
           </div>
         </dl>
       </header>

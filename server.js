@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const { generateReports } = require('./report-generator.js');
 const { generatePdfFromUrl } = require('./pdf-generator.js');
 
@@ -16,16 +17,64 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json()); // JSONボディをパースするためのミドルウェア
 
-let uploadedDriversData = null; // アップロードされたドライバーデータを一時的に保持する変数
+let uploadedDriversData = null; // アップロードされたドライバーデータを一時的に保持する変数（フォールバック用）
+
+// URLトークン方式: トークン -> データ をインメモリ保持
+const tokenStore = new Map(); // token -> { data, lastAccess }
+const TOKEN_TTL_MS = (parseInt(process.env.TOKEN_TTL_HOURS || '8', 10) || 8) * 60 * 60 * 1000; // 8時間
+const CLEANUP_INTERVAL_MS = 5 * 60 * 1000; // 5分
+
+function saveTokenData(token, data) {
+  tokenStore.set(token, { data, lastAccess: Date.now() });
+}
+
+function getTokenData(token) {
+  const entry = tokenStore.get(token);
+  if (!entry) return null;
+  if (Date.now() - entry.lastAccess > TOKEN_TTL_MS) {
+    tokenStore.delete(token);
+    return null;
+  }
+  entry.lastAccess = Date.now();
+  return entry.data;
+}
+
+function cleanupExpiredTokens() {
+  const now = Date.now();
+  for (const [t, entry] of tokenStore.entries()) {
+    if (now - entry.lastAccess > TOKEN_TTL_MS) tokenStore.delete(t);
+  }
+}
+setInterval(cleanupExpiredTokens, CLEANUP_INTERVAL_MS).unref?.();
+
+function resolveDriversData(req) {
+  const t = req.query && req.query.t ? String(req.query.t) : null;
+  if (t) {
+    const data = getTokenData(t);
+    if (data) return { token: t, data };
+  }
+  // トークンが無い/失効時は既定データを返す（共有フォールバックは使用しない）
+  const dataPath = path.join(__dirname, 'driver-data.json');
+  try {
+    const dataRaw = fs.readFileSync(dataPath, 'utf8');
+    return { token: null, data: JSON.parse(dataRaw) };
+  } catch (e) {
+    console.error(e);
+    return { token: null, data: [] };
+  }
+}
 
 // --- Endpoints ---
 
 // JSONデータアップロード用エンドポイント
 app.post('/upload-json-data', (req, res) => {
   try {
-    uploadedDriversData = req.body; // アップロードされたJSONデータを保存
-    console.log('Uploaded driver data received:', uploadedDriversData.length, 'drivers');
-    res.status(200).json({ message: 'JSONデータが正常にアップロードされました。' });
+    const incoming = req.body;
+    const token = (crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex'));
+    saveTokenData(token, incoming);
+    // 共有フォールバックは使用しない（URLトークン経由のみ参照）
+    console.log('Uploaded driver data (tokenized):', token, Array.isArray(incoming) ? incoming.length : 'n/a', 'drivers');
+    res.status(200).json({ message: 'JSONデータが正常にアップロードされました。', token });
   } catch (error) {
     console.error('Error processing uploaded JSON data:', error);
     res.status(400).json({ message: '無効なJSONデータです。' });
@@ -41,17 +90,16 @@ app.post('/reset-json-data', (req, res) => {
 
 // Root: Dashboard page
 app.get('/', (req, res) => {
-  const dataPath = path.join(__dirname, 'driver-data.json');
+  const { token, data } = resolveDriversData(req);
   try {
-    const dataRaw = fs.readFileSync(dataPath, 'utf8');
-    const driversDataToUse = JSON.parse(dataRaw);
     res.render('pages/report-links', {
       reportTitle: '運転診断レポート一覧',
-      drivers: driversDataToUse
+      drivers: data,
+      token
     });
   } catch (readErr) {
     console.error(readErr);
-    return res.status(500).send('Error reading default driver data');
+    return res.status(500).send('Error rendering dashboard');
   }
 });
 
@@ -66,22 +114,10 @@ app.get('/reports/all', (req, res) => {
     }
     const config = JSON.parse(configRaw);
 
-    let driversDataToUse;
-    if (uploadedDriversData) {
-      driversDataToUse = uploadedDriversData;
-    } else {
-      const dataPath = path.join(__dirname, 'driver-data.json');
-      try {
-        const dataRaw = fs.readFileSync(dataPath, 'utf8'); // 同期的に読み込む
-        driversDataToUse = JSON.parse(dataRaw);
-      } catch (readErr) {
-        console.error(readErr);
-        return res.status(500).send('Error reading default driver data');
-      }
-    }
-    
+    const { token, data: driversDataToUse } = resolveDriversData(req);
     const reports = generateReports(driversDataToUse, config);
-    res.render('pages/report', { reports: reports });
+    const staticMapKey = process.env.GOOGLE_STATIC_MAPS_KEY || '';
+    res.render('pages/report', { reports: reports, staticMapKey, token });
   });
 });
 
@@ -97,19 +133,7 @@ app.get('/reports/:driverId', (req, res) => {
     }
     const config = JSON.parse(configRaw);
 
-    let driversDataToUse;
-    if (uploadedDriversData) {
-      driversDataToUse = uploadedDriversData;
-    } else {
-      const dataPath = path.join(__dirname, 'driver-data.json');
-      try {
-        const dataRaw = fs.readFileSync(dataPath, 'utf8'); // 同期的に読み込む
-        driversDataToUse = JSON.parse(dataRaw);
-      } catch (readErr) {
-        console.error(readErr);
-        return res.status(500).send('Error reading default driver data');
-      }
-    }
+    const { token, data: driversDataToUse } = resolveDriversData(req);
     
     const singleDriverData = driversDataToUse.find(d => d.driverId === driverId);
     if (!singleDriverData) {
@@ -117,7 +141,8 @@ app.get('/reports/:driverId', (req, res) => {
     }
 
     const reports = generateReports([singleDriverData], config);
-    res.render('pages/report', { reports: reports });
+    const staticMapKey = process.env.GOOGLE_STATIC_MAPS_KEY || '';
+    res.render('pages/report', { reports: reports, staticMapKey, token });
   });
 });
 
@@ -128,8 +153,10 @@ app.get('/download/all', async (req, res) => {
     const PORT = process.env.PORT || 3000;
     const DOMAIN = process.env.DOMAIN || `127.0.0.1:${PORT}`;
 
-    // プロトコルは req.protocol を使用
-    const url = `${req.protocol}://${DOMAIN}/reports/all`;
+    // プロトコルは req.protocol を使用（トークンをURL伝搬）
+    const t = req.query && req.query.t ? String(req.query.t) : null;
+    const query = t ? `?t=${encodeURIComponent(t)}` : '';
+    const url = `${req.protocol}://${DOMAIN}/reports/all${query}`;
     
     // タイムスタンプ付きファイル名（report-all-drivers-YYYYMMDD-hhmmss.pdf）
     const now = new Date();
@@ -164,24 +191,14 @@ app.get('/download/:driverId', async (req, res) => {
     const PORT = process.env.PORT || 3000;
     const DOMAIN = process.env.DOMAIN || `127.0.0.1:${PORT}`;
 
-    // URLの設定（driverIdはURLエンコード）
-    const url = `${req.protocol}://${DOMAIN}/reports/${encodeURIComponent(driverId)}`;
+    // URLの設定（driverIdはURLエンコード＋トークン伝搬）
+    const t = req.query && req.query.t ? String(req.query.t) : null;
+    const query = t ? `?t=${encodeURIComponent(t)}` : '';
+    const url = `${req.protocol}://${DOMAIN}/reports/${encodeURIComponent(driverId)}${query}`;
 
     // ダウンロード用ファイル名の生成（ドライバーID-事業所名-ドライバー名-YYYYMMDD-hhmmss.pdf）
-    // アップロード済みのデータがあればそれを使用、なければデフォルトJSONを参照
-    let driversDataToUse;
-    if (uploadedDriversData) {
-      driversDataToUse = uploadedDriversData;
-    } else {
-      const dataPath = path.join(__dirname, 'driver-data.json');
-      try {
-        const dataRaw = fs.readFileSync(dataPath, 'utf8');
-        driversDataToUse = JSON.parse(dataRaw);
-      } catch (readErr) {
-        console.error(readErr);
-        driversDataToUse = [];
-      }
-    }
+    // URLトークンがあればそのデータ、なければフォールバック
+    const { data: driversDataToUse } = resolveDriversData(req);
 
     const driver = Array.isArray(driversDataToUse)
       ? driversDataToUse.find((d) => d.driverId === driverId)
