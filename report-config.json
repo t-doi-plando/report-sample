@@ -22,73 +22,30 @@
       "name": "バック中安全確認"
     }
   },
+  "thresholds": {
+    "danger_threshold": 10,
+    "warn_threshold": 5,
+    "good_threshold": 0
+  },
   "highlights_gaiyou": {
-    "danger": {
-      "id": 1,
-      "badge": "！ 危険疑い回数が多い項目",
-      "text_template": "%TOTAL%回のうち%VIOLATIONS%回の危険疑いがありました。左折時には、バイクや自転車の巻き込みに特に注意しましょう。"
-    },
-    "warn": {
-      "id": 3,
-      "badge": "！ 違反疑い割合が高い項目",
-      "text_template": "%TOTAL%回のうち%VIOLATIONS%回(%RATE%%)の違反疑いがありました。右折時は徐行し、いつでも停止できる速度で運転することが重要です。"
-    },
-    "good": {
-      "id": 8,
-      "badge": "◎ 高評価ポイント",
-      "text_template": "%TOTAL%回のうち違反疑いは%VIOLATIONS%回でした。安全運転を継続してください。"
-    }
+    "danger": { "badge": "！ 危険疑い回数が多い項目" },
+    "warn":   { "badge": "！ 違反疑い割合が高い項目" },
+    "good":   { "badge": "◎ 高評価ポイント" }
   },
   "highlights_sasetumae": {
-    "danger": {
-      "id": 1,
-      "badge": "危険疑い回数",
-      "text_template": "%TOTAL%回のうち%VIOLATIONS%回の危険疑いがありました。左折時には、バイクや自転車の巻き込みに特に注意しましょう。"
-    },
-    "warn": {
-      "id": 1,
-      "badge": "違反疑い割合",
-      "text_template": "%TOTAL%回のうち%VIOLATIONS%回(%RATE%%)の違反疑いがありました。右折時は徐行し、いつでも停止できる速度で運転することが重要です。"
-    },
-    "good": {
-      "id": 1,
-      "badge": "高評価ポイント",
-      "text_template": "%TOTAL%回のうち違反疑いは%VIOLATIONS%回でした。安全運転を継続してください。"
-    }
+    "danger": { "badge": "危険疑い回数" },
+    "warn":   { "badge": "違反疑い割合" },
+    "good":   { "badge": "高評価ポイント" }
   },
   "highlights_sasetuchuu": {
-    "danger": {
-      "id": 2,
-      "badge": "危険疑い回数",
-      "text_template": "%TOTAL%回のうち%VIOLATIONS%回の危険疑いがありました。左折中は歩行者や二輪車の動きに注意し、徐行を徹底しましょう。"
-    },
-    "warn": {
-      "id": 2,
-      "badge": "違反疑い割合",
-      "text_template": "%TOTAL%回のうち%VIOLATIONS%回(%RATE%%)の違反疑いがありました。左折中は巻き込みに注意し、視線移動とミラー確認を強化しましょう。"
-    },
-    "good": {
-      "id": 2,
-      "badge": "高評価ポイント",
-      "text_template": "%TOTAL%回のうち違反疑いは%VIOLATIONS%回でした。左折中の安全確認を継続してください。"
-    }
+    "danger": { "badge": "危険疑い回数" },
+    "warn":   { "badge": "違反疑い割合" },
+    "good":   { "badge": "高評価ポイント" }
   },
   "highlights_sasetuchuu_speed": {
-    "danger": {
-      "id": 3,
-      "badge": "危険疑い回数",
-      "text_template": "%TOTAL%回のうち%VIOLATIONS%回の危険疑いがありました。左折中は速度を抑え、いつでも停止できる速度を心がけましょう。"
-    },
-    "warn": {
-      "id": 3,
-      "badge": "違反疑い割合",
-      "text_template": "%TOTAL%回のうち%VIOLATIONS%回(%RATE%%)の違反疑いがありました。左折中の速度超過は巻き込み事故のリスクを高めます。"
-    },
-    "good": {
-      "id": 3,
-      "badge": "高評価ポイント",
-      "text_template": "%TOTAL%回のうち違反疑いは%VIOLATIONS%回でした。現在の左折中速度は適切です。"
-    }
+    "danger": { "badge": "危険疑い回数" },
+    "warn":   { "badge": "違反疑い割合" },
+    "good":   { "badge": "高評価ポイント" }
   },
   "detailSections": [
     {

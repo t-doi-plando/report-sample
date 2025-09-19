@@ -11,8 +11,8 @@
         <% cards.forEach(c => { %>
           <article class="hl hl--<%= c.kind %>">
             <div class="hl__band"><%= c.badge %></div>
-            <h2 class="hl__title"><%= c.title %></h2>
-            <p class="hl__text"><%= c.text %></p>
+            <h2 class="hl__title"><%= c.title || '' %></h2>
+            <p class="hl__text"><%= (c.text && c.text.trim()) ? c.text : '本文未設定' %></p>
           </article>
         <% }) %>
       </section>
