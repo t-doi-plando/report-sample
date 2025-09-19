@@ -1,7 +1,7 @@
       <% const isFirstPage = (typeof pageIndex === 'number' ? pageIndex === 0 : true); %>
       <% if (isFirstPage) { %>
         <!-- ===== ハイライト3カード（1ページ目のみ） ===== -->
-        <section class="highlights">
+        <section class="highlights highlights--detail">
           <% const cards = section.highlights || []; %>
           <% cards.forEach(c => { %>
             <article class="hl hl--<%= c.kind %>">
