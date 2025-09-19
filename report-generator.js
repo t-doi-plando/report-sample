@@ -59,6 +59,10 @@ function buildHighlight(kind, meta, entry) {
 
 function generateReports(driversData, config) {
   const thresholds = resolveThresholds(config ? config.thresholds : undefined);
+  const limits = config && config.detailPageLimits ? {
+    first: Number(config.detailPageLimits.first_page) || 13,
+    other: Number(config.detailPageLimits.other_pages) || 16
+  } : { first: 13, other: 16 };
   const reports = driversData.map(driverData => {
     const eventMap = driverData.events.reduce((map, event) => {
       map[event.id] = event;
@@ -165,7 +169,8 @@ function generateReports(driversData, config) {
           groups.push({ year, dates });
         }
         // ページ分割
-        const FIRST_PAGE_LIMIT = 14, OTHER_PAGE_LIMIT = 22;
+        const FIRST_PAGE_LIMIT = limits.first;
+        const OTHER_PAGE_LIMIT = limits.other;
         const pagesTmp = [];
         let current = { groups: [], rowCount: 0, limit: FIRST_PAGE_LIMIT };
         const pushGroup = (year, dateObj) => {

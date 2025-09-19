@@ -27,6 +27,10 @@
     "warn_threshold": 5,
     "good_threshold": 0
   },
+  "detailPageLimits": {
+    "first_page": 13,
+    "other_pages": 16
+  },
   "highlights_gaiyou": {
     "danger": { "badge": "！ 危険疑い回数が多い項目" },
     "warn":   { "badge": "！ 違反疑い割合が高い項目" },
