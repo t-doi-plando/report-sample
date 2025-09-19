@@ -1,4 +1,64 @@
+const DEFAULT_THRESHOLDS = {
+  danger: 10,
+  warn: 5,
+  good: 0
+};
+
+const HIGHLIGHT_KINDS = ['danger', 'warn', 'good'];
+
+function normalizeThreshold(value, fallback) {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : fallback;
+}
+
+function resolveThresholds(configThresholds = {}) {
+  return {
+    danger: normalizeThreshold(configThresholds.danger_threshold, DEFAULT_THRESHOLDS.danger),
+    warn: normalizeThreshold(configThresholds.warn_threshold, DEFAULT_THRESHOLDS.warn),
+    good: normalizeThreshold(configThresholds.good_threshold, DEFAULT_THRESHOLDS.good)
+  };
+}
+
+function determineTone(rate, thresholds) {
+  if (rate >= thresholds.danger) return 'danger';
+  if (rate >= thresholds.warn) return 'warn';
+  if (rate <= thresholds.good) return 'good';
+  return '';
+}
+
+function fallbackText(text) {
+  if (typeof text === 'string' && text.trim().length > 0) {
+    return text;
+  }
+  return '本文未設定';
+}
+
+function resolveHighlightMeta(kind, meta = {}) {
+  return {
+    kind,
+    badge: meta.badge || ''
+  };
+}
+
+function fallbackTitle(title) {
+  if (typeof title === 'string' && title.trim().length > 0) {
+    return title;
+  }
+  return 'タイトル未設定';
+}
+
+function buildHighlight(kind, meta, entry) {
+  const base = resolveHighlightMeta(kind, meta);
+  return {
+    kind: base.kind,
+    badge: base.badge,
+    title: fallbackTitle(entry?.title),
+    text: fallbackText(entry?.body)
+  };
+}
+
 function generateReports(driversData, config) {
+  const thresholds = resolveThresholds(config ? config.thresholds : undefined);
   const reports = driversData.map(driverData => {
     const eventMap = driverData.events.reduce((map, event) => {
       map[event.id] = event;
@@ -22,26 +82,16 @@ function generateReports(driversData, config) {
     };
 
     // Generate Highlights(概要)
-    // 仮置きのため、ロジックが決まり次第差し替えが必要
-    // 現状はreport-config.jsonのidとdriver-data.jsonのidを紐づけてテンプレートにpushしている
-    for (const kind in config.highlights_gaiyou) {
-      const highlightInfo = config.highlights_gaiyou[kind];
-      const eventData = eventMap[highlightInfo.id];
-      if (eventData) {
-        const rate = Math.round((eventData.violations / eventData.total) * 100);
-        let text = highlightInfo.text_template
-          .replace('%TOTAL%', eventData.total)
-          .replace('%VIOLATIONS%', eventData.violations)
-          .replace('%RATE%', rate);
-        
-        finalReportData.highlights_gaiyou.push({
-          kind: kind,
-          badge: highlightInfo.badge,
-          title: config.itemMap[eventData.id].name,
-          text: text
-        });
-      }
-    }
+    const overviewTexts = (driverData.stats && driverData.stats.overviewHighlights) || {};
+    const overviewConfig = config.highlights_gaiyou || {};
+    HIGHLIGHT_KINDS.forEach(kind => {
+      const meta = overviewConfig[kind] || {};
+      const entry = {
+        title: overviewTexts[`${kind}_title`],
+        body: overviewTexts[`${kind}_body`]
+      };
+      finalReportData.highlights_gaiyou.push(buildHighlight(kind, meta, entry));
+    });
 
     // 詳細ハイライトは detailSections 生成時に一括で作成します
 
@@ -59,10 +109,7 @@ function generateReports(driversData, config) {
         }
         
         const rate = Math.round((event.violations / event.total) * 100);
-        let tone = '';
-        if (rate >= 10) tone = 'danger';
-        else if (rate >= 5) tone = 'warn';
-        else if (rate === 0) tone = 'good';
+        const tone = determineTone(rate, thresholds);
 
         let tag = '';
         if (tone === 'danger' || tone === 'warn') tag = '!';
@@ -133,14 +180,25 @@ function generateReports(driversData, config) {
 
         // ハイライト生成
         const highlights = [];
-        if (sec.highlightsKey && config[sec.highlightsKey] && ev) {
-          for (const kind in config[sec.highlightsKey]) {
-            const hl = config[sec.highlightsKey][kind];
-            const rate = Math.round((ev.violations / ev.total) * 100);
-            const text = hl.text_template.replace('%TOTAL%', ev.total).replace('%VIOLATIONS%', ev.violations).replace('%RATE%', rate);
-            highlights.push({ kind, badge: hl.badge, title: config.itemMap[ev.id].name, text, risk: ev.risk, rate, violations: ev.violations, total: ev.total });
+        const sectionHighlightMeta = (sec.highlightsKey && config[sec.highlightsKey]) ? config[sec.highlightsKey] : {};
+        const highlightTexts = (ev && ev.highlightTexts) ? ev.highlightTexts : {};
+        HIGHLIGHT_KINDS.forEach(kind => {
+          const meta = sectionHighlightMeta[kind] || {};
+          const entry = {
+            title: highlightTexts[`${kind}_title`],
+            body: highlightTexts[`${kind}_body`]
+          };
+          if (!entry.title && entry.title !== '') {
+            entry.title = undefined;
           }
-        }
+          if (!entry.body && entry.body !== '') {
+            entry.body = undefined;
+          }
+          if (entry.body === undefined && Object.prototype.hasOwnProperty.call(highlightTexts, kind)) {
+            entry.body = highlightTexts[kind];
+          }
+          highlights.push(buildHighlight(kind, meta, entry));
+        });
 
         details.push({ key: sec.key, title: sec.title, pages, highlights, eventId: sec.eventId });
       });

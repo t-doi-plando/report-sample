@@ -7,25 +7,9 @@
             <article class="hl hl--<%= c.kind %>">
               <div class="hl__band hl__band--sasetumae">
                 <span><%= c.badge %></span>
-                <% if (c.kind === 'danger' && c.risk !== undefined && c.risk !== null) { %>
-                  <span class="hl__risk-count">
-                    <span class="hl__main-value">
-                      <span class="hl__value-with-exclamation"><%= c.risk %></span>回
-                    </span>
-                  </span>
-                <% } else if (c.kind === 'warn' && c.rate !== undefined && c.rate !== null) { %>
-                  <span class="hl__risk-count">
-                    <span class="hl__main-value">
-                      <span class="hl__value-with-exclamation"><%= c.rate %></span>%
-                    </span>
-                    <span class="hl__sub-value">
-                      (<%= c.violations %>回/<%= c.total %>回)
-                    </span>
-                  </span>
-                <% } %>
               </div>
               <div class="hl__divider"></div>
-              <p class="hl__text"><%= c.text %></p>
+              <p class="hl__text"><%= (c.text && c.text.trim()) ? c.text : '本文未設定' %></p>
             </article>
           <% }) %>
         </section>
@@ -61,9 +45,8 @@
                     <% } %>
                     <td class="scenes-time"><%= timeStr %></td>
                     <td class="scenes-item">
-                      <% const riskCls = s.riskLevel === 'danger' ? 'scenes-item--danger' : (s.riskLevel === 'warn' ? 'scenes-item--warn' : ''); %>
                       <span class="scenes-item-icon">[<%= s.type === 'hard_brake' ? '急' : (s.type === 'near_miss_contact' ? '接' : '・') %>]</span>
-                      <span class="<%= riskCls %>">
+                      <span>
                         <%= s.type === 'hard_brake' ? '急ブレーキ' : (s.type === 'near_miss_contact' ? '接触未遂' : s.type) %>
                       </span>
                     </td>
