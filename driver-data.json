@@ -5,11 +5,6 @@
     "officeName": "大阪事業所",
     "reportDate": "2025-08-26",
     "stats": {
-      "avgViolationRatePct": 8.5,
-      "rank": {
-        "total": 25,
-        "position": 5
-      },
       "overviewHighlights": {
         "danger_title": "",
         "danger_body": "",
@@ -83,11 +78,6 @@
     "officeName": "東京事業所",
     "reportDate": "2025-08-26",
     "stats": {
-      "avgViolationRatePct": 1.2,
-      "rank": {
-        "total": 25,
-        "position": 1
-      },
       "overviewHighlights": {
         "danger_title": "",
         "danger_body": "",
