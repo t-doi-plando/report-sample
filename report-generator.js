@@ -63,7 +63,39 @@ function generateReports(driversData, config) {
     first: Number(config.detailPageLimits.first_page) || 13,
     other: Number(config.detailPageLimits.other_pages) || 16
   } : { first: 13, other: 16 };
+  const computedStats = driversData.map(driverData => {
+    let violationsSum = 0;
+    let totalSum = 0;
+    (driverData.events || []).forEach(event => {
+      const violations = Number(event.violations) || 0;
+      const total = Number(event.total) || 0;
+      violationsSum += violations;
+      totalSum += total;
+    });
+    const rate = totalSum > 0 ? Math.round((violationsSum / totalSum) * 1000) / 10 : 0;
+    return {
+      driverId: driverData.driverId,
+      rate,
+      violationsSum,
+      totalSum
+    };
+  });
+
+  const sortedByRate = [...computedStats].sort((a, b) => a.rate - b.rate);
+  let currentRank = 0;
+  let lastRate = null;
+  const rankMap = new Map();
+  sortedByRate.forEach((item, index) => {
+    if (lastRate === null || item.rate !== lastRate) {
+      currentRank = index + 1;
+      lastRate = item.rate;
+    }
+    rankMap.set(item.driverId, currentRank);
+  });
+  const totalDrivers = driversData.length;
+
   const reports = driversData.map(driverData => {
+    const stats = computedStats.find(s => s.driverId === driverData.driverId) || { rate: 0 };
     const eventMap = driverData.events.reduce((map, event) => {
       map[event.id] = event;
       return map;
@@ -74,8 +106,11 @@ function generateReports(driversData, config) {
       pageTitle: config.pageTitle,
       officeName: driverData.officeName,
       driverName: driverData.driverName,
-      avgViolationRatePct: driverData.stats.avgViolationRatePct,
-      rank: driverData.stats.rank,
+      avgViolationRatePct: stats.rate,
+      rank: {
+        total: totalDrivers,
+        position: rankMap.get(driverData.driverId) || totalDrivers
+      },
       highlights_gaiyou: [],
       highlights_sasetumae: [], // この行を追加
       highlights_sasetuchuu: [],
