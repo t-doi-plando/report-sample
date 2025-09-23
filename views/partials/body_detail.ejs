@@ -2,7 +2,7 @@
       <% if (isFirstPage) { %>
         <!-- ===== ハイライト3カード（1ページ目のみ） ===== -->
         <section class="highlights highlights--detail">
-          <% const cards = section.highlights || []; %>
+          <% const cards = (section.highlights || []).filter(c => c.kind !== 'warn' && c.kind !== 'good'); %>
           <% cards.forEach(c => { %>
             <article class="hl hl--<%= c.kind %>">
               <div class="hl__band hl__band--sasetumae">
