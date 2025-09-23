@@ -91,7 +91,7 @@
         "total": 200,
         "risk": 3,
         "highlightTexts": {
-          "danger": "",
+          "danger": "模範さんの中で最大の3回の危険疑いがありました。左の確認はよくできているので、あとは右の確認漏れを減らせれば、違反疑いを減らせます。",
           "warn": "",
           "good": ""
         },
@@ -106,7 +106,7 @@
           {
             "id": "sc-20250707-1820-1",
             "capturedAt": "2025-07-07T18:20:00+09:00",
-            "type": "near_miss_contact",
+            "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           },
@@ -114,300 +114,6 @@
             "id": "sc-20250707-1720-1",
             "capturedAt": "2025-07-07T17:20:00+09:00",
             "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250706-1920-1",
-            "capturedAt": "2025-07-06T19:20:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250706-1840-1",
-            "capturedAt": "2025-07-06T18:40:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250706-1710-1",
-            "capturedAt": "2025-07-06T17:10:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250705-2005-1",
-            "capturedAt": "2025-07-05T20:05:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250705-1930-1",
-            "capturedAt": "2025-07-05T19:30:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250705-1815-1",
-            "capturedAt": "2025-07-05T18:15:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250704-2110-1",
-            "capturedAt": "2025-07-04T21:10:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250704-2045-1",
-            "capturedAt": "2025-07-04T20:45:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250703-1955-1",
-            "capturedAt": "2025-07-03T19:55:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250703-1920-1",
-            "capturedAt": "2025-07-03T19:20:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250703-1750-1",
-            "capturedAt": "2025-07-03T17:50:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250702-2010-1",
-            "capturedAt": "2025-07-02T20:10:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250702-1900-1",
-            "capturedAt": "2025-07-02T19:00:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250701-2100-1",
-            "capturedAt": "2025-07-01T21:00:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250701-1935-1",
-            "capturedAt": "2025-07-01T19:35:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250701-1810-1",
-            "capturedAt": "2025-07-01T18:10:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250630-2050-1",
-            "capturedAt": "2025-06-30T20:50:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250630-1925-1",
-            "capturedAt": "2025-06-30T19:25:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250630-1800-1",
-            "capturedAt": "2025-06-30T18:00:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250629-2120-1",
-            "capturedAt": "2025-06-29T21:20:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250629-2000-1",
-            "capturedAt": "2025-06-29T20:00:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250629-1840-1",
-            "capturedAt": "2025-06-29T18:40:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250628-1950-1",
-            "capturedAt": "2025-06-28T19:50:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250628-1905-1",
-            "capturedAt": "2025-06-28T19:05:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250628-1730-1",
-            "capturedAt": "2025-06-28T17:30:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250627-2115-1",
-            "capturedAt": "2025-06-27T21:15:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250627-1945-1",
-            "capturedAt": "2025-06-27T19:45:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250627-1825-1",
-            "capturedAt": "2025-06-27T18:25:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250626-2040-1",
-            "capturedAt": "2025-06-26T20:40:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250626-1910-1",
-            "capturedAt": "2025-06-26T19:10:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250625-2055-1",
-            "capturedAt": "2025-06-25T20:55:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250625-1930-1",
-            "capturedAt": "2025-06-25T19:30:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250625-1805-1",
-            "capturedAt": "2025-06-25T18:05:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250624-2105-1",
-            "capturedAt": "2025-06-24T21:05:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250624-1920-1",
-            "capturedAt": "2025-06-24T19:20:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250624-1735-1",
-            "capturedAt": "2025-06-24T17:35:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250623-2030-1",
-            "capturedAt": "2025-06-23T20:30:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250623-1915-1",
-            "capturedAt": "2025-06-23T19:15:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250623-1800-1",
-            "capturedAt": "2025-06-23T18:00:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250622-2125-1",
-            "capturedAt": "2025-06-22T21:25:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250622-2010-1",
-            "capturedAt": "2025-06-22T20:10:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc-20250622-1855-1",
-            "capturedAt": "2025-06-22T18:55:00+09:00",
-            "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           }
@@ -419,7 +125,7 @@
         "total": 200,
         "risk": 1,
         "highlightTexts": {
-          "danger": "",
+          "danger": "模範さんの中で最大の1回の危険疑いがありました。左の確認はよくできているので、あとは右の確認漏れを減らせれば、違反疑いを減らせます。",
           "warn": "",
           "good": ""
         },
@@ -427,134 +133,6 @@
           {
             "id": "sc2-20250709-2015-1",
             "capturedAt": "2025-07-09T20:15:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250709-1935-1",
-            "capturedAt": "2025-07-09T19:35:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250709-1810-1",
-            "capturedAt": "2025-07-09T18:10:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250708-2050-1",
-            "capturedAt": "2025-07-08T20:50:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250708-1930-1",
-            "capturedAt": "2025-07-08T19:30:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250708-1845-1",
-            "capturedAt": "2025-07-08T18:45:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250708-1735-1",
-            "capturedAt": "2025-07-08T17:35:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250707-2010-1",
-            "capturedAt": "2025-07-07T20:10:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250707-1900-1",
-            "capturedAt": "2025-07-07T19:00:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250707-1825-1",
-            "capturedAt": "2025-07-07T18:25:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250707-1740-1",
-            "capturedAt": "2025-07-07T17:40:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250707-1710-1",
-            "capturedAt": "2025-07-07T17:10:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250706-2020-1",
-            "capturedAt": "2025-07-06T20:20:00+09:00",
-            "type": "hard_brake",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250706-1855-1",
-            "capturedAt": "2025-07-06T18:55:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250706-1730-1",
-            "capturedAt": "2025-07-06T17:30:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250705-1910-1",
-            "capturedAt": "2025-07-05T19:10:00+09:00",
-            "type": "near_miss_contact",
-            "videoUrl": "https://app.box.com/file/1876898649050",
-            "streetViewUrl": null,
-            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
-          },
-          {
-            "id": "sc2-20250705-1840-1",
-            "capturedAt": "2025-07-05T18:40:00+09:00",
             "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "streetViewUrl": null,
@@ -568,7 +146,7 @@
         "total": 200,
         "risk": 0,
         "highlightTexts": {
-          "danger": "",
+          "danger": "demo",
           "warn": "",
           "good": ""
         },
@@ -611,6 +189,62 @@
           {
             "id": "sc3-20250706-1715-1",
             "capturedAt": "2025-07-06T17:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250705-1820-1",
+            "capturedAt": "2025-07-05T18:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250705-1715-1",
+            "capturedAt": "2025-07-05T17:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250704-1820-1",
+            "capturedAt": "2025-07-04T18:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250704-1715-1",
+            "capturedAt": "2025-07-04T17:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250703-1820-1",
+            "capturedAt": "2025-07-03T18:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250703-1715-1",
+            "capturedAt": "2025-07-03T17:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250702-1820-1",
+            "capturedAt": "2025-07-02T18:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250702-1715-1",
+            "capturedAt": "2025-07-02T17:15:00+09:00",
             "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
