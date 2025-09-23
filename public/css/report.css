@@ -293,7 +293,7 @@ body.print-a4 {
   font-size:9.5pt;
   line-height:1.35;
   display:-webkit-box;
-  -webkit-line-clamp:3;
+  -webkit-line-clamp:6;
   -webkit-box-orient:vertical;
   overflow:hidden;
 }
