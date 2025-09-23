@@ -41,7 +41,19 @@
                   <% } %>
                 </td>
                 <td class="cell--name"><%= r.name %></td>
-                <td class="cell--tag"><%= r.tag || '-' %></td>
+                <td class="cell--tag">
+                  <% if (Array.isArray(r.tags) && r.tags.length > 0) { %>
+                    <div class="tags">
+                      <% r.tags.forEach(tone => { %>
+                        <span class="tag-pill tag-pill--<%= tone %>">
+                          <%= (tone === 'good') ? '◎' : '！' %>
+                        </span>
+                      <% }) %>
+                    </div>
+                  <% } else { %>
+                    -
+                  <% } %>
+                </td>
                 <td class="cell--rate">
                   <% if (r.rate !== "" && r.rate !== null && r.rate !== undefined) { %>
                     <strong class="rate"><%= r.rate %>%</strong>

@@ -135,14 +135,13 @@ app.get('/reports/:driverId', (req, res) => {
 
     const { token, data: driversDataToUse } = resolveDriversData(req);
     
-    const singleDriverData = driversDataToUse.find(d => d.driverId === driverId);
-    if (!singleDriverData) {
+    const reports = generateReports(driversDataToUse, config);
+    const targetReport = reports.find(r => r.driverId === driverId);
+    if (!targetReport) {
       return res.status(404).send('Driver not found');
     }
-
-    const reports = generateReports([singleDriverData], config);
     const staticMapKey = process.env.GOOGLE_STATIC_MAPS_KEY || '';
-    res.render('pages/report', { reports: reports, staticMapKey, token });
+    res.render('pages/report', { reports: [targetReport], staticMapKey, token });
   });
 });
 
