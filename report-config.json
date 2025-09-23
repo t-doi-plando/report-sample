@@ -22,11 +22,6 @@
       "name": "バック中安全確認"
     }
   },
-  "thresholds": {
-    "danger_threshold": 10,
-    "warn_threshold": 5,
-    "good_threshold": 0
-  },
   "detailPageLimits": {
     "first_page": 13,
     "other_pages": 16

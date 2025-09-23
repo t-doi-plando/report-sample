@@ -1,29 +1,13 @@
-const DEFAULT_THRESHOLDS = {
-  danger: 10,
-  warn: 5,
-  good: 0
-};
-
 const HIGHLIGHT_KINDS = ['danger', 'warn', 'good'];
+const TONE_PRIORITY = { danger: 3, warn: 2, good: 1 };
 
-function normalizeThreshold(value, fallback) {
+function sortTonesByPriority(tones = []) {
+  return tones.slice().sort((a, b) => (TONE_PRIORITY[b] || 0) - (TONE_PRIORITY[a] || 0));
+}
+
+function normalizeEventId(value) {
   const num = Number(value);
-  return Number.isFinite(num) ? num : fallback;
-}
-
-function resolveThresholds(configThresholds = {}) {
-  return {
-    danger: normalizeThreshold(configThresholds.danger_threshold, DEFAULT_THRESHOLDS.danger),
-    warn: normalizeThreshold(configThresholds.warn_threshold, DEFAULT_THRESHOLDS.warn),
-    good: normalizeThreshold(configThresholds.good_threshold, DEFAULT_THRESHOLDS.good)
-  };
-}
-
-function determineTone(rate, thresholds) {
-  if (rate >= thresholds.danger) return 'danger';
-  if (rate >= thresholds.warn) return 'warn';
-  if (rate <= thresholds.good) return 'good';
-  return '';
+  return Number.isFinite(num) ? String(num) : null;
 }
 
 function fallbackText(text) {
@@ -49,16 +33,33 @@ function fallbackTitle(title) {
 
 function buildHighlight(kind, meta, entry) {
   const base = resolveHighlightMeta(kind, meta);
-  return {
+  const highlight = {
     kind: base.kind,
     badge: base.badge,
     title: fallbackTitle(entry?.title),
     text: fallbackText(entry?.body)
   };
+  if (entry && entry.eventId !== undefined) {
+    highlight.eventId = entry.eventId;
+  }
+  return highlight;
+}
+
+function lookupEventTitle(config, eventIdStr) {
+  if (!config || !eventIdStr) return null;
+  const itemInfo = config.itemMap && config.itemMap[eventIdStr];
+  if (itemInfo && typeof itemInfo.name === 'string' && itemInfo.name.trim().length > 0) {
+    return itemInfo.name;
+  }
+  const detailList = Array.isArray(config.detailSections) ? config.detailSections : [];
+  const detail = detailList.find(sec => normalizeEventId(sec.eventId) === eventIdStr);
+  if (detail && typeof detail.title === 'string' && detail.title.trim().length > 0) {
+    return detail.title;
+  }
+  return null;
 }
 
 function generateReports(driversData, config) {
-  const thresholds = resolveThresholds(config ? config.thresholds : undefined);
   const limits = config && config.detailPageLimits ? {
     first: Number(config.detailPageLimits.first_page) || 13,
     other: Number(config.detailPageLimits.other_pages) || 16
@@ -122,12 +123,30 @@ function generateReports(driversData, config) {
 
     // Generate Highlights(概要)
     const overviewTexts = (driverData.stats && driverData.stats.overviewHighlights) || {};
+    const highlightToneOverrides = new Map();
     const overviewConfig = config.highlights_gaiyou || {};
     HIGHLIGHT_KINDS.forEach(kind => {
       const meta = overviewConfig[kind] || {};
+      const eventIdRaw = overviewTexts[`${kind}_eventId`];
+      const normalizedEventId = normalizeEventId(eventIdRaw);
+      if (normalizedEventId) {
+        if (!highlightToneOverrides.has(normalizedEventId)) {
+          highlightToneOverrides.set(normalizedEventId, new Set());
+        }
+        highlightToneOverrides.get(normalizedEventId).add(kind);
+      }
+      const titleRaw = overviewTexts[`${kind}_title`];
+      let resolvedTitle = titleRaw;
+      if ((!resolvedTitle || resolvedTitle.trim().length === 0) && normalizedEventId) {
+        const fallbackTitleValue = lookupEventTitle(config, normalizedEventId);
+        if (fallbackTitleValue) {
+          resolvedTitle = fallbackTitleValue;
+        }
+      }
       const entry = {
-        title: overviewTexts[`${kind}_title`],
-        body: overviewTexts[`${kind}_body`]
+        title: resolvedTitle,
+        body: overviewTexts[`${kind}_body`],
+        eventId: normalizedEventId ? Number(normalizedEventId) : undefined
       };
       finalReportData.highlights_gaiyou.push(buildHighlight(kind, meta, entry));
     });
@@ -148,16 +167,18 @@ function generateReports(driversData, config) {
         }
         
         const rate = Math.round((event.violations / event.total) * 100);
-        const tone = determineTone(rate, thresholds);
+        const eventIdKey = normalizeEventId(event.id);
+        const toneSet = eventIdKey ? highlightToneOverrides.get(eventIdKey) : undefined;
+        const toneList = toneSet ? sortTonesByPriority(Array.from(toneSet)) : [];
+        const tone = toneList[0] || '';
 
-        let tag = '';
-        if (tone === 'danger' || tone === 'warn') tag = '!';
-        if (tone === 'good') tag = 'good';
+        const tags = toneList;
 
         sectionsMap[itemInfo.maneuver].rows.push({
           no: event.id,
           name: itemInfo.name,
-          tag: tag,
+          tag: '',
+          tags,
           tone: tone,
           rate: rate,
           detail: `(${event.violations}回/${event.total}回)`,

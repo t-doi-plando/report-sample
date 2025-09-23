@@ -403,8 +403,8 @@ body.print-a4 {
 
 /* Column widths and alignments */
 .group-table .cell--no    { width: 20mm; } /* Removed text-align */
-.group-table .cell--name  { width: 45mm; } /* Set width */
-.group-table .cell--tag   { width: 23mm; } /* Adjusted */
+.group-table .cell--name  { width: 42mm; }
+.group-table .cell--tag   { width: 26mm; }
 .group-table .cell--rate  { width: 42mm; } /* Increased */
 .group-table .cell--count { width: 28mm; } /* Reduced */
 .group-table .cell--page  { width: 28mm; text-align: left; } /* Changed to left */
@@ -418,13 +418,39 @@ body.print-a4 {
   font-weight:800; color:#2a5db6;
 }
 .cell--name{ font-weight:700; }
+.cell--tag .tags{
+  display:flex;
+  flex-direction:row;
+  flex-wrap:wrap;
+  gap:1mm;
+  align-items:center;
+}
+.tag-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:6mm;
+  min-height:6mm;
+  padding:0.8mm 2.2mm;
+  border-radius:2px;
+  font-weight:800;
+  font-size:9pt;
+  line-height:1;
+  color:#fff;
+  background: var(--ink-600);
+  letter-spacing:.05em;
+  box-shadow:0 0 0 0.2mm rgba(0,0,0,0.05);
+}
+.tag-pill--danger{ background: var(--red-600); }
+.tag-pill--warn  { background: var(--amber-600); }
+.tag-pill--good  { background: var(--green-600); }
 .cell--tag{
   font-weight:800;
   border-radius:2px; /* Changed */
   color:#9b1b1b;
 }
-.row--warn .cell--tag{ color:#8a5b00; }
-.row--good .cell--tag{ color:#1b7a22; }
+.row--warn .cell--tag{ color:inherit; }
+.row--good .cell--tag{ color:inherit; }
 .rate{ font-size:11pt; font-weight:800; line-height:1; }
 .detail{ font-size:8.5pt; color:var(--ink-600); }
 .cell--count{ font-weight:800; }
@@ -583,8 +609,8 @@ body.print-a4 {
 
 /* Column widths and alignments */
 .group-table .cell--no    { width: 20mm; } /* Removed text-align */
-.group-table .cell--name  { width: 45mm; } /* Set width */
-.group-table .cell--tag   { width: 23mm; } /* Adjusted */
+.group-table .cell--name  { width: 42mm; }
+.group-table .cell--tag   { width: 26mm; }
 .group-table .cell--rate  { width: 42mm; } /* Increased */
 .group-table .cell--count { width: 28mm; } /* Reduced */
 .group-table .cell--page  { width: 28mm; text-align: left; } /* Changed to left */
@@ -603,8 +629,8 @@ body.print-a4 {
   border-radius:2px; /* Changed */
   color:#9b1b1b;
 }
-.row--warn .cell--tag{ color:#8a5b00; }
-.row--good .cell--tag{ color:#1b7a22; }
+.row--warn .cell--tag{ color:inherit; }
+.row--good .cell--tag{ color:inherit; }
 .rate{ font-size:11pt; font-weight:800; line-height:1; }
 .detail{ font-size:8.5pt; color:var(--ink-600); }
 .cell--count{ font-weight:800; }
@@ -761,8 +787,8 @@ body.print-a4 {
 
 /* Column widths and alignments */
 .group-table .cell--no    { width: 20mm; } /* Removed text-align */
-.group-table .cell--name  { width: 45mm; } /* Set width */
-.group-table .cell--tag   { width: 23mm; } /* Adjusted */
+.group-table .cell--name  { width: 42mm; }
+.group-table .cell--tag   { width: 26mm; }
 .group-table .cell--rate  { width: 42mm; } /* Increased */
 .group-table .cell--count { width: 28mm; } /* Reduced */
 .group-table .cell--page  { width: 28mm; text-align: left; } /* Changed to left */
@@ -781,8 +807,8 @@ body.print-a4 {
   border-radius:2px; /* Changed */
   color:#9b1b1b;
 }
-.row--warn .cell--tag{ color:#8a5b00; }
-.row--good .cell--tag{ color:#1b7a22; }
+.row--warn .cell--tag{ color:inherit; }
+.row--good .cell--tag{ color:inherit; }
 .rate{ font-size:11pt; font-weight:800; line-height:1; }
 .detail{ font-size:8.5pt; color:var(--ink-600); }
 .cell--count{ font-weight:800; }
