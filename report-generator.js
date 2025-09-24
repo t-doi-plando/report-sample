@@ -42,6 +42,15 @@ function buildHighlight(kind, meta, entry) {
   if (entry && entry.eventId !== undefined) {
     highlight.eventId = entry.eventId;
   }
+  if (entry && entry.risk !== undefined) {
+    highlight.risk = entry.risk;
+  }
+  if (entry && entry.rate !== undefined) {
+    highlight.rate = entry.rate;
+  }
+  if (entry && entry.rateDetail !== undefined) {
+    highlight.rateDetail = entry.rateDetail;
+  }
   return highlight;
 }
 
@@ -265,11 +274,24 @@ function generateReports(driversData, config) {
         const highlights = [];
         const sectionHighlightMeta = (sec.highlightsKey && config[sec.highlightsKey]) ? config[sec.highlightsKey] : {};
         const highlightTexts = (ev && ev.highlightTexts) ? ev.highlightTexts : {};
+        const violationsVal = Number(ev && ev.violations !== undefined ? ev.violations : 0);
+        const totalVal = Number(ev && ev.total !== undefined ? ev.total : 0);
+        const eventRiskRaw = ev && ev.risk !== undefined && ev.risk !== null ? Number(ev.risk) : undefined;
+        const eventRisk = Number.isFinite(eventRiskRaw) ? eventRiskRaw : undefined;
+        const eventRate = totalVal > 0 && Number.isFinite(violationsVal)
+          ? Math.round((violationsVal / totalVal) * 100)
+          : undefined;
+        const eventRateDetail = totalVal > 0 && Number.isFinite(violationsVal)
+          ? `(${violationsVal}回/${totalVal}回)`
+          : undefined;
         HIGHLIGHT_KINDS.forEach(kind => {
           const meta = sectionHighlightMeta[kind] || {};
           const entry = {
             title: highlightTexts[`${kind}_title`],
-            body: highlightTexts[`${kind}_body`]
+            body: highlightTexts[`${kind}_body`],
+            risk: (kind === 'danger') ? eventRisk : undefined,
+            rate: (kind === 'warn') ? eventRate : undefined,
+            rateDetail: (kind === 'warn') ? eventRateDetail : undefined
           };
           if (!entry.title && entry.title !== '') {
             entry.title = undefined;

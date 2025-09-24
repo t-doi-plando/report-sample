@@ -75,6 +75,11 @@ body.print-a4 {
 }
 .headline__label{ color:var(--blue-700); font-size:10pt; }
 .headline__value{ font-size:22pt; font-weight:800; line-height:1; }
+.headline__value-percent{
+  font-size:0.75em;
+  margin-left:0.1em;
+  vertical-align:baseline;
+}
 .headline__rank{ color:var(--ink-400); font-size:10pt; }
 
 .sidou-headline{
@@ -230,8 +235,8 @@ body.print-a4 {
   overflow:hidden;
 }
 .highlights--detail .hl{
-  min-height:40mm;
-  max-height:40mm;
+  min-height:46mm;
+  max-height:46mm;
   padding:4mm;
   gap:1mm;
 }
@@ -257,18 +262,73 @@ body.print-a4 {
   color: var(--blue-700);
   text-align:left;
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   justify-content:flex-start;
-  min-height:12mm;
+  gap:2mm;
+  min-height:8mm;
   width:100%;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
 .highlights--detail .hl__band--sasetumae {
-  min-height:auto;
+  min-height:8mm;
   padding:0;
   margin-bottom:0.2mm;
+  gap:1.5mm;
+}
+.hl__band-label{ font-weight:inherit; }
+.hl__band-meta{
+  margin-left:auto;
+  display:flex;
+  align-items:flex-end;
+  gap:1mm;
+}
+.hl__band-metaRiskNumber{
+  font-size:18pt;
+  font-weight:800;
+  color:var(--ink-900);
+  line-height:0.9;
+  transform: translateY(-0.6mm);
+}
+.hl__band-metaRiskUnit{
+  font-size:9.5pt;
+  font-weight:700;
+  color:var(--ink-900);
+  line-height:0.9;
+  margin-bottom:1mm;
+}
+.hl__band-meta--warn{
+  margin-left:auto;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:0.4mm;
+}
+.hl__band-metaWarnTop{
+  display:flex;
+  align-items:flex-end;
+  gap:1mm;
+}
+.hl__band-metaWarnNumber{
+  font-size:16pt;
+  font-weight:800;
+  color:var(--ink-900);
+  line-height:0.9;
+  transform: translateY(-0.4mm);
+}
+.hl__band-metaWarnUnit{
+  font-size:9.5pt;
+  font-weight:700;
+  color:var(--ink-900);
+  line-height:0.9;
+  margin-bottom:1mm;
+}
+.hl__band-metaWarnCaption{
+  font-size:6pt;
+  font-weight:600;
+  color:var(--ink-600);
+  text-align:right;
 }
 
 /* .hl__band--sasetumae が適用されている場合は、以下の背景色を無効化 */
