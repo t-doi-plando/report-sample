@@ -4,33 +4,38 @@
         <section class="highlights highlights--detail">
           <% const cards = section.highlights || []; %>
           <% cards.forEach(c => { %>
-            <article class="hl hl--<%= c.kind %>">
-              <div class="hl__band hl__band--sasetumae">
-                <span class="hl__band-label"><%= c.badge %></span>
-                <% const riskValue = (c && typeof c.risk === 'number' && Number.isFinite(c.risk)) ? c.risk : null; %>
-                <% if (c.kind === 'danger' && riskValue !== null) { %>
-                  <span class="hl__band-meta">
-                    <span class="hl__band-metaRiskNumber"><%= riskValue %></span>
-                    <span class="hl__band-metaRiskUnit">回</span>
-                  </span>
-                <% } else if (c.kind === 'warn') { %>
-                  <% const rateValue = (c && typeof c.rate === 'number' && Number.isFinite(c.rate)) ? c.rate : null; %>
-                  <% const rateDetail = (typeof c.rateDetail === 'string' && c.rateDetail.trim().length > 0) ? c.rateDetail : null; %>
-                  <% if (rateValue !== null) { %>
-                    <span class="hl__band-meta hl__band-meta--warn">
-                      <span class="hl__band-metaWarnTop">
-                        <span class="hl__band-metaWarnNumber"><%= rateValue %></span>
-                        <span class="hl__band-metaWarnUnit">％</span>
+            <% const kind = c.kind; %>
+            <% const metric = c.metric || {}; %>
+            <% const riskValue = (kind === 'danger' && typeof metric.risk === 'number' && Number.isFinite(metric.risk)) ? metric.risk : null; %>
+            <% const rateValue = (kind === 'warn' && typeof metric.rate === 'number' && Number.isFinite(metric.rate)) ? metric.rate : null; %>
+            <% const rateDetail = (kind === 'warn' && typeof metric.detail === 'string' && metric.detail.trim().length > 0) ? metric.detail : null; %>
+            <article class="hl hl--<%= kind %> hl--detail-card">
+              <div class="hl-cardHeader">
+                <span class="hl-cardTitleText"><%= c.badge %></span>
+                <div class="hl-cardMetricWrapper">
+                  <div class="hl-cardMetricGroup">
+                    <% if (kind === 'danger' && riskValue !== null) { %>
+                      <span class="hl-cardMetricRow">
+                        <span class="hl-cardMetricNumber"><%= riskValue %></span>
+                        <span class="hl-cardMetricUnit">回</span>
+                      </span>
+                    <% } else if (kind === 'warn' && rateValue !== null) { %>
+                      <span class="hl-cardMetricRow">
+                        <span class="hl-cardMetricNumber"><%= rateValue %></span>
+                        <span class="hl-cardMetricUnit">％</span>
                       </span>
                       <% if (rateDetail) { %>
-                        <span class="hl__band-metaWarnCaption"><%= rateDetail %></span>
+                        <span class="hl-cardMetricDetail"><%= rateDetail %></span>
                       <% } %>
-                    </span>
+                    <% } %>
+                  </div>
+                  <% if (kind === 'danger' || kind === 'warn') { %>
+                    <span class="hl-cardIcon hl-cardIcon--<%= kind %>">！</span>
                   <% } %>
-                <% } %>
+                </div>
               </div>
               <div class="hl__divider"></div>
-              <p class="hl__text"><%= (c.text && c.text.trim()) ? c.text : '本文未設定' %></p>
+              <p class="hl__text hl__text-detail"><%= (c.text && c.text.trim()) ? c.text : '本文未設定' %></p>
             </article>
           <% }) %>
         </section>
