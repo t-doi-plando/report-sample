@@ -9,12 +9,13 @@
       </section>
 
       <!-- ===== ハイライト3カード ===== -->
-      <section class="highlights">
+      <section class="highlights highlights--summary">
         <% const cards = report.highlights_gaiyou || []; %>
         <% cards.forEach(c => { %>
           <article class="hl hl--<%= c.kind %>">
             <div class="hl__band"><%= c.badge %></div>
             <h2 class="hl__title"><%= c.title || '' %></h2>
+            <div class="hl__divider"></div>
             <p class="hl__text"><%= (c.text && c.text.trim()) ? c.text : '本文未設定' %></p>
           </article>
         <% }) %>
