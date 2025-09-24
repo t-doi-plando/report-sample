@@ -194,6 +194,12 @@ body.print-a4 {
 .scenes-table td.scenes-actions { width: 36mm; }
 
 .scenes-item-icon { margin-right: 3mm; opacity: .9; }
+.scenes-item-icon__img {
+  display: inline-block;
+  width: auto;
+  height: 7mm;
+  object-fit: contain;
+}
 
 .scenes-btn {
   display: inline-flex;
