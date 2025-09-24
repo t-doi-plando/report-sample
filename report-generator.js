@@ -229,13 +229,35 @@ function generateReports(driversData, config) {
         const OTHER_PAGE_LIMIT = limits.other;
         const pagesTmp = [];
         let current = { groups: [], rowCount: 0, limit: FIRST_PAGE_LIMIT };
-        const pushGroup = (year, dateObj) => {
+        const pushDateChunk = (year, dateLabel, scenesChunk) => {
           const last = current.groups[current.groups.length - 1];
-          if (last && last.year === year) last.dates.push(dateObj); else current.groups.push({ year, dates: [dateObj] });
-          current.rowCount += dateObj.scenes.length;
+          if (last && last.year === year) {
+            last.dates.push({ dateLabel, scenes: scenesChunk });
+          } else {
+            current.groups.push({ year, dates: [{ dateLabel, scenes: scenesChunk }] });
+          }
+          current.rowCount += scenesChunk.length;
         };
-        const closePage = () => { if (current.rowCount > 0) pagesTmp.push({ groups: current.groups }); current = { groups: [], rowCount: 0, limit: OTHER_PAGE_LIMIT }; };
-        for (const g of groups) { for (const d of g.dates) { const need = d.scenes.length; if (current.rowCount + need > current.limit && current.rowCount > 0) closePage(); pushGroup(g.year, d); } }
+        const closePage = () => {
+          if (current.rowCount > 0) {
+            pagesTmp.push({ groups: current.groups });
+          }
+          current = { groups: [], rowCount: 0, limit: OTHER_PAGE_LIMIT };
+        };
+        for (const g of groups) {
+          for (const d of g.dates) {
+            let remaining = Array.isArray(d.scenes) ? d.scenes.slice() : [];
+            while (remaining.length > 0) {
+              if (current.rowCount >= current.limit && current.rowCount > 0) {
+                closePage();
+              }
+              const available = Math.max(current.limit - current.rowCount, 0);
+              const chunkSize = Math.min(remaining.length, available > 0 ? available : current.limit);
+              const chunk = remaining.splice(0, chunkSize);
+              pushDateChunk(g.year, d.dateLabel, chunk);
+            }
+          }
+        }
         closePage();
         const pages = pagesTmp;
 
