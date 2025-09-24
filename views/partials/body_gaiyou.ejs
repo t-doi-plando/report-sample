@@ -1,7 +1,10 @@
       <!-- ===== KPI（平均と順位） ===== -->
       <section class="headline">
         <div class="headline__label">違反疑い割合平均</div>
-        <div class="headline__value"><%= (report.avgViolationRatePct ?? 10.9) %>%</div>
+        <div class="headline__value">
+          <%= (report.avgViolationRatePct ?? 10.9) %>
+          <span class="headline__value-percent">%</span>
+        </div>
         <div class="headline__rank">(<%= (report.rank?.total ?? 10) %>人中<%= (report.rank?.position ?? 8) %>位)</div>
       </section>
 
