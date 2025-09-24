@@ -45,9 +45,22 @@
                     <% } %>
                     <td class="scenes-time"><%= timeStr %></td>
                     <td class="scenes-item">
-                      <span class="scenes-item-icon">[<%= s.type === 'hard_brake' ? '急' : (s.type === 'near_miss_contact' ? '接' : '・') %>]</span>
+                      <% const sceneType = (typeof s.type === 'string') ? s.type.trim() : ''; %>
+                      <span class="scenes-item-icon">
+                        <% if (sceneType === 'hard_brake') { %>
+                          [急]
+                        <% } else if (sceneType === 'near_miss_contact') { %>
+                          [接]
+                        <% } %>
+                      </span>
                       <span>
-                        <%= s.type === 'hard_brake' ? '急ブレーキ' : (s.type === 'near_miss_contact' ? '接触未遂' : s.type) %>
+                        <% if (sceneType === 'hard_brake') { %>
+                          急ブレーキ
+                        <% } else if (sceneType === 'near_miss_contact') { %>
+                          接触未遂
+                        <% } else { %>
+                          <%= sceneType %>
+                        <% } %>
                       </span>
                     </td>
                     <td class="scenes-actions">

@@ -106,17 +106,167 @@
           {
             "id": "sc-20250707-1820-1",
             "capturedAt": "2025-07-07T18:20:00+09:00",
-            "type": "hard_brake",
+            "type": "",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           },
           {
             "id": "sc-20250707-1720-1",
             "capturedAt": "2025-07-07T17:20:00+09:00",
-            "type": "near_miss_contact",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+
+          {
+            "id": "sc-20250706-1820-1",
+            "capturedAt": "2025-07-06T18:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1720-1",
+            "capturedAt": "2025-07-06T17:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-06T16:10:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-06T15:50:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-06T14:40:00+09:00",
+            "type": "",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           }
+
+          ,
+          {
+            "id": "sc-20250706-1820-1",
+            "capturedAt": "2025-07-05T18:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1720-1",
+            "capturedAt": "2025-07-05T17:20:00+09:00",
+            "type": "near_miss_contact",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-05T16:10:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-05T15:50:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-05T14:40:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          }
+
+          ,
+          {
+            "id": "sc-20250706-1820-1",
+            "capturedAt": "2025-07-04T18:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1720-1",
+            "capturedAt": "2025-07-04T17:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-04T16:10:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-04T15:50:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-04T14:40:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          }
+
+          ,
+          {
+            "id": "sc-20250706-1820-1",
+            "capturedAt": "2025-07-03T18:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1720-1",
+            "capturedAt": "2025-07-03T17:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-03T16:10:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-03T15:50:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-03T14:40:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          }
+
+
+
         ]
       },
       {
@@ -137,7 +287,231 @@
             "videoUrl": "https://app.box.com/file/1876898649050",
             "streetViewUrl": null,
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+
+          {
+            "id": "sc-20250706-1820-1",
+            "capturedAt": "2025-07-06T18:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1720-1",
+            "capturedAt": "2025-07-06T17:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-06T16:10:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-06T15:50:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-06T14:40:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           }
+
+          ,
+          {
+            "id": "sc-20250706-1820-1",
+            "capturedAt": "2025-07-05T18:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1720-1",
+            "capturedAt": "2025-07-05T17:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-05T16:10:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-05T15:50:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-05T14:40:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          }
+
+          ,
+          {
+            "id": "sc-20250706-1820-1",
+            "capturedAt": "2025-07-04T18:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1720-1",
+            "capturedAt": "2025-07-04T17:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-04T16:10:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-04T15:50:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-04T14:40:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          }
+
+          ,
+          {
+            "id": "sc-20250706-1820-1",
+            "capturedAt": "2025-07-03T18:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1720-1",
+            "capturedAt": "2025-07-03T17:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-03T16:10:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-03T15:50:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-03T14:40:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          }
+
+          ,
+          {
+            "id": "sc-20250706-1820-1",
+            "capturedAt": "2025-07-02T18:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1720-1",
+            "capturedAt": "2025-07-02T17:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-02T16:10:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-02T15:50:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-02T14:40:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          }
+
+          ,
+          {
+            "id": "sc-20250706-1820-1",
+            "capturedAt": "2025-07-01T18:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1720-1",
+            "capturedAt": "2025-07-01T17:20:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-01T16:10:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-01T15:50:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc-20250706-1620-1",
+            "capturedAt": "2025-07-01T14:40:00+09:00",
+            "type": "",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          }
+
+
+
         ]
       },
       {
@@ -167,84 +541,266 @@
           },
           {
             "id": "sc3-20250707-2015-1",
-            "capturedAt": "2025-07-07T20:15:00+09:00",
+            "capturedAt": "2025-07-08T20:15:00+09:00",
             "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           },
           {
             "id": "sc3-20250707-1930-1",
-            "capturedAt": "2025-07-07T19:30:00+09:00",
+            "capturedAt": "2025-07-08T19:30:00+09:00",
             "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           },
           {
             "id": "sc3-20250706-1820-1",
-            "capturedAt": "2025-07-06T18:20:00+09:00",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
             "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           },
           {
             "id": "sc3-20250706-1715-1",
-            "capturedAt": "2025-07-06T17:15:00+09:00",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
             "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           },
           {
             "id": "sc3-20250705-1820-1",
-            "capturedAt": "2025-07-05T18:20:00+09:00",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
             "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           },
           {
             "id": "sc3-20250705-1715-1",
-            "capturedAt": "2025-07-05T17:15:00+09:00",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
             "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           },
           {
             "id": "sc3-20250704-1820-1",
-            "capturedAt": "2025-07-04T18:20:00+09:00",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
             "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           },
           {
             "id": "sc3-20250704-1715-1",
-            "capturedAt": "2025-07-04T17:15:00+09:00",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
             "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           },
           {
             "id": "sc3-20250703-1820-1",
-            "capturedAt": "2025-07-03T18:20:00+09:00",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
             "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           },
           {
             "id": "sc3-20250703-1715-1",
-            "capturedAt": "2025-07-03T17:15:00+09:00",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
             "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           },
           {
             "id": "sc3-20250702-1820-1",
-            "capturedAt": "2025-07-02T18:20:00+09:00",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
             "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
           },
           {
             "id": "sc3-20250702-1715-1",
-            "capturedAt": "2025-07-02T17:15:00+09:00",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250708-1845-1",
+            "capturedAt": "2025-07-08T18:45:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250707-2015-1",
+            "capturedAt": "2025-07-08T20:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250707-1930-1",
+            "capturedAt": "2025-07-08T19:30:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250706-1820-1",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250706-1715-1",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250705-1820-1",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250705-1715-1",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250704-1820-1",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250704-1715-1",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250703-1820-1",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250703-1715-1",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250702-1820-1",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250702-1715-1",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250708-1845-1",
+            "capturedAt": "2025-07-08T18:45:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250707-2015-1",
+            "capturedAt": "2025-07-08T20:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250707-1930-1",
+            "capturedAt": "2025-07-08T19:30:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250706-1820-1",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250706-1715-1",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250705-1820-1",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250705-1715-1",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250704-1820-1",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250704-1715-1",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250703-1820-1",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250703-1715-1",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250702-1820-1",
+            "capturedAt": "2025-07-08T18:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          },
+          {
+            "id": "sc3-20250702-1715-1",
+            "capturedAt": "2025-07-08T17:15:00+09:00",
             "type": "hard_brake",
             "videoUrl": "https://app.box.com/file/1876898649050",
             "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
