@@ -27,9 +27,9 @@
     "other_pages": 17
   },
   "highlights_gaiyou": {
-    "danger": { "badge": "！ 危険疑い回数が多い項目" },
-    "warn":   { "badge": "！ 違反疑い割合が高い項目" },
-    "good":   { "badge": "◎ 高評価ポイント" }
+    "danger": { "badge": "危険疑い回数が多い項目" },
+    "warn":   { "badge": "違反疑い割合が高い項目" },
+    "good":   { "badge": "高評価ポイント" }
   },
   "highlights_sasetumae": {
     "danger": { "badge": "危険疑い回数" },

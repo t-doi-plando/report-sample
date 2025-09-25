@@ -241,7 +241,7 @@ body.print-a4 {
 .highlights--detail .hl{
   min-height:46mm;
   max-height:46mm;
-  padding:4mm;
+  padding:5mm 4mm 4mm;
   gap:1mm;
   position:relative;
 }
@@ -253,7 +253,7 @@ body.print-a4 {
   border-top:1px solid var(--line);
 }
 .highlights--detail .hl__divider{
-  top:14.5mm;
+  top:15.5mm;
 }
 .highlights--summary .hl__divider{
   position:absolute;
@@ -280,7 +280,7 @@ body.print-a4 {
   position:absolute;
   left:5mm;
   right:5mm;
-  top:15.5mm;
+  top:16.5mm;
   bottom:6.5mm;
   margin:0;
   color:var(--ink-600);
@@ -300,6 +300,7 @@ body.print-a4 {
   display:flex;
   align-items:center;
   justify-content:center;
+  gap:2mm;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -312,6 +313,11 @@ body.print-a4 {
   height:12mm;
   padding:0 5mm;
   border-radius:8px 8px 0 0;
+}
+.hl__band-icon{
+  width:4.6mm;
+  height:4.6mm;
+  object-fit:contain;
 }
 
 /* body_sasetumae.ejs 用のハイライトバンドスタイル */
@@ -331,9 +337,10 @@ body.print-a4 {
 }
 .highlights--detail .hl__band--sasetumae {
   min-height:8mm;
-  padding:0;
-  margin-bottom:0.2mm;
+  padding:1mm 0 0;
+  margin-bottom:1.2mm;
   gap:1.5mm;
+  transform: translateX(-3mm);
 }
 .hl__band-label{ font-weight:inherit; }
 .hl__band-meta{
@@ -542,9 +549,9 @@ body.print-a4 {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  min-width:6mm;
+  min-width:5mm;
   min-height:6mm;
-  padding:0.8mm 2.2mm;
+  padding:0.8mm 1.7mm;
   border-radius:2px;
   font-weight:800;
   font-size:9pt;
@@ -553,6 +560,11 @@ body.print-a4 {
   background: var(--ink-600);
   letter-spacing:.05em;
   box-shadow:0 0 0 0.2mm rgba(0,0,0,0.05);
+}
+.tag-pill__icon{
+  width:3.6mm;
+  height:3.6mm;
+  object-fit:contain;
 }
 .tag-pill--danger{ background: var(--red-600); }
 .tag-pill--warn  { background: var(--amber-600); }
@@ -593,74 +605,33 @@ body.print-a4 {
   flex-direction:column;
   gap:2mm;
 }
-.hl--detail-card .hl-cardHeader{
+.hl__band--sasetumae{
   display:flex;
   align-items:flex-start;
-  justify-content:space-between;
-  gap:4mm;
+  justify-content:flex-start;
+  gap:2mm;
 }
-.hl--detail-card .hl-cardTitleText{
-  font-size:9pt;
-  font-weight:800;
-  color:var(--blue-700);
-  white-space:nowrap;
-}
-.hl--detail-card .hl-cardMetricWrapper{
+.hl__band--sasetumae .hl__band-left{
   display:flex;
-  align-items:flex-end;
+  align-items:center;
   gap:1.6mm;
 }
-.hl--detail-card .hl-cardMetricGroup{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-end;
-  gap:0.4mm;
-  min-width:20mm;
-}
-.hl--detail-card .hl-cardMetricRow{
-  display:flex;
-  align-items:flex-end;
-  gap:0.6mm;
-}
-.hl--detail-card .hl-cardMetricNumber{
-  font-size:18pt;
-  font-weight:800;
-  color:var(--ink-900);
-  line-height:1;
-}
-.hl--detail-card .hl-cardMetricUnit{
-  font-size:9.5pt;
-  font-weight:700;
-  color:var(--ink-900);
-  line-height:1;
-}
-.hl--detail-card .hl-cardMetricDetail{
-  font-size:5pt;
-  font-weight:600;
-  color:var(--ink-600);
-}
-
-.hl--detail-card .hl-cardIcon{
+.hl__band-iconBadge{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  width:5mm;
-  height:5mm;
-  border-radius:0;
-  font-size:7pt;
-  font-weight:800;
+  width:4mm;
+  height:4mm;
   box-shadow:0 1px 2px rgba(0,0,0,0.12);
-  transform: translateY(-1.2mm);
+  transform: translateY(-0.2mm);
+  border-radius:0;
 }
-.hl--detail-card .hl-cardIcon--danger{
-  background: var(--red-600);
-  color:#fff;
-  transform: translateY(-4mm);
-}
-.hl--detail-card .hl-cardIcon--warn{
-  background: var(--amber-600);
-  color:#fff;
-  transform: translateY(-7mm);
+.hl__band-iconBadge--danger{ background:var(--red-600); }
+.hl__band-iconBadge--warn{ background:var(--amber-600); }
+.hl__band-iconBadgeImg{
+  width:2.6mm;
+  height:2.6mm;
+  object-fit:contain;
 }
 
 /* 画面表示の見栄え */
@@ -1028,15 +999,4 @@ body.print-a4 {
     background: #fff;
     box-shadow: 0 2px 30px rgba(0,0,0,.06);
   }
-}
-.hl--detail-card .hl-cardMetric--placeholder{
-  visibility:hidden;
-  display:block;
-  min-height:18pt;
-}
-.hl--detail-card .hl-cardMetric{
-  display:flex;
-  align-items:flex-end;
-  justify-content:flex-start;
-  gap:0.6mm;
 }
