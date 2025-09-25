@@ -13,7 +13,12 @@
         <% const cards = report.highlights_gaiyou || []; %>
         <% cards.forEach(c => { %>
           <article class="hl hl--<%= c.kind %>">
-            <div class="hl__band"><%= c.badge %></div>
+            <% const bandIconSrc = (c.kind === 'good') ? '/img/good.svg' : '/img/exclamation.svg'; %>
+            <% const bandIconAlt = (c.kind === 'good') ? '高評価アイコン' : '注意アイコン'; %>
+            <div class="hl__band">
+              <img src="<%= bandIconSrc %>" alt="<%= bandIconAlt %>" class="hl__band-icon"/>
+              <span class="hl__band-label"><%= c.badge %></span>
+            </div>
             <h2 class="hl__title"><%= c.title || '' %></h2>
             <div class="hl__divider"></div>
             <p class="hl__text"><%= (c.text && c.text.trim()) ? c.text : '本文未設定' %></p>
@@ -48,9 +53,12 @@
                 <td class="cell--tag">
                   <% if (Array.isArray(r.tags) && r.tags.length > 0) { %>
                     <div class="tags">
-                      <% r.tags.forEach(tone => { %>
+                      <% r.tags.forEach(tone => {
+                        const tagIconSrc = (tone === 'good') ? '/img/good.svg' : '/img/exclamation.svg';
+                        const tagIconAlt = (tone === 'good') ? '高評価アイコン' : '注意アイコン';
+                      %>
                         <span class="tag-pill tag-pill--<%= tone %>">
-                          <%= (tone === 'good') ? '◎' : '！' %>
+                          <img src="<%= tagIconSrc %>" alt="<%= tagIconAlt %>" class="tag-pill__icon" />
                         </span>
                       <% }) %>
                     </div>
