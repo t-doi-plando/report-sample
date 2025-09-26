@@ -87,7 +87,10 @@
                     </td>
                     <td class="scenes-actions">
                       <% if (s.videoUrl) { %>
-                        <a href="<%= s.videoUrl %>" class="scenes-btn" target="_blank"><span class="icon">▶</span>動画を確認する</a>
+                        <a href="<%= s.videoUrl %>" class="scenes-btn" target="_blank">
+                          <img src="/img/start.svg" alt="再生アイコン" class="scenes-btn__icon" />
+                          動画を確認する
+                        </a>
                       <% } else { %>
                         -
                       <% } %>
@@ -103,7 +106,10 @@
                         }
                       %>
                       <% if (mapUrl) { %>
-                        <a href="<%= mapUrl %>" class="scenes-btn" target="_blank"><span class="icon">📍</span>地図を確認する</a>
+                        <a href="<%= mapUrl %>" class="scenes-btn" target="_blank">
+                          <img src="/img/pin.svg" alt="地図アイコン" class="scenes-btn__icon" />
+                          地図を確認する
+                        </a>
                       <% } else { %>
                         -
                       <% } %>
