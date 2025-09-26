@@ -84,9 +84,12 @@
                 <td class="cell--page">
                   <% const dynPageNum = (typeof r.pageNumber === 'number') ? r.pageNumber : null; %>
                   <% if (dynPageNum) { %>
-                    <a class="btn" href="#<%= report.driverId %>-page-<%= dynPageNum %>"><%= dynPageNum %>ページ ▶</a>
+                    <a class="btn" href="#<%= report.driverId %>-page-<%= dynPageNum %>">
+                      <span class="btn__text"><%= dynPageNum %>ページ</span>
+                      <span class="btn__arrow">&gt;</span>
+                    </a>
                   <% } else { %>
-                    <span class="btn" style="opacity:.7;">ページなし</span>
+                    <span class="btn" style="opacity:.7;">違反ゼロ</span>
                   <% } %>
                 </td>
               </tr>
