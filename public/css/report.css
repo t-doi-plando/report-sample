@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700;800&display=swap');
+
 /* ===== A4・印刷設定 ===== */
 @page {
   size: A4;
@@ -427,10 +429,11 @@ body.print-a4 {
 }
 /* ===== セクション（テーブル） ===== */
 .group-table {
-  width: 100%;
+  width: calc(100% - 1mm);
   border-collapse: separate;
   border-spacing: 0;
   border: 1px solid var(--line);
+  margin-right: 2mm;
 }
 .group-table + .group-table {
   margin-top: 3mm;
@@ -496,7 +499,7 @@ body.print-a4 {
 }
 .group-table thead th {
   background: #fff; /* Reverted color */
-  padding: 2.5mm 4mm;
+  padding: 2.5mm 1.2mm;
   font-size: 9pt;
   font-weight: 700;
   color: var(--ink-600);
@@ -506,16 +509,12 @@ body.print-a4 {
   line-height: 6.5mm; /* ADDED */
 }
 .group-table thead .cell--no { text-align: left; }
-.group-table thead tr:first-child th:first-child {
-  border-top-left-radius: 8px;
-}
-.group-table thead tr:first-child th:last-child {
-  border-top-right-radius: 8px;
-}
+.group-table thead .cell--page { padding-right: 0; }
+
 
 
 .group-table th, .group-table td {
-  padding: 2.5mm 4mm;
+  padding: 2.5mm 1mm;
   text-align: left;
   vertical-align: top;
   border: none;
@@ -531,11 +530,11 @@ body.print-a4 {
 
 /* Column widths and alignments */
 .group-table .cell--no    { width: 20mm; } /* Removed text-align */
-.group-table .cell--name  { width: 42mm; }
+.group-table .cell--name  { width: 28mm; }
 .group-table .cell--tag   { width: 26mm; }
 .group-table .cell--rate  { width: 38mm; } /* Adjusted */
-.group-table .cell--count { width: 32mm; } /* Adjusted */
-.group-table .cell--page  { width: 28mm; }
+.group-table .cell--count { width: 22mm; } /* Adjusted */
+.group-table .cell--page  { width: 22mm; }
 .group-table tbody .cell--page { text-align: left; }
 
 /* Cell content styles (reusing old classes) */
@@ -618,11 +617,11 @@ body.print-a4 {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  gap:6.0mm;
+  gap:3mm;
   min-height:7mm;
-  padding:0 3mm;
-  width:24mm;
-  border:1px solid #2a5db6; border-radius:1mm; /* Changed */
+  padding:0 1.5mm;
+  width:20mm;
+  border:1px solid var(--line); border-radius:1mm; /* Changed */
   font-size:8pt; color:#2a5db6; background:#fff;
   white-space:nowrap; /* Prevent wrapping */
 }
@@ -648,10 +647,15 @@ body.print-a4 {
 /* Anchor-style buttons should not show underline */
 .btn, .btn:visited, .btn:hover, .btn:active{ text-decoration: none; }
 
-.group-table tbody .cell--rate {
-  display: flex;
-  align-items: baseline;
-  gap: 2mm;
+.rate-wrapper{
+  display:flex;
+  align-items:baseline;
+  gap:2mm;
+}
+.risk-wrapper{
+  display:flex;
+  align-items:baseline;
+  gap:2mm;
 }
 
 /* ===== フッター ===== */

@@ -68,21 +68,25 @@
                 </td>
                 <td class="cell--rate">
                   <% if (r.rate !== "" && r.rate !== null && r.rate !== undefined) { %>
-                    <strong class="rate">
-                      <span class="rate__number"><%= r.rate %></span>
-                      <span class="rate__unit">%</span>
-                    </strong>
-                    <div class="detail"><%= r.detail %></div>
+                    <div class="rate-wrapper">
+                      <strong class="rate">
+                        <span class="rate__number"><%= r.rate %></span>
+                        <span class="rate__unit">%</span>
+                      </strong>
+                      <div class="detail"><%= r.detail %></div>
+                    </div>
                   <% } else { %>
                     -
                   <% } %>
                 </td>
                 <td class="cell--count">
                   <% if (r.risk !== "" && r.risk !== null && r.risk !== undefined) { %>
-                    <strong class="risk-count">
-                      <span class="risk-count__number"><%= r.risk %></span>
-                      <span class="risk-count__unit">回</span>
-                    </strong>
+                    <div class="risk-wrapper">
+                      <strong class="risk-count">
+                        <span class="risk-count__number"><%= r.risk %></span>
+                        <span class="risk-count__unit">回</span>
+                      </strong>
+                    </div>
                   <% } else { %>
                     -
                   <% } %>
