@@ -68,7 +68,10 @@
                 </td>
                 <td class="cell--rate">
                   <% if (r.rate !== "" && r.rate !== null && r.rate !== undefined) { %>
-                    <strong class="rate"><%= r.rate %>%</strong>
+                    <strong class="rate">
+                      <span class="rate__number"><%= r.rate %></span>
+                      <span class="rate__unit">%</span>
+                    </strong>
                     <div class="detail"><%= r.detail %></div>
                   <% } else { %>
                     -
@@ -76,7 +79,10 @@
                 </td>
                 <td class="cell--count">
                   <% if (r.risk !== "" && r.risk !== null && r.risk !== undefined) { %>
-                    <strong><%= r.risk %>回</strong>
+                    <strong class="risk-count">
+                      <span class="risk-count__number"><%= r.risk %></span>
+                      <span class="risk-count__unit">回</span>
+                    </strong>
                   <% } else { %>
                     -
                   <% } %>
@@ -85,7 +91,10 @@
                   <% const dynPageNum = (typeof r.pageNumber === 'number') ? r.pageNumber : null; %>
                   <% if (dynPageNum) { %>
                     <a class="btn" href="#<%= report.driverId %>-page-<%= dynPageNum %>">
-                      <span class="btn__text"><%= dynPageNum %>ページ</span>
+                      <span class="btn__label">
+                        <span class="btn__number"><%= dynPageNum %></span>
+                        <span class="btn__text">ページ</span>
+                      </span>
                       <span class="btn__arrow">&gt;</span>
                     </a>
                   <% } else { %>
