@@ -267,6 +267,7 @@ function generateReports(driversData, config) {
         const highlightTexts = (ev && ev.highlightTexts) ? ev.highlightTexts : {};
         const violationsVal = Number(ev && ev.violations !== undefined ? ev.violations : 0);
         const totalVal = Number(ev && ev.total !== undefined ? ev.total : 0);
+        const riskVal = Number(ev && ev.risk !== undefined ? ev.risk : 0);
         HIGHLIGHT_KINDS.forEach(kind => {
           const meta = sectionHighlightMeta[kind] || {};
           const entry = {
@@ -274,7 +275,7 @@ function generateReports(driversData, config) {
             body: highlightTexts[`${kind}_body`]
           };
           if (kind === 'danger') {
-            entry.metric = { risk: violationsVal };
+            entry.metric = { risk: riskVal };
           }
           if (kind === 'warn') {
             const rate = totalVal > 0 ? Math.round((violationsVal / totalVal) * 1000) / 10 : 0;
