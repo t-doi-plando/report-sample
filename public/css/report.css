@@ -25,8 +25,8 @@ body.print-a4 {
 /* カラートークン（近似） */
 :root{
   --blue-700:#0D47A0; --blue-600:#082B60; --blue-100:#eaf2ff;
-  --ink-900:#0b1420;  --ink-600:#5a6b84;  --ink-400:#7f8ea4;
-  --line:#CBD5E1;     --panel:#ffffff;    --bg:#f3f6fb;
+  --ink-900:#1E1E1E;  --ink-600:#767676;  --ink-400:#7f8ea4;
+  --line:#E1EBF5;     --panel:#ffffff;    --bg:#f3f6fb;
 
   --red-600:#A0140A;  --red-050:#FFE1E1;
   --amber-600:#E6AA19;--amber-050:#FFF0DC;
@@ -98,13 +98,13 @@ body.print-a4 {
 }
 
 .sidou-example-text{
-  color: var(--ink-600);
+  color: var(--ink-900);
   font-size: 9pt;
   margin-top: 1mm;
 }
 
 .sidou-checkbox-text{
-  color: var(--ink-600);
+  color: var(--ink-900);
   font-size: 9pt;
   margin-top: auto;
   vertical-align: text-top; /* 調整 */
@@ -271,7 +271,7 @@ body.print-a4 {
 }
 .hl__text{
   margin:0;
-  color:var(--ink-600);
+  color:var(--ink-900);
   font-size:9.5pt;
   line-height:1.35;
   display:-webkit-box;
@@ -289,7 +289,7 @@ body.print-a4 {
   top:18.5mm;
   bottom:6.5mm;
   margin:0;
-  color:var(--ink-600);
+  color:var(--ink-900);
   font-size:9.5pt;
   line-height:1.35;
   display:-webkit-box;
@@ -398,7 +398,7 @@ body.print-a4 {
 .hl__band-metaWarnCaption{
   font-size:6pt;
   font-weight:600;
-  color:var(--ink-600);
+  color:var(--ink-900);
   text-align:right;
 }
 
@@ -433,6 +433,8 @@ body.print-a4 {
   border-collapse: separate;
   border-spacing: 0;
   border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
   margin-right: 2mm;
 }
 .group-table + .group-table {
@@ -566,7 +568,7 @@ body.print-a4 {
   font-size:9pt;
   line-height:1;
   color:#fff;
-  background: var(--ink-600);
+  background: var(--ink-900);
   letter-spacing:.05em;
   box-shadow:0 0 0 0.2mm rgba(0,0,0,0.05);
 }
@@ -611,7 +613,7 @@ body.print-a4 {
   font-size:0.66em;
   font-weight:700;
 }
-.detail{ font-size:8.5pt; color:var(--ink-600); }
+.detail{ font-size:8.5pt; color:var(--ink-900); }
 .cell--count{ font-weight:800; }
 .btn{
   display:inline-flex;
