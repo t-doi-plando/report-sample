@@ -7,7 +7,7 @@ body {
 
 .page {
     width: 210mm;
-    height: 297mm; /* Use fixed height for PDF rendering context */
+    height: 297mm; /* PDFレンダリング用に高さを固定 */
     padding: 20mm;
     margin: 10mm auto;
     border: 1px #D3D3D3 solid;
@@ -23,7 +23,7 @@ body {
 }
 
 .report-header {
-    text-align: center; /* This will be overridden by flexbox for horizontal alignment */
+    text-align: center; /* 水平方向の配置はFlexbox指定で上書きされる */
     margin-bottom: 2em;
     padding: 1.5em;
     background: linear-gradient(135deg, #007BFF, #0056b3);
@@ -31,20 +31,20 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
-    /* ADD THESE FOR FLEXBOX LAYOUT */
+    /* Flexboxレイアウト用の追加指定 */
     display: flex;
-    justify-content: space-between; /* Pushes items to ends */
-    align-items: center; /* Vertically centers items */
+    justify-content: space-between; /* 要素を左右の端へ振り分ける */
+    align-items: center; /* 縦方向で中央揃えにする */
 }
 
 .report-header h1 {
-    margin: 0; /* Ensure no extra margin pushes it */
+    margin: 0; /* 余計なマージンで位置がずれないようにする */
     font-size: 2.2em;
     font-weight: bold;
 }
 
 .report-header p {
-    margin: 0; /* Ensure no extra margin pushes it */
+    margin: 0; /* 余計なマージンで位置がずれないようにする */
     font-size: 1.2em;
     opacity: 0.9;
 }
@@ -73,7 +73,7 @@ table {
     border-collapse: collapse;
     margin-top: 1em;
     border-radius: 8px;
-    overflow: hidden; /* This is key for border-radius on tables */
+    overflow: hidden; /* tableに角丸を効かせるための重要な指定 */
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
@@ -94,7 +94,7 @@ th {
     text-transform: uppercase;
     font-size: 0.85em;
     letter-spacing: 0.5px;
-    background-color: transparent; /* Remove individual background to let thead control it */
+    background-color: transparent; /* thead側でまとめて背景色を制御するため個別では外す */
 }
 
 thead th:first-child {
@@ -108,7 +108,7 @@ tbody tr {
 }
 
 tbody tr:last-child td {
-    border-bottom: none; /* Remove bottom border from the last row */
+    border-bottom: none; /* 最終行のみ下罫線を外す */
 }
 
 tbody tr:nth-of-type(even) {
@@ -167,7 +167,7 @@ td.sales {
     }
 }
 
-/* Styles moved from report-links.ejs */
+/* report-links.ejsから移動したスタイル */
 body {
   margin: 20px;
   background-color: #f4f4f4;
@@ -204,16 +204,16 @@ li span {
   text-decoration: none;
   border-radius: 5px;
   transition: background-color 0.3s ease;
-  margin-left: 10px; /* Space between buttons */
+  margin-left: 10px; /* ボタンの間隔用 */
 }
 .button-group a.download-pdf {
-  background-color: #28a745; /* Green for download */
+  background-color: #28a745; /* ダウンロード用のグリーン */
 }
 .button-group a.download-pdf:hover {
   background-color: #218838;
 }
 .button-group a.view-html {
-  background-color: #007BFF; /* Blue for view HTML */
+  background-color: #007BFF; /* HTML表示用のブルー */
 }
 .button-group a.view-html:hover {
   background-color: #0056b3;
@@ -229,17 +229,17 @@ li span {
   background-color: #5a6268;
 }
 
-/* New styles for report-details */
+/* report-details用の新規スタイル */
 .report-details {
-    text-align: right; /* Right align the whole block */
+    text-align: right; /* ブロック全体を右寄せ */
     display: flex;
-    flex-direction: column; /* Stack elements vertically within the right-aligned block */
-    align-items: flex-end; /* Align items to the right within the column */
+    flex-direction: column; /* 右寄せブロック内で要素を縦方向に積む */
+    align-items: flex-end; /* カラム内の要素を右側に揃える */
 }
 
 .report-label {
     font-size: 12pt;
-    color: #007BFF; /* Blue color */
+    color: #007BFF; /* ブルー系の配色 */
 }
 
 .report-value {
