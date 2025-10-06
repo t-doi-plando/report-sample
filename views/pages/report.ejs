@@ -20,14 +20,8 @@
 
     <% const detailSections = report.detailSections || []; %>
     <% detailSections.forEach(function(section) { %>
-      <% const pages = section.pages || []; %>
-      <% if (pages.length === 0) { %>
-        <main class="sheet" id="<%= report.driverId %>-page-<%= pageCounter %>" style="page-break-before: always;">
-          <%- include('../partials/header/header_detail', { report: report, section: section, pageIndex: 0, totalPages: 1 }) %>
-          <%- include('../partials/body/body_detail', { report: report, section: section, page: null, pageIndex: 0, totalPages: 1 }) %>
-        </main>
-        <% pageCounter++; %>
-      <% } else { %>
+      <% const pages = Array.isArray(section.pages) ? section.pages : []; %>
+      <% if (pages.length > 0) { %>
         <% pages.forEach((page, idx) => { %>
           <main class="sheet" id="<%= report.driverId %>-page-<%= pageCounter %>" style="page-break-before: always;">
             <%- include('../partials/header/header_detail', { report: report, section: section, pageIndex: idx, totalPages: pages.length }) %>
