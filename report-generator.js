@@ -166,7 +166,10 @@ function generateReports(driversData, config) {
           };
         }
         
-        const rate = Math.round((event.violations / event.total) * 100);
+        const violationsVal = Number(event.violations) || 0;
+        const totalVal = Number(event.total) || 0;
+        const rateRaw = totalVal > 0 ? (violationsVal / totalVal) * 100 : 0;
+        const rate = Math.round(rateRaw);
         const eventIdKey = normalizeEventId(event.id);
         const toneSet = eventIdKey ? highlightToneOverrides.get(eventIdKey) : undefined;
         const toneList = toneSet ? sortTonesByPriority(Array.from(toneSet)) : [];
@@ -181,8 +184,8 @@ function generateReports(driversData, config) {
           tags,
           tone: tone,
           rate: rate,
-          detail: `(${event.violations}回/${event.total}回)`,
-          count: event.violations,
+          detail: `(${violationsVal}回/${totalVal}回)`,
+          count: violationsVal,
           risk: event.risk,
           // 動的ページ番号は後段で pageNumber に付与。静的pageは使用しない
         });
@@ -286,7 +289,7 @@ function generateReports(driversData, config) {
             const rate = totalVal > 0 ? Math.round((violationsVal / totalVal) * 1000) / 10 : 0;
             entry.metric = {
               rate,
-              detail: totalVal > 0 ? `(${violationsVal}回/${totalVal}回)` : ''
+          detail: `(${violationsVal}回/${totalVal}回)`
             };
           }
           if (!entry.title && entry.title !== '') {
