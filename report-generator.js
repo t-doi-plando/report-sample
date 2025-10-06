@@ -261,6 +261,11 @@ function generateReports(driversData, config) {
         closePage();
         const pages = pagesTmp;
 
+        // シーンが存在しないセクションは詳細ページを生成しない
+        if (!pages || pages.length === 0) {
+          return; // continue current forEach
+        }
+
         // ハイライト生成
         const highlights = [];
         const sectionHighlightMeta = (sec.highlightsKey && config[sec.highlightsKey]) ? config[sec.highlightsKey] : {};
