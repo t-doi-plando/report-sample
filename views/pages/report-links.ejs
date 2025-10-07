@@ -323,10 +323,44 @@
 
         reader.onload = function(e) {
           try {
-            const jsonData = JSON.parse(e.target.result);
-            
-            // 1. Send data to server in the background
-            fetch('/upload-json-data', {
+        const jsonData = JSON.parse(e.target.result);
+
+        if (!Array.isArray(jsonData)) {
+          showToast('不正な形式です。アップロードファイルの内容をご確認ください。', 'error');
+          return;
+        }
+
+        const stringifyId = (id) => {
+          try {
+            const parsed = JSON.parse(id);
+            if (parsed && typeof parsed === 'object') {
+              return JSON.stringify(parsed);
+            }
+          } catch (ignore) {}
+          return id;
+        };
+
+        // Check duplicated driverIds before uploading
+        const seen = new Map();
+        const duplicates = new Set();
+        jsonData.forEach(item => {
+          const rawId = item && typeof item.driverId === 'string' ? item.driverId : null;
+          const id = rawId ? stringifyId(rawId) : null;
+          if (!id) return;
+          if (seen.has(id)) {
+            duplicates.add(id);
+          } else {
+            seen.set(id, true);
+          }
+        });
+        if (duplicates.size > 0) {
+          const ids = Array.from(duplicates).join(',');
+          showToast(`DriverIDが重複するデータが存在します。ID：${ids}`, 'error');
+          return;
+        }
+
+        // 1. Send data to server in the background
+        fetch('/upload-json-data', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(jsonData),
