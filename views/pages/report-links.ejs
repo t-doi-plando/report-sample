@@ -6,9 +6,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/report_links.css">
 </head>
 <body>
@@ -63,24 +60,24 @@
   </body>
   <div id="toast-container"></div>
   <script>
-    // Current URL token (from server render). Empty string if none.
+    // サーバーレンダリング時のトークン。未設定時は空文字列
     let currentToken = <%- (token ? JSON.stringify(token) : '""') %>;
     function showToast(message, type = 'success') {
       const toastContainer = document.getElementById('toast-container');
       const toast = document.createElement('div');
       toast.classList.add('toast');
       if (type === 'error') {
-        toast.style.backgroundColor = '#f44336'; // Red for error
+        toast.style.backgroundColor = '#f44336'; // エラー時は赤背景
       }
       toast.textContent = message;
       toastContainer.appendChild(toast);
 
-      // Show toast
+      // トーストを表示
       setTimeout(() => {
         toast.classList.add('show');
       }, 100);
 
-      // Hide toast after 3 seconds
+      // 3秒後に非表示へ切り替え
       setTimeout(() => {
         toast.classList.remove('show');
         toast.addEventListener('transitionend', () => {
@@ -91,12 +88,51 @@
 
     const fileInput = document.getElementById('jsonFileInput');
     const uploadButton = document.getElementById('uploadButton');
-    const uploadButtonSpan = document.querySelector('.custom-file-upload .upload-button');
+    const uploadLabel = document.querySelector('.custom-file-upload .upload-button');
     const customFileUpload = document.querySelector('.custom-file-upload');
     const individualReportsList = document.getElementById('individual-reports-list');
+    const DEFAULT_UPLOAD_LABEL = 'ファイルを選択して下さい';
 
+    // JSON文字列を安全に解析する
+    const parseJsonSafely = (text) => {
+      try {
+        return JSON.parse(text);
+      } catch (_) {
+        return null;
+      }
+    };
+
+    // driverId がJSON文字列の場合に整形する
+    const stringifyId = (id) => {
+      try {
+        const parsed = JSON.parse(id);
+        if (parsed && typeof parsed === 'object') {
+          return JSON.stringify(parsed);
+        }
+      } catch (_) {}
+      return id;
+    };
+
+    // driverId の重複を抽出する
+    const findDuplicateDriverIds = (drivers = []) => {
+      const seen = new Map();
+      const duplicates = new Set();
+      drivers.forEach(item => {
+        const rawId = item && typeof item.driverId === 'string' ? item.driverId : null;
+        const id = rawId ? stringifyId(rawId) : null;
+        if (!id) return;
+        if (seen.has(id)) {
+          duplicates.add(id);
+        } else {
+          seen.set(id, true);
+        }
+      });
+      return duplicates;
+    };
+
+    // ドライバー一覧を再描画
     function updateReportsList(drivers) {
-      individualReportsList.innerHTML = ''; // Clear existing list
+      individualReportsList.innerHTML = ''; // 表示中のリストをリセット
 
       if (!drivers || drivers.length === 0) {
         const li = document.createElement('li');
@@ -119,118 +155,117 @@
       });
     }
 
-    fileInput.addEventListener('change', function() {
-      if (this.files && this.files.length > 0) {
-        const file = this.files[0];
-        const fileName = file.name;
-        const reader = new FileReader();
+    // ファイル選択ラベルを初期状態にする
+    const setDefaultUploadLabel = () => {
+      if (!uploadLabel) return;
+      uploadLabel.textContent = DEFAULT_UPLOAD_LABEL;
+    };
 
-        reader.onload = function(e) {
-          try {
-        const jsonData = JSON.parse(e.target.result);
+    // 選択ファイル名の表示と削除操作を更新する
+    const updateFileSelectionDisplay = (fileName) => {
+      if (!uploadLabel) return;
+      uploadLabel.innerHTML = '';
+      const deleteBtn = document.createElement('span');
+      deleteBtn.textContent = '✖️';
+      deleteBtn.style.cursor = 'pointer';
+      deleteBtn.style.marginRight = '8px';
+      deleteBtn.onclick = function(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        fetch('/reset-json-data', { method: 'POST' })
+          .then(res => res.json())
+          .then(data => {
+            showToast(data.message, 'success');
+            setTimeout(() => { window.location.reload(); }, 1500);
+          })
+          .catch(err => {
+            console.error('Error:', err);
+            showToast('リセット中にエラーが発生しました。', 'error');
+          });
+      };
+      const fileNameSpan = document.createElement('span');
+      fileNameSpan.textContent = fileName;
+      fileNameSpan.style.textDecoration = 'underline';
+      uploadLabel.appendChild(deleteBtn);
+      uploadLabel.appendChild(fileNameSpan);
+    };
 
-        if (!Array.isArray(jsonData)) {
-          showToast('不正な形式です。アップロードファイルの内容をご確認ください。', 'error');
-          return;
-        }
+    // 一覧リンクにトークンを反映
+    // ダウンロード/プレビューリンクのクエリにトークンを適用する
+    const updateGlobalLinks = (tokenValue) => {
+      const tokenSuffix = tokenValue ? `?t=${encodeURIComponent(tokenValue)}` : '';
+      const allPdf = document.querySelector('a.download-pdf[href^="/download/all"]');
+      if (allPdf) allPdf.href = `/download/all${tokenSuffix}`;
+      const allHtml = document.querySelector('a.view-html[href^="/reports/all"]');
+      if (allHtml) allHtml.href = `/reports/all${tokenSuffix}`;
+    };
 
-        const stringifyId = (id) => {
-          try {
-            const parsed = JSON.parse(id);
-            if (parsed && typeof parsed === 'object') {
-              return JSON.stringify(parsed);
-            }
-          } catch (ignore) {}
-          return id;
-        };
-
-        // Check duplicated driverIds before uploading
-        const seen = new Map();
-        const duplicates = new Set();
-        jsonData.forEach(item => {
-          const rawId = item && typeof item.driverId === 'string' ? item.driverId : null;
-          const id = rawId ? stringifyId(rawId) : null;
-          if (!id) return;
-          if (seen.has(id)) {
-            duplicates.add(id);
-          } else {
-            seen.set(id, true);
-          }
+    // アップロード後のUI/リンク更新を一括で実行
+    const handleUploadSuccess = (jsonData, fileName) => {
+      fetch('/upload-json-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(jsonData),
+      })
+        .then(response => response.json())
+        .then(data => {
+          showToast(data.message, 'success');
+          const tokenValue = data.token || '';
+          currentToken = tokenValue;
+          updateGlobalLinks(currentToken);
+          updateReportsList(jsonData);
+          updateFileSelectionDisplay(fileName);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          showToast('JSONデータのアップロード中にエラーが発生しました。', 'error');
         });
-        if (duplicates.size > 0) {
-          const ids = Array.from(duplicates).join(',');
-          showToast(`DriverIDが重複するデータが存在します。ID：${ids}`, 'error');
+    };
+
+    // JSON形式と重複を確認した上でアップロード処理へ進む
+    const processUploadedData = (jsonData, fileName) => {
+      if (!Array.isArray(jsonData)) {
+        showToast('不正な形式です。アップロードファイルの内容をご確認ください。', 'error');
+        return;
+      }
+      const duplicates = findDuplicateDriverIds(jsonData);
+      if (duplicates.size > 0) {
+        const ids = Array.from(duplicates).join(',');
+        showToast(`DriverIDが重複するデータが存在します。ID：${ids}`, 'error');
+        return;
+      }
+      handleUploadSuccess(jsonData, fileName);
+    };
+
+    setDefaultUploadLabel();
+    updateGlobalLinks(currentToken);
+
+    fileInput.addEventListener('change', function() {
+      if (!(this.files && this.files.length > 0)) return;
+
+      const file = this.files[0];
+      const fileName = file.name;
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        const jsonData = parseJsonSafely(e.target.result);
+        if (!jsonData) {
+          showToast('選択されたファイルは有効なJSONではありません。', 'error');
+          console.error('JSON parse error');
           return;
         }
+        processUploadedData(jsonData, fileName);
+      };
 
-        // 1. Send data to server in the background
-        fetch('/upload-json-data', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(jsonData),
-            })
-            .then(response => response.json())
-            .then(data => {
-              showToast(data.message, 'success');
-              if (data.token) {
-                currentToken = data.token;
-                // Update "all" section links to include token
-                const allPdf = document.querySelector('a.download-pdf[href^="/download/all"]');
-                if (allPdf) allPdf.href = `/download/all?t=${encodeURIComponent(currentToken)}`;
-                const allHtml = document.querySelector('a.view-html[href^="/reports/all"]');
-                if (allHtml) allHtml.href = `/reports/all?t=${encodeURIComponent(currentToken)}`;
-              }
-              // Re-render individual list so that each link includes ?t=
-              updateReportsList(jsonData);
-            })
-            .catch(error => {
-              console.error('Error:', error);
-              showToast('JSONデータのアップロード中にエラーが発生しました。', 'error');
-            });
-
-            // 2. Update the UI dynamically (moved after token assignment)
-
-            // 3. Update the file selection display
-            uploadButtonSpan.innerHTML = ''; // Clear existing content
-            const deleteBtn = document.createElement('span');
-            deleteBtn.textContent = '✖️';
-            deleteBtn.style.cursor = 'pointer';
-            deleteBtn.style.marginRight = '8px';
-            deleteBtn.onclick = function(ev) {
-              ev.preventDefault();
-              ev.stopPropagation();
-              fetch('/reset-json-data', { method: 'POST' })
-                .then(res => res.json())
-                .then(data => {
-                  showToast(data.message, 'success');
-                  setTimeout(() => { window.location.reload(); }, 1500);
-                })
-                .catch(err => {
-                  console.error('Error:', err);
-                  showToast('リセット中にエラーが発生しました。', 'error');
-                });
-            };
-            const fileNameSpan = document.createElement('span');
-            fileNameSpan.textContent = fileName;
-            fileNameSpan.style.textDecoration = 'underline';
-            uploadButtonSpan.appendChild(deleteBtn);
-            uploadButtonSpan.appendChild(fileNameSpan);
-
-          } catch (parseError) {
-            showToast('選択されたファイルは有効なJSONではありません。', 'error');
-            console.error('JSON parse error:', parseError);
-          }
-        };
-        reader.readAsText(file);
-      }
+      reader.readAsText(file);
     });
 
-    // The "ファイル選択" button just opens the file dialog
+    // 「ファイル選択」ボタンはダイアログを直接開く
     uploadButton.addEventListener('click', function() {
       fileInput.click();
     });
     
-    // Also allow clicking the text area to open the dialog
+    // テキスト部分をクリックしてもダイアログを開く
     customFileUpload.addEventListener('click', function(e) {
       if (e.target.textContent !== '✖️') {
         fileInput.click();
