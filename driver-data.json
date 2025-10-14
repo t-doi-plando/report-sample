@@ -21,7 +21,14 @@
           "danger": "",
           "warn": "",
           "good": ""
-        }
+        },
+        "scenes": [
+          {
+            "capturedAt": "2025-07-08T19:20:00+09:00",
+            "type": "hard_brake",
+            "videoUrl": "https://app.box.com/file/1876898649050",
+            "MapViewUrl": "https://www.google.com/maps/search/?api=1&query=35.24955,138.90847"
+          }]
       },
       {
         "id": 2,

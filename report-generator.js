@@ -320,15 +320,30 @@ function generateReports(driversData, config) {
       }
       // 概要テーブル向け: 各イベントIDの開始ページ番号を計算
       const startPageByEventId = {};
-      let pageCounter = 1; // 概要が1ページ
+      let pageCounter = 1; // 概要ページが1ページ
+      const detailPages = [];
       details.forEach(sec => {
-        const effectivePages = Math.max(1, (sec.pages || []).length);
-        const startPage = pageCounter + 1; // 次ページからセクション開始
+        const pages = Array.isArray(sec.pages) ? sec.pages : [];
+        if (!pages.length) return;
+        const startPage = pageCounter + 1; // 次ページから詳細が始まる
         if (sec.eventId != null) {
           startPageByEventId[sec.eventId] = startPage;
         }
-        pageCounter += effectivePages;
+        pages.forEach((page, idx) => {
+          const pageNumber = startPage + idx;
+          detailPages.push({
+            pageNumber,
+            page,
+            section: sec,
+            index: idx,
+            totalPages: pages.length
+          });
+        });
+        pageCounter += pages.length;
       });
+      finalReportData.detailPages = detailPages;
+      finalReportData.guidancePageNumber = pageCounter + 1;
+
       // 既に生成済みの概要 rows へ動的ページ番号を反映
       (finalReportData.sections || []).forEach(group => {
         (group.rows || []).forEach(row => {
