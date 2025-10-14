@@ -11,28 +11,20 @@
 </head>
 <body class="print-a4">
   <% reports.forEach(report => { %>
-    <% var pageCounter = 1; %>
-    <main class="sheet" id="<%= report.driverId %>-page-<%= pageCounter %>">
+    <% const detailPages = report.detailPages || []; %>
+    <% const guidancePageNumber = report.guidancePageNumber || (detailPages.length ? detailPages[detailPages.length - 1].pageNumber + 1 : 2); %>
+    <main class="sheet" id="<%= report.driverId %>-page-1 %>">
       <%- include('../partials/header/header_gaiyou', { report: report }) %>
       <%- include('../partials/body/body_gaiyou', { report: report }) %>
     </main>
-    <% pageCounter++; %>
-
-    <% const detailSections = report.detailSections || []; %>
-    <% detailSections.forEach(function(section) { %>
-      <% const pages = Array.isArray(section.pages) ? section.pages : []; %>
-      <% if (pages.length > 0) { %>
-        <% pages.forEach((page, idx) => { %>
-          <main class="sheet" id="<%= report.driverId %>-page-<%= pageCounter %>" style="page-break-before: always;">
-            <%- include('../partials/header/header_detail', { report: report, section: section, pageIndex: idx, totalPages: pages.length }) %>
-            <%- include('../partials/body/body_detail', { report: report, section: section, page: page, pageIndex: idx, totalPages: pages.length }) %>
-          </main>
-          <% pageCounter++; %>
-        <% }) %>
-      <% } %>
+    <% detailPages.forEach(function(pageEntry) { %>
+      <main class="sheet sheet--break" id="<%= report.driverId %>-page-<%= pageEntry.pageNumber %>">
+        <%- include('../partials/header/header_detail', { report: report, section: pageEntry.section, pageIndex: pageEntry.index, totalPages: pageEntry.totalPages }) %>
+        <%- include('../partials/body/body_detail', { report: report, section: pageEntry.section, page: pageEntry.page, pageIndex: pageEntry.index, totalPages: pageEntry.totalPages }) %>
+      </main>
     <% }) %>
 
-    <main class="sheet" id="<%= report.driverId %>-page-<%= pageCounter %>" style="page-break-before: always;">
+    <main class="sheet sheet--break" id="<%= report.driverId %>-page-<%= guidancePageNumber %>">
       <%- include('../partials/header/header_sidou', { report: report }) %>
       <%- include('../partials/body/body_sidou', { report: report }) %>
     </main>

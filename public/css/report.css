@@ -46,6 +46,10 @@ body.print-a4 {
   page-break-after: always;
 }
 
+.sheet--break {
+  page-break-before: always;
+}
+
 /* ===== ヘッダー（青帯） ===== */
 .topbar{
   background: linear-gradient(90deg, var(--blue-700), var(--blue-600));
