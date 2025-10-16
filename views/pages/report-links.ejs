@@ -93,7 +93,7 @@
     const individualReportsList = document.getElementById('individual-reports-list');
     const DEFAULT_UPLOAD_LABEL = 'ファイルを選択して下さい';
 
-    // JSON文字列を安全に解析する
+    // JSON文字列にパース可能か判定する
     const parseJsonSafely = (text) => {
       try {
         return JSON.parse(text);
@@ -102,7 +102,7 @@
       }
     };
 
-    // driverId がJSON文字列の場合に整形する
+    // driverId がJSONとして読み取れた場合、整形済みのJSON文字列にそろえる
     const stringifyId = (id) => {
       try {
         const parsed = JSON.parse(id);
