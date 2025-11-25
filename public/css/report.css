@@ -39,9 +39,287 @@ body.print-a4 {
   --meta-width: 32ch;
 }
 
+/* ===================================
+ * 新概要ページ（モック）
+ * =================================== */
+.gaiyou-hero{
+  background: linear-gradient(90deg,#0a3c90,#0f6ac2);
+  color:#fff;
+  padding:2mm 3.5mm 2.4mm;
+  border-radius:5px;
+  display:flex;
+  flex-direction:column;
+  gap:1mm;
+  box-shadow:0 2px 5px rgba(7,35,89,0.12);
+}
+.gaiyou-hero__head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:5mm;
+}
+.gaiyou-hero__primary{
+  display:flex;
+  align-items:flex-end;
+  gap:3mm;
+  font-size:11pt;
+  font-weight:700;
+  letter-spacing:.06em;
+}
+.gaiyou-hero__separator{
+  opacity:.8;
+  font-size:10pt;
+}
+.gaiyou-hero__subtitle{
+  font-size:9pt;
+  font-weight:600;
+}
+.gaiyou-hero__org{
+  font-size:7.5pt;
+  font-weight:600;
+  letter-spacing:.08em;
+  white-space:nowrap;
+}
+.gaiyou-metaRow{
+  display:flex;
+  gap:1.6mm;
+  padding:1.2mm 0 2.8mm;
+  color:#111;
+}
+.gaiyou-metaRow__item{
+  display:flex;
+  align-items:center;
+  gap:1mm;
+  flex:1;
+  font-size:7.5pt;
+}
+.gaiyou-metaRow__label{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:16mm;
+  padding:0.4mm 1.2mm;
+  border-radius:999px;
+  background:#e5e7f0;
+  font-weight:700;
+  font-size:6.5pt;
+  color:#1a1a1a;
+}
+.gaiyou-metaRow__value{
+  font-weight:700;
+  color:#111;
+}
+.gaiyou-riskSummary{
+  margin-top:1mm;
+  display:flex;
+  flex-direction:column;
+  gap:0.8mm;
+}
+.gaiyou-riskSummary__lead{
+  color:var(--blue-700);
+  font-weight:700;
+  margin:0;
+  font-size:8pt;
+}
+.gaiyou-riskSummary__panel{
+  background:#fff;
+  border-radius:4px;
+  border:1px solid transparent;
+  padding:2mm 2.4mm;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:1.2mm;
+  box-shadow:0 1px 4px rgba(16,31,63,0.05);
+}
+.gaiyou-riskSummary__title{
+  font-size:14pt;
+  font-weight:800;
+  color:#052353;
+}
+.gaiyou-riskSummary__counts{
+  display:flex;
+  gap:2mm;
+  flex-wrap:wrap;
+}
+.gaiyou-riskSummary__count{
+  background:#fef1f1;
+  color:#b4261c;
+  border-radius:4px;
+  padding:1.6mm 3mm;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:2mm;
+  font-size:7pt;
+}
+.gaiyou-riskSummary__count strong{
+  font-size:9pt;
+}
+.gaiyou-checklist{
+  margin-top:1mm;
+  background:#fff;
+  padding:2.6mm 3.2mm;
+  border-radius:5px;
+  border:1px solid transparent;
+  box-shadow:0 1px 4px rgba(16,31,63,0.05);
+}
+.gaiyou-checklist h2{
+  margin:0;
+  font-size:10pt;
+  color:#1b2b47;
+}
+.gaiyou-checklist header p{
+  margin:1.2mm 0 0;
+  color:var(--ink-600);
+  font-size:9pt;
+}
+.gaiyou-checklist__cards{
+  margin-top:0.6mm;
+  display:flex;
+  flex-direction:column;
+  gap:1mm;
+}
+.gaiyou-checkCard{
+  border:1px solid transparent;
+  border-radius:6px;
+  padding:2.2mm 3mm;
+  background:#fff;
+  box-shadow:0 1px 3px rgba(16,31,63,0.05);
+}
+.gaiyou-checkCard--filled{
+  background:#fbe9e6;
+  border-color:#f1b4ae;
+}
+.gaiyou-checkCard__head{
+  display:flex;
+  gap:2mm;
+  align-items:flex-start;
+}
+.gaiyou-checkCard__checkbox{
+  width:4mm;
+  height:4mm;
+  border:2px solid #c8ced8;
+  border-radius:2px;
+  margin-top:0.4mm;
+}
+.gaiyou-checkCard__title{
+  flex:1;
+  font-weight:700;
+  color:#1a2135;
+  line-height:1.25;
+  font-size:8.5pt;
+}
+.gaiyou-checkCard__metric{
+  margin-top:0.5mm;
+  font-size:7pt;
+  color:#c02b16;
+  font-weight:600;
+}
+.gaiyou-checkCard__alert{
+  margin:2mm 0 0;
+  color:#c02b16;
+  font-weight:700;
+  font-size:7pt;
+  border:1px solid rgba(192,43,22,0.25);
+  border-radius:6px;
+  padding:1.5mm 2mm;
+  background:#fff;
+}
+.gaiyou-checkCard__note{
+  margin:0.8mm 0 0;
+  color:#424b63;
+  font-size:7pt;
+  line-height:1.4;
+}
+.gaiyou-scene{
+  margin-top:0.8mm;
+  background:#fff;
+  border-radius:5px;
+  border:1px solid transparent;
+  padding:1.4mm 2.2mm 2mm;
+  display:flex;
+  flex-direction:column;
+  gap:1mm;
+  box-shadow:0 1px 4px rgba(16,31,63,0.05);
+}
+.gaiyou-scene header h2{
+  margin:0;
+  color:#1b2b47;
+  font-size:10pt;
+}
+.gaiyou-scene header p{
+  margin:0.6mm 0 0;
+  color:var(--ink-600);
+  font-size:7pt;
+}
+.gaiyou-scene__meta{
+  display:flex;
+  flex-direction:column;
+  gap:1mm;
+}
+.gaiyou-scene__meta dt{
+  font-weight:700;
+  color:#334166;
+  font-size:7pt;
+  display:block;
+}
+.gaiyou-scene__meta dd{
+  margin:0 0 1mm;
+  color:#1a2135;
+  line-height:1.35;
+  font-size:7pt;
+}
+.gaiyou-scene__media{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1.4mm;
+}
+.gaiyou-mediaFrame{
+  border-radius:4px;
+  min-height:30mm;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  font-size:7pt;
+  letter-spacing:.05em;
+  color:#2f3a52;
+  background:#f0f3fb;
+}
+.gaiyou-mediaFrame--video{
+  background-image:linear-gradient(135deg,#18263d,#314a7a);
+  color:#fff;
+}
+.gaiyou-mediaFrame--map{
+  background-image:linear-gradient(135deg,#dfeaff,#f1f4ff);
+  color:#2f3a52;
+}
+.gaiyou-legend{
+  margin-top:1mm;
+  border:1px solid transparent;
+  border-radius:5px;
+  background:#f7f9ff;
+  padding:1.4mm 2.6mm;
+  display:flex;
+  flex-direction:column;
+  gap:1mm;
+  color:#4b5571;
+  font-size:7pt;
+  line-height:1.3;
+}
+.gaiyou-pager{
+  margin-top:2.8mm;
+  text-align:center;
+  color:#7b869f;
+  font-weight:700;
+  font-size:8.5pt;
+}
+
 /* A4 1枚のシート */
 .sheet{
-  display:grid; gap:4mm;
+  display:grid; gap:1.5mm;
   align-content: start;
   page-break-after: always;
 }

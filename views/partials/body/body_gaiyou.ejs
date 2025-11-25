@@ -1,112 +1,88 @@
-      <!-- ===== KPI（平均と順位） ===== -->
-      <section class="headline">
-        <div class="headline__label">違反疑い割合平均</div>
-        <div class="headline__value">
-          <%= (report.avgViolationRatePct ?? 10.9) %>
-          <span class="headline__value-percent">%</span>
+      <section class="gaiyou-riskSummary">
+        <p class="gaiyou-riskSummary__lead">事故リスクが高いと判定された指導項目</p>
+        <div class="gaiyou-riskSummary__panel">
+          <div class="gaiyou-riskSummary__title">バック前確認</div>
+          <div class="gaiyou-riskSummary__counts">
+            <div class="gaiyou-riskSummary__count"><span>違反疑い</span><strong>5件</strong></div>
+            <div class="gaiyou-riskSummary__count"><span>うち危険疑い</span><strong>3件</strong></div>
+          </div>
         </div>
-        <div class="headline__rank">(<%= (report.rank?.total ?? 10) %>人中<%= (report.rank?.position ?? 8) %>位)</div>
       </section>
 
-      <!-- ===== ハイライト3カード ===== -->
-      <section class="highlights highlights--summary">
-        <% const cards = report.highlights_gaiyou || []; %>
-        <% cards.forEach(c => { %>
-          <article class="hl hl--<%= c.kind %>">
-            <% const bandIconSrc = (c.kind === 'good') ? '/img/good.svg' : '/img/exclamation.svg'; %>
-            <% const bandIconAlt = (c.kind === 'good') ? '高評価アイコン' : '注意アイコン'; %>
-            <div class="hl__band">
-              <img src="<%= bandIconSrc %>" alt="<%= bandIconAlt %>" class="hl__band-icon"/>
-              <span class="hl__band-label"><%= c.badge %></span>
+      <section class="gaiyou-checklist">
+        <header>
+          <h2>「バック前確認」の改善チェックリスト</h2>
+          <p>すべてにチェックマークがつくようにチェックリストを意識して運転しましょう。</p>
+        </header>
+        <div class="gaiyou-checklist__cards">
+          <article class="gaiyou-checkCard">
+            <div class="gaiyou-checkCard__head">
+              <div class="gaiyou-checkCard__checkbox" aria-hidden="true"></div>
+              <div class="gaiyou-checkCard__title">
+                <div>バックに入る前に、完全に停止できているか</div>
+                <div class="gaiyou-checkCard__metric">違反疑い件数　1/5件</div>
+              </div>
             </div>
-            <h2 class="hl__title"><%= c.title || '' %></h2>
-            <div class="hl__divider"></div>
-            <p class="hl__text"><%= (c.text && c.text.trim()) ? c.text : '本文未設定' %></p>
+            <p class="gaiyou-checkCard__alert">バックを開始する前のタイミングで、完全停止（0km/h）が検出できませんでした</p>
+            <p class="gaiyou-checkCard__note">車を止めてから数秒待ってると、後輪の位置や車両の角度や周囲の状況がつかめます。一度止まって落ち着いて後退する時間を取りましょう。</p>
           </article>
-        <% }) %>
+
+          <article class="gaiyou-checkCard gaiyou-checkCard--filled">
+            <div class="gaiyou-checkCard__head">
+              <div class="gaiyou-checkCard__checkbox" aria-hidden="true"></div>
+              <div class="gaiyou-checkCard__title">
+                <div>バックに入る前に、左後方の安全を確認できているか</div>
+                <div class="gaiyou-checkCard__metric">違反疑い件数　2/5件　うち危険疑い 2件</div>
+              </div>
+            </div>
+            <p class="gaiyou-checkCard__alert">バックを開始する前のタイミングで、左後方の安全確認が検出できませんでした</p>
+            <p class="gaiyou-checkCard__note">後方には人やフォークリフトが入り込んでしまう危険性があります。停止した左右をそれぞれ目視し、安全スペースを確保してからバックを始めましょう。</p>
+          </article>
+
+          <article class="gaiyou-checkCard gaiyou-checkCard--filled">
+            <div class="gaiyou-checkCard__head">
+              <div class="gaiyou-checkCard__checkbox" aria-hidden="true"></div>
+              <div class="gaiyou-checkCard__title">
+                <div>バックに入る前に、右後方の安全を確認できているか</div>
+                <div class="gaiyou-checkCard__metric">違反疑い件数　2/5件</div>
+              </div>
+            </div>
+            <p class="gaiyou-checkCard__alert">バックを開始する前のタイミングで、右後方の安全確認が検出できませんでした</p>
+            <p class="gaiyou-checkCard__note">後方には人やフォークリフトが入り込んでしまう危険性があります。停止した左右をそれぞれ目視し、安全スペースを確保してからバックを始めましょう。</p>
+          </article>
+        </div>
       </section>
 
-      <% const groups = report.sections || []; %>
-      <% groups.forEach(g => { %>
-        <table class="group-table">
-          <thead>
-            <tr>
-              <th class="cell--no"><%= g.title %></th>
-              <th class="cell--name">項目</th>
-              <th class="cell--tag">指導提案</th>
-              <th class="cell--rate">違反疑い割合</th>
-              <th class="cell--count">危険疑い回数</th>
-              <th class="cell--page">詳細</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% g.rows.forEach(r => { %>
-              <tr class="<%= r.tone ? 'row--' + r.tone : '' %>">
-                <td class="cell--no">
-                  <% if (r.no !== "") { %>
-                    <span class="no"><%= r.no %></span>
-                  <% } else { %>
-                    -
-                  <% } %>
-                </td>
-                <td class="cell--name"><%= r.name %></td>
-                <td class="cell--tag">
-                  <% if (Array.isArray(r.tags) && r.tags.length > 0) { %>
-                    <div class="tags">
-                      <% r.tags.forEach(tone => {
-                        const tagIconSrc = (tone === 'good') ? '/img/good.svg' : '/img/exclamation.svg';
-                        const tagIconAlt = (tone === 'good') ? '高評価アイコン' : '注意アイコン';
-                      %>
-                        <span class="tag-pill tag-pill--<%= tone %>">
-                          <img src="<%= tagIconSrc %>" alt="<%= tagIconAlt %>" class="tag-pill__icon" />
-                        </span>
-                      <% }) %>
-                    </div>
-                  <% } else { %>
-                    -
-                  <% } %>
-                </td>
-                <td class="cell--rate">
-                  <% if (r.rate !== "" && r.rate !== null && r.rate !== undefined) { %>
-                    <div class="rate-wrapper">
-                      <strong class="rate">
-                        <span class="rate__number"><%= r.rate %></span>
-                        <span class="rate__unit">%</span>
-                      </strong>
-                      <div class="detail"><%= r.detail %></div>
-                    </div>
-                  <% } else { %>
-                    -
-                  <% } %>
-                </td>
-                <td class="cell--count">
-                  <% if (r.risk !== "" && r.risk !== null && r.risk !== undefined) { %>
-                    <div class="risk-wrapper">
-                      <strong class="risk-count">
-                        <span class="risk-count__number"><%= r.risk %></span>
-                        <span class="risk-count__unit">回</span>
-                      </strong>
-                    </div>
-                  <% } else { %>
-                    -
-                  <% } %>
-                </td>
-                <td class="cell--page">
-                  <% const dynPageNum = (typeof r.pageNumber === 'number') ? r.pageNumber : null; %>
-                  <% if (dynPageNum) { %>
-                    <a class="btn" href="#<%= report.driverId %>-page-<%= dynPageNum %>">
-                      <span class="btn__label">
-                        <span class="btn__number"><%= dynPageNum %></span>
-                        <span class="btn__text">ページ</span>
-                      </span>
-                      <img src="/img/arrow.svg" alt="詳細ページへ" class="btn__arrow" />
-                    </a>
-                  <% } else { %>
-                    <span class="btn" style="opacity:.7;">違反ゼロ</span>
-                  <% } %>
-                </td>
-              </tr>
-            <% }) %>
-          </tbody>
-        </table>
-      <% }) %>
+      <section class="gaiyou-scene">
+        <header>
+          <h2>直近の違反疑いシーン</h2>
+          <p>直近に検出された、危険疑いを伴う違反疑いシーンを表示しています。</p>
+        </header>
+        <dl class="gaiyou-scene__meta">
+          <div>
+            <dt>発生日</dt>
+            <dd>2025/9/21</dd>
+          </div>
+          <div>
+            <dt>違反疑い</dt>
+            <dd>バックを開始する前のタイミングで、左後方の安全確認が検出できませんでした</dd>
+          </div>
+          <div>
+            <dt>危険疑い</dt>
+            <dd>急ブレーキ</dd>
+          </div>
+        </dl>
+        <div class="gaiyou-scene__media">
+          <div class="gaiyou-mediaFrame gaiyou-mediaFrame--video">
+            <span>動画プレビュー</span>
+          </div>
+          <div class="gaiyou-mediaFrame gaiyou-mediaFrame--map">
+            <span>Google Maps プレビュー</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="gaiyou-legend">
+        <div><strong>違反疑い：</strong>指導項目に関連した疑いのある回数です。各指導項目ごとに、速度超過や停止不完全などの違反項目があります。</div>
+        <div><strong>危険疑い：</strong>違反疑いの際に発生した「急ブレーキ」または「接触未遂」の合計回数です。「急ブレーキ」「接触未遂」はあくまで事故事故となる可能性があります。</div>
+      </section>

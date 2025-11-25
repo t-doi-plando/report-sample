@@ -1,17 +1,24 @@
-      <!-- ===== ヘッダー（青帯） ===== -->
-      <header class="topbar">
-        <h1 class="topbar__title">
-          <span>診断結果</span><span class="sep">｜</span><span>概要</span>
-        </h1>
-        <dl class="meta">
-          <% function wrapEvery10Html(s){ s = String(s || ''); return s.replace(/(.{10})/g, '$1<wbr>'); } %>
-          <% const _officeName = report.officeName || "矢崎事業所"; const _officeLong = String(_officeName).length >= 10; %>
-          <div class="meta__item">
-            <dd class="meta__office <%= _officeLong ? 'meta__office--small' : '' %>"><%- wrapEvery10Html(_officeName) %></dd>
+      <header class="gaiyou-hero">
+        <div class="gaiyou-hero__head">
+          <div class="gaiyou-hero__primary">
+            <div class="gaiyou-hero__title">今月の安全レポート</div>
+            <span class="gaiyou-hero__separator">|</span>
+            <div class="gaiyou-hero__subtitle">概要</div>
           </div>
-          <% const _driverName = report.driverName || "安全 太郎"; const _driverLong = String(_driverName).length >= 10; %>
-          <div class="meta__item">
-            <dd class="meta__name <%= _driverLong ? 'meta__name--small' : '' %>"><%- wrapEvery10Html(_driverName) %></dd>
-          </div>
-        </dl>
+          <div class="gaiyou-hero__org">日本運送会社　東京事業所</div>
+        </div>
       </header>
+      <div class="gaiyou-metaRow">
+        <div class="gaiyou-metaRow__item">
+          <span class="gaiyou-metaRow__label">ドライバー</span>
+          <span class="gaiyou-metaRow__value">山口一郎</span>
+        </div>
+        <div class="gaiyou-metaRow__item">
+          <span class="gaiyou-metaRow__label">稼働日数</span>
+          <span class="gaiyou-metaRow__value">2025/9/1〜2025/9/30 (20日間)</span>
+        </div>
+        <div class="gaiyou-metaRow__item">
+          <span class="gaiyou-metaRow__label">走行時間</span>
+          <span class="gaiyou-metaRow__value">52時間40分</span>
+        </div>
+      </div>
