@@ -109,6 +109,226 @@ body.print-a4 {
   font-weight:700;
   color:#111;
 }
+
+/* ===============================
+ * detail page (video list)
+ * =============================== */
+.detail-risk{
+  margin-top:1mm;
+  display:flex;
+  flex-direction:column;
+  gap:1mm;
+}
+.detail-risk__lead{
+  margin:0;
+  color:var(--blue-700);
+  font-size:8pt;
+  font-weight:700;
+}
+.detail-risk__title{
+  font-size:14pt;
+  font-weight:800;
+  color:#0f1f3e;
+}
+.detail-list{
+  margin-top:1.4mm;
+  background:#fff;
+  border-radius:6px;
+  padding:2.4mm 3mm;
+  box-shadow:0 1px 4px rgba(16,31,63,0.05);
+  display:flex;
+  flex-direction:column;
+  gap:1.6mm;
+}
+.detail-list__header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.detail-list__title{
+  font-size:9pt;
+  font-weight:700;
+  color:#1b2b47;
+}
+.detail-table{
+  display:flex;
+  flex-direction:column;
+  border-radius:4px;
+  overflow:hidden;
+  border:1px solid #e4e8f1;
+}
+.detail-table__row{
+  display:grid;
+  grid-template-columns:10mm 26mm 1fr 28mm 32mm;
+  align-items:stretch;
+}
+.detail-table__row--header{
+  background:#f5f7fb;
+  font-weight:700;
+  color:#4a5670;
+  font-size:7.5pt;
+}
+.detail-table__row--year{
+  grid-template-columns:1fr;
+  background:#f5f7fb;
+  color:#4a5670;
+  font-weight:700;
+  font-size:7.2pt;
+  padding:1.6mm 2mm;
+}
+.detail-table__row--tone{
+  background:#fef6f6;
+}
+.detail-table__row--alert{
+  background:#fff5f1;
+}
+.detail-table__cell{
+  padding:1.4mm 1.6mm;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:0.6mm;
+}
+.detail-table__icon{
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  color:#b4261c;
+  font-size:9pt;
+}
+.detail-table__date{
+  font-weight:800;
+  color:#0f1f3e;
+  font-size:9pt;
+  align-items:flex-start;
+  justify-content:flex-start;
+  text-align:left;
+}
+.detail-table__date--day{
+  align-items:center;
+  flex-direction:row;
+  gap:1mm;
+}
+.detail-table__day{
+  font-weight:800;
+  font-size:10pt;
+}
+.detail-table__dow{
+  font-size:7pt;
+  margin-left:1mm;
+}
+.detail-table__time{
+  font-size:7pt;
+  color:#4a5670;
+}
+.detail-table__violation{
+  color:#0f1f3e;
+  font-size:8pt;
+  font-weight:700;
+}
+.detail-table__label{
+  font-weight:700;
+}
+.detail-table__sub{
+  font-size:7pt;
+  color:#6a748a;
+}
+.detail-table__danger{
+  align-items:center;
+  justify-content:center;
+}
+.detail-tag{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:1mm 2mm;
+  border-radius:999px;
+  font-size:7pt;
+  font-weight:800;
+  color:#8b1d19;
+  background:#fbe1df;
+  gap:1mm;
+}
+.detail-tag--danger{ background:#fbe1df; color:#8b1d19; }
+.detail-tag--icon{ padding-left:2.4mm; padding-right:2.4mm; }
+.detail-table__links{
+  align-items:flex-end;
+}
+.detail-links{
+  display:flex;
+  gap:1.6mm;
+  align-items:center;
+  justify-content:flex-end;
+}
+.detail-linkBtn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:16mm;
+  padding:1mm 2mm;
+  border-radius:4px;
+  font-weight:700;
+  font-size:7pt;
+  border:1px solid #1e6edc;
+  color:#1e6edc;
+}
+.detail-linkBtn--primary{
+  background:#1e6edc;
+  color:#fff;
+}
+.detail-linkBtn--ghost{
+  background:#fff;
+}
+.detail-note{
+  margin-top:1mm;
+  font-size:7pt;
+  color:#4a5670;
+}
+.detail-memo{
+  margin-top:1.4mm;
+  background:#fff;
+  border-radius:6px;
+  padding:2.4mm 3mm;
+  box-shadow:0 1px 4px rgba(16,31,63,0.05);
+  display:flex;
+  flex-direction:column;
+  gap:1mm;
+}
+.detail-memo__title{
+  font-weight:800;
+  color:#1b2b47;
+  font-size:9pt;
+}
+.detail-memo__desc{
+  margin:0;
+  font-size:7pt;
+  color:#4a5670;
+}
+.detail-memo__box{
+  margin-top:1mm;
+  min-height:32mm;
+  border:1px solid #d9e0f0;
+  border-radius:4px;
+  background:#fafdff;
+}
+.detail-memo__advisor{
+  margin-top:3mm;
+  padding-bottom:1mm;
+  font-size:7pt;
+  color:#1b2b47;
+  display:flex;
+  align-items:flex-end;
+  gap:4mm;
+  justify-content:flex-start;
+}
+.detail-memo__line{
+  flex:0 0 42mm;
+  width:42mm;
+  border-bottom:1px solid #8d97ae;
+  display:inline-block;
+  height:0;
+  transform: translateY(2mm);
+}
 .gaiyou-riskSummary{
   margin-top:1mm;
   display:flex;
