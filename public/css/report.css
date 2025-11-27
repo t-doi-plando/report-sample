@@ -37,13 +37,16 @@ body.print-a4 {
   --green-600:#3CBE2D;--green-050:#E6FFE6;
   /* 固定メタ幅（右側の事業所/氏名エリア） */
   --meta-width: 32ch;
+  /* ヒーロー用グラデーションカラー */
+  --hero-grad-left: #0D47A0;
+  --hero-grad-right: #082B60;
 }
 
 /* ===================================
  * 新概要ページ（モック）
  * =================================== */
 .gaiyou-hero{
-  background: linear-gradient(90deg,#0a3c90,#0f6ac2);
+  background: linear-gradient(90deg,var(--hero-grad-left),var(--hero-grad-right));
   color:#fff;
   padding:2mm 3.5mm 2.4mm;
   border-radius:5px;
@@ -55,7 +58,7 @@ body.print-a4 {
 .gaiyou-hero__head{
   display:flex;
   justify-content:space-between;
-  align-items:flex-start;
+  align-items:center;
   gap:5mm;
 }
 .gaiyou-hero__primary{
@@ -76,7 +79,7 @@ body.print-a4 {
 }
 .gaiyou-hero__org{
   font-size:7.5pt;
-  font-weight:600;
+  font-weight:500;
   letter-spacing:.08em;
   white-space:nowrap;
 }
