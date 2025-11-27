@@ -5,20 +5,20 @@
             <span class="gaiyou-hero__separator">|</span>
             <div class="gaiyou-hero__subtitle">動画一覧</div>
           </div>
-          <div class="gaiyou-hero__org">日本運送会社　東京事業所</div>
+          <div class="gaiyou-hero__org"><%= (report.companyName || '会社未設定') %>　<%= (report.officeName || '事業所未設定') %></div>
         </div>
       </header>
       <div class="gaiyou-metaRow">
         <div class="gaiyou-metaRow__item">
           <span class="gaiyou-metaRow__label">ドライバー</span>
-          <span class="gaiyou-metaRow__value">山口一郎</span>
+          <span class="gaiyou-metaRow__value"><%= report.driverName || '氏名未設定' %></span>
         </div>
         <div class="gaiyou-metaRow__item">
           <span class="gaiyou-metaRow__label">稼働日数</span>
-          <span class="gaiyou-metaRow__value">2025/9/1〜2025/9/30 (20日間)</span>
+          <span class="gaiyou-metaRow__value"><%= (report.periodLabel || '') %> <%= (report.daysCountLabel || '') %></span>
         </div>
         <div class="gaiyou-metaRow__item">
           <span class="gaiyou-metaRow__label">走行時間</span>
-          <span class="gaiyou-metaRow__value">52時間40分</span>
+          <span class="gaiyou-metaRow__value"><%= report.drivingTimeLabel || '' %></span>
         </div>
       </div>

@@ -47,21 +47,124 @@ function cleanupExpiredTokens() {
 }
 setInterval(cleanupExpiredTokens, CLEANUP_INTERVAL_MS).unref?.();
 
+function normalizeDriversData(raw = []) {
+  if (!Array.isArray(raw)) return [];
+  return raw.map((rec) => {
+    const driverId = rec.driver_id || rec.driverId || '';
+    const driverName = rec.driver_name || rec.driverName || '';
+    const officeName = rec.branch_name || rec.officeName || '';
+    const companyName = rec.company_name || rec.companyName || '';
+    const events = Array.isArray(rec.events) ? rec.events : [];
+    const scenes = Array.isArray(rec.scenes) ? rec.scenes : [];
+    return {
+      driverId,
+      driverName,
+      officeName,
+      companyName,
+      period: rec.period || null,
+      events,
+      scenes,
+      stats: rec.stats || {}
+    };
+  });
+}
+
 function resolveDriversData(req) {
   const t = req.query && req.query.t ? String(req.query.t) : null;
   if (t) {
     const data = getTokenData(t);
-    if (data) return { token: t, data };
+    if (data) return { token: t, data: normalizeDriversData(data) };
   }
   // トークンが無い/失効時は既定データを返す（共有フォールバックは使用しない）
-  const dataPath = path.join(__dirname, 'driver-data.json');
+  const pocPath = path.join(__dirname, 'driver-data-poc1.json');
+  const legacyPath = path.join(__dirname, 'driver-data.json');
   try {
-    const dataRaw = fs.readFileSync(dataPath, 'utf8');
-    return { token: null, data: JSON.parse(dataRaw) };
+    const raw = fs.readFileSync(pocPath, 'utf8');
+    return { token: null, data: normalizeDriversData(JSON.parse(raw)) };
   } catch (e) {
-    console.error(e);
-    return { token: null, data: [] };
+    try {
+      const rawLegacy = fs.readFileSync(legacyPath, 'utf8');
+      return { token: null, data: normalizeDriversData(JSON.parse(rawLegacy)) };
+    } catch (e2) {
+      console.error(e2);
+      return { token: null, data: [] };
+    }
   }
+}
+
+function formatDateLabel(val) {
+  if (!val) return '';
+  const d = new Date(val);
+  if (Number.isNaN(d.getTime())) return '';
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${yyyy}/${mm}/${dd}`;
+}
+
+function formatMinutesToHm(totalMinutes) {
+  const m = Number(totalMinutes);
+  if (!Number.isFinite(m)) return '';
+  const h = Math.floor(m / 60);
+  const rem = m % 60;
+  return `${h}時間${rem}分`;
+}
+
+function buildMockReports(drivers) {
+  const mockDetailPages = [{
+    pageNumber: 2,
+    page: {},
+    section: { title: '詳細' },
+    index: 0,
+    totalPages: 1
+  }];
+  const baseHighlights = [
+    { kind: 'danger', badge: '危険疑い回数が多い項目', title: '左折前安全確認', text: 'バックを開始する前に完全停止できていませんでした。' },
+    { kind: 'warn', badge: '違反疑い割合が高い項目', title: '左折中安全確認', text: '左後方の安全確認が不足しています。' },
+    { kind: 'good', badge: '高評価ポイント', title: 'バック中安全確認', text: '後方確認がしっかりできています。' }
+  ];
+  const baseSections = [
+    {
+      title: '左折',
+      rows: [
+        { no: 1, name: '左折前安全確認', tags: ['danger'], rate: 25, detail: '(1/4)', risk: 3, pageNumber: null },
+        { no: 2, name: '左折中安全確認', tags: ['warn'], rate: 15, detail: '(2/13)', risk: 2, pageNumber: null }
+      ]
+    },
+    {
+      title: 'バック',
+      rows: [
+        { no: 4, name: 'バック前安全確認', tags: ['good'], rate: 5, detail: '(0/10)', risk: 0, pageNumber: null }
+      ]
+    }
+  ];
+  return drivers.map((d, idx) => ({
+    driverId: d.driverId || `mock-${idx}`,
+    driverName: d.driverName || '氏名未設定',
+    officeName: d.officeName || d.branch_name || '事業所未設定',
+    companyName: d.companyName || d.company_name || '会社未設定',
+    periodLabel: (() => {
+      const start = d.period && d.period.start_date ? formatDateLabel(d.period.start_date) : '';
+      const end = d.period && d.period.end_date ? formatDateLabel(d.period.end_date) : '';
+      if (start && end) return `${start}〜${end}`;
+      return '';
+    })(),
+    daysCountLabel: (() => {
+      const days = d.period && Number.isFinite(Number(d.period.days_count)) ? Number(d.period.days_count) : null;
+      return days !== null ? `(${days}日間)` : '';
+    })(),
+    drivingTimeLabel: (() => {
+      const minutes = d.period ? d.period.total_minutes : null;
+      const label = formatMinutesToHm(minutes);
+      return label || '';
+    })(),
+    pageTitle: '運転診断結果レポート｜概要',
+    avgViolationRatePct: 10.9,
+    rank: { total: drivers.length, position: idx + 1 },
+    highlights_gaiyou: baseHighlights,
+    sections: baseSections,
+    detailPages: mockDetailPages
+  }));
 }
 
 // --- Endpoints ---
@@ -115,7 +218,8 @@ app.get('/reports/all', (req, res) => {
     const config = JSON.parse(configRaw);
 
     const { token, data: driversDataToUse } = resolveDriversData(req);
-    const reports = generateReports(driversDataToUse, config);
+    // モック表示：gaiyou固定
+    const reports = buildMockReports(driversDataToUse);
     const staticMapKey = process.env.GOOGLE_STATIC_MAPS_KEY || '';
     res.render('pages/report', { reports: reports, staticMapKey, token });
   });
@@ -135,7 +239,8 @@ app.get('/reports/:driverId', (req, res) => {
 
     const { token, data: driversDataToUse } = resolveDriversData(req);
     
-    const reports = generateReports(driversDataToUse, config);
+    // モック表示：gaiyou固定
+    const reports = buildMockReports(driversDataToUse);
     const targetReport = reports.find(r => r.driverId === driverId);
     if (!targetReport) {
       return res.status(404).send('Driver not found');

@@ -47,7 +47,7 @@
       <ul id="individual-reports-list">
         <% drivers.forEach(function(driver) { %>
           <li>
-            <span class="driver-label"><%= driver.driverName %> (<%= driver.officeName %>)</span>
+            <span class="driver-label"><%= driver.companyName %> / <%= driver.officeName %> / <%= driver.driverName %></span>
             <div class="button-group">
               <a href="/download/<%= driver.driverId %><%= token ? ('?t=' + token) : '' %>" class="download-pdf">PDFダウンロード</a>
               <a href="/reports/<%= driver.driverId %><%= token ? ('?t=' + token) : '' %>" class="view-html" target="_blank">HTMLプレビュー</a>
