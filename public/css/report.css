@@ -480,19 +480,28 @@ body.print-a4 {
 .gaiyou-scene__meta{
   display:flex;
   flex-direction:column;
-  gap:1mm;
+  gap:2mm;
+}
+.gaiyou-scene__metaItem{
+  display:flex;
+  gap:1.2mm;
+  align-items:baseline;
+  flex-wrap:wrap;
+  margin-bottom:0.5mm;
 }
 .gaiyou-scene__meta dt{
   font-weight:700;
   color:#334166;
   font-size:7pt;
-  display:block;
+  display:inline-block;
+  margin:0;
 }
 .gaiyou-scene__meta dd{
-  margin:0 0 1mm;
+  margin:0;
   color:#1a2135;
   line-height:1.35;
   font-size:7pt;
+  display:inline;
 }
 .gaiyou-scene__media{
   display:grid;

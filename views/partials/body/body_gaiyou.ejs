@@ -56,35 +56,54 @@
       </section>
 
       <section class="gaiyou-scene">
+        <% const scene = report.latestScene; %>
         <header>
           <h2>直近の違反疑いシーン</h2>
+          <% if (scene && scene.riskLabel) { %>
           <p>直近に検出された、危険疑いを伴う違反疑いシーンを表示しています。</p>
+          <% } %>
         </header>
+        <% if (scene) { %>
         <dl class="gaiyou-scene__meta">
-          <div>
+          <div class="gaiyou-scene__metaItem">
             <dt>発生日</dt>
-            <dd>2025/9/21</dd>
+            <dd><%= scene.dateLabel || '—' %></dd>
           </div>
-          <div>
+          <div class="gaiyou-scene__metaItem">
             <dt>違反疑い</dt>
-            <dd>バックを開始する前のタイミングで、左後方の安全確認が検出できませんでした</dd>
+            <dd><%= scene.violationLabel || 'データなし' %></dd>
           </div>
-          <div>
+          <% if (scene.riskLabel) { %>
+          <div class="gaiyou-scene__metaItem">
             <dt>危険疑い</dt>
-            <dd>急ブレーキ</dd>
+            <dd><%= scene.riskLabel %></dd>
           </div>
+          <% } %>
         </dl>
         <div class="gaiyou-scene__media">
           <div class="gaiyou-mediaFrame gaiyou-mediaFrame--video">
-            <span>動画プレビュー</span>
+            <% if (scene.movieUrl) { %>
+              <a href="<%= scene.movieUrl %>" target="_blank" rel="noopener noreferrer">動画を開く</a>
+            <% } else { %>
+              <span>動画URL未設定</span>
+            <% } %>
           </div>
           <div class="gaiyou-mediaFrame gaiyou-mediaFrame--map">
-            <span>Google Maps プレビュー</span>
+            <% if (scene.mapUrl) { %>
+              <a href="<%= scene.mapUrl %>" target="_blank" rel="noopener noreferrer">Google Mapsを開く</a>
+            <% } else { %>
+              <span>地図URL未設定</span>
+            <% } %>
           </div>
         </div>
+        <% } else { %>
+          <p class="gaiyou-scene__empty">直近の違反疑いのシーンがありません。</p>
+        <% } %>
       </section>
 
       <section class="gaiyou-legend">
         <div><strong>違反疑い：</strong>指導項目に関連した疑いのある回数です。各指導項目ごとに、速度超過や停止不完全などの違反項目があります。</div>
+        <% if (scene && scene.riskLabel) { %>
         <div><strong>危険疑い：</strong>違反疑いの際に発生した「急ブレーキ」または「接触未遂」の合計回数です。「急ブレーキ」「接触未遂」はあくまで事故事故となる可能性があります。</div>
+        <% } %>
       </section>

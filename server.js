@@ -54,6 +54,7 @@ function normalizeDriversData(raw = []) {
     const driverName = rec.driver_name || rec.driverName || '';
     const officeName = rec.branch_name || rec.officeName || '';
     const companyName = rec.company_name || rec.companyName || '';
+    const highRiskOperationType = rec.high_risk_operation_type || rec.highRiskOperationType || '';
     const highRiskGuidanceType = rec.high_risk_guidance_type || rec.highRiskGuidanceType || '';
     const events = Array.isArray(rec.events) ? rec.events : [];
     const scenes = Array.isArray(rec.scenes) ? rec.scenes : [];
@@ -62,6 +63,7 @@ function normalizeDriversData(raw = []) {
       driverName,
       officeName,
       companyName,
+      highRiskOperationType,
       highRiskGuidanceType,
       period: rec.period || null,
       events,
@@ -104,6 +106,18 @@ function formatDateLabel(val) {
   return `${yyyy}/${mm}/${dd}`;
 }
 
+function formatDateTimeLabel(val) {
+  if (!val) return '';
+  const d = new Date(val);
+  if (Number.isNaN(d.getTime())) return '';
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mi = String(d.getMinutes()).padStart(2, '0');
+  return `${yyyy}/${mm}/${dd} ${hh}:${mi}`;
+}
+
 function formatMinutesToHm(totalMinutes) {
   const m = Number(totalMinutes);
   if (!Number.isFinite(m)) return '';
@@ -112,8 +126,83 @@ function formatMinutesToHm(totalMinutes) {
   return `${h}時間${rem}分`;
 }
 
+function formatNumberHuman(n) {
+  if (!Number.isFinite(n)) return '';
+  return Number.isInteger(n) ? String(n) : String(Number(n.toFixed(1)));
+}
+
+function getSceneValue(scene, key) {
+  if (!scene) return null;
+  if (key in scene) return scene[key];
+  // snake_case <-> camelCase 両対応
+  const camel = key.replace(/_([a-z])/g, (_, c) => c.toUpperCase());
+  if (camel in scene) return scene[camel];
+  const snake = key.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`);
+  if (snake in scene) return scene[snake];
+  return null;
+}
+
+function getValueFromSources(sources, key) {
+  for (const src of sources) {
+    const val = getSceneValue(src, key);
+    if (val !== null && val !== undefined) return val;
+  }
+  return null;
+}
+
+function applyTemplatePlaceholders(text, sources = [], labelMaps = {}) {
+  const sourceList = Array.isArray(sources) ? sources : [sources];
+  if (!text || typeof text !== 'string') return '詳細文言が未設定です';
+  const replaceCalc = (exprRaw) => {
+    const expr = exprRaw.trim();
+    const sanitized = expr.replace(/[a-zA-Z_][a-zA-Z0-9_]*/g, (name) => {
+      const v = getValueFromSources(sourceList, name);
+      const num = Number(v);
+      return Number.isFinite(num) ? String(num) : '0';
+    });
+    // 許可: 数字, 演算子, 括弧, 小数点, 空白
+    if (/[^0-9+\-*/().\s]/.test(sanitized)) return '計算不可';
+    try {
+      const val = Function(`"use strict"; return (${sanitized});`)();
+      return Number.isFinite(val) ? formatNumberHuman(val) : '計算不可';
+    } catch (e) {
+      return '計算不可';
+    }
+  };
+
+  return text.replace(/\{([^{}]+)\}/g, (_, token) => {
+    const trimmed = token.trim();
+    if (trimmed.startsWith('calc:')) {
+      const expr = trimmed.slice(5);
+      return replaceCalc(expr);
+    }
+    const val = getValueFromSources(sourceList, trimmed);
+    if (val === null || val === undefined) return '';
+    const labelMap = labelMaps[trimmed];
+    if (labelMap && val in labelMap) return String(labelMap[val]);
+    return String(val);
+  });
+}
+
+// txt master (POC) をキャッシュ読み込み
+let txtMasterCache = null;
+function loadTxtMaster() {
+  if (txtMasterCache) return txtMasterCache;
+  const txtMasterPath = path.join(__dirname, 'txt-master-poc1.json');
+  try {
+    const raw = fs.readFileSync(txtMasterPath, 'utf8');
+    txtMasterCache = JSON.parse(raw);
+  } catch (err) {
+    console.error('Failed to load txt-master-poc1.json', err);
+    txtMasterCache = {};
+  }
+  return txtMasterCache;
+}
+
 function buildMockReports(drivers, config) {
   const itemMap = (config && config.itemMap) || {};
+  const riskTypeLabelMap = (config && config.risk_type_label) || {};
+  const txtMaster = loadTxtMaster();
   const mockDetailPages = [{
     pageNumber: 2,
     page: {},
@@ -149,6 +238,61 @@ function buildMockReports(drivers, config) {
       const risk = s && (s.risk_type ?? s.riskType);
       return risk !== null && risk !== undefined && risk !== '';
     }).length;
+    const toTimestamp = (val) => {
+      const dt = new Date(val);
+      const t = dt.getTime();
+      return Number.isNaN(t) ? null : t;
+    };
+    const latestViolationScene = scenes.reduce((acc, s) => {
+      const latestFlg = s && (s.latest_violation_flg ?? s.latestViolationFlg);
+      if (!latestFlg) return acc;
+      const ts = toTimestamp(s && s.datetime);
+      if (ts === null) return acc;
+      if (!acc || ts > acc.ts) return { ts, scene: s };
+      return acc;
+    }, null);
+    const pickedScene = latestViolationScene ? latestViolationScene.scene : null;
+    const latestScene = (() => {
+      if (!pickedScene) return null;
+      const opType = d.highRiskOperationType || d.high_risk_operation_type || '';
+      const guideType = d.highRiskGuidanceType || '';
+      const violationType = pickedScene.violation_type ?? pickedScene.violationType ?? '';
+      const accelDecelCount = (() => {
+        const timing = getSceneValue(pickedScene, 'left_turn_timing_type');
+        const kind = getSceneValue(pickedScene, 'left_turn_accel_decel_type');
+        if (!timing || !kind) return 0;
+        return scenes.filter((s) => (
+          getSceneValue(s, 'left_turn_timing_type') === timing &&
+          getSceneValue(s, 'left_turn_accel_decel_type') === kind
+        )).length;
+      })();
+      const violationDetail = (() => {
+        const op = txtMaster && txtMaster[opType];
+        const guide = op && op[guideType];
+        const entry = guide && guide[violationType];
+        const base = entry && entry.check_detail ? entry.check_detail : '詳細文言が未設定です';
+        const thresholds = (config && config.thresholds) || {};
+        const labelMaps = {
+          left_turn_timing_type: (config && config.left_turn_timing_type_label) || {},
+          left_turn_accel_decel_type: (config && config.left_turn_accel_decel_type_label) || {}
+        };
+        const derived = { accel_or_decel_count: accelDecelCount };
+        return applyTemplatePlaceholders(base, [pickedScene, thresholds, derived], labelMaps);
+      })();
+      const riskRaw = pickedScene.risk_type ?? pickedScene.riskType ?? '';
+      const riskLabel = (() => {
+        if (!riskRaw) return '';
+        if (riskTypeLabelMap && riskTypeLabelMap[riskRaw]) return riskTypeLabelMap[riskRaw];
+        return String(riskRaw);
+      })();
+      return {
+        dateLabel: pickedScene.datetime ? formatDateTimeLabel(pickedScene.datetime) : '',
+        violationLabel: violationDetail || '詳細文言が未設定です',
+        riskLabel,
+        movieUrl: pickedScene.movie_url || pickedScene.movieUrl || '',
+        mapUrl: pickedScene.map_url || pickedScene.mapUrl || ''
+      };
+    })();
     return {
       driverId: d.driverId || `mock-${idx}`,
       driverName: d.driverName || '氏名未設定',
@@ -176,6 +320,7 @@ function buildMockReports(drivers, config) {
       highRiskGuidanceLabel,
       violationCount,
       dangerCount,
+      latestScene,
       sections: baseSections,
       detailPages: mockDetailPages
     };

@@ -5,6 +5,22 @@
         "turning_left_speed": "左折時速度",
         "before_reverse": "バック前確認", 
         "during_reverse": "バック中確認"
+    },
+    "thresholds": {
+        "reverse_threshold": 7,
+        "turning_left_threshold": 10,
+        "sudden_accel_or_decel_threshold": 5
+    },
+    "risk_type_label": {
+        "hard_braking": "急ブレーキ",
+        "near_miss": "接触未遂"
+    },
+    "left_turn_timing_type_label": {
+        "before_left_turn": "左折前",
+        "during_left_turn": "左折中"
+    },
+    "left_turn_accel_decel_type_label": {
+        "sudden_acceleration": "急加速",
+        "sudden_deceleration": "急減速"
     }
-
 }
