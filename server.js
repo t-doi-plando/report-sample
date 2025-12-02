@@ -54,6 +54,7 @@ function normalizeDriversData(raw = []) {
     const driverName = rec.driver_name || rec.driverName || '';
     const officeName = rec.branch_name || rec.officeName || '';
     const companyName = rec.company_name || rec.companyName || '';
+    const highRiskGuidanceType = rec.high_risk_guidance_type || rec.highRiskGuidanceType || '';
     const events = Array.isArray(rec.events) ? rec.events : [];
     const scenes = Array.isArray(rec.scenes) ? rec.scenes : [];
     return {
@@ -61,6 +62,7 @@ function normalizeDriversData(raw = []) {
       driverName,
       officeName,
       companyName,
+      highRiskGuidanceType,
       period: rec.period || null,
       events,
       scenes,
@@ -110,7 +112,8 @@ function formatMinutesToHm(totalMinutes) {
   return `${h}時間${rem}分`;
 }
 
-function buildMockReports(drivers) {
+function buildMockReports(drivers, config) {
+  const itemMap = (config && config.itemMap) || {};
   const mockDetailPages = [{
     pageNumber: 2,
     page: {},
@@ -138,33 +141,45 @@ function buildMockReports(drivers) {
       ]
     }
   ];
-  return drivers.map((d, idx) => ({
-    driverId: d.driverId || `mock-${idx}`,
-    driverName: d.driverName || '氏名未設定',
-    officeName: d.officeName || d.branch_name || '事業所未設定',
-    companyName: d.companyName || d.company_name || '会社未設定',
-    periodLabel: (() => {
-      const start = d.period && d.period.start_date ? formatDateLabel(d.period.start_date) : '';
-      const end = d.period && d.period.end_date ? formatDateLabel(d.period.end_date) : '';
-      if (start && end) return `${start}〜${end}`;
-      return '';
-    })(),
-    daysCountLabel: (() => {
-      const days = d.period && Number.isFinite(Number(d.period.days_count)) ? Number(d.period.days_count) : null;
-      return days !== null ? `(${days}日間)` : '';
-    })(),
-    drivingTimeLabel: (() => {
-      const minutes = d.period ? d.period.total_minutes : null;
-      const label = formatMinutesToHm(minutes);
-      return label || '';
-    })(),
-    pageTitle: '運転診断結果レポート｜概要',
-    avgViolationRatePct: 10.9,
-    rank: { total: drivers.length, position: idx + 1 },
-    highlights_gaiyou: baseHighlights,
-    sections: baseSections,
-    detailPages: mockDetailPages
-  }));
+  return drivers.map((d, idx) => {
+    const highRiskGuidanceLabel = itemMap[d.highRiskGuidanceType] || '文言未設定';
+    const scenes = Array.isArray(d.scenes) ? d.scenes : [];
+    const violationCount = scenes.length;
+    const dangerCount = scenes.filter((s) => {
+      const risk = s && (s.risk_type ?? s.riskType);
+      return risk !== null && risk !== undefined && risk !== '';
+    }).length;
+    return {
+      driverId: d.driverId || `mock-${idx}`,
+      driverName: d.driverName || '氏名未設定',
+      officeName: d.officeName || d.branch_name || '事業所未設定',
+      companyName: d.companyName || d.company_name || '会社未設定',
+      periodLabel: (() => {
+        const start = d.period && d.period.start_date ? formatDateLabel(d.period.start_date) : '';
+        const end = d.period && d.period.end_date ? formatDateLabel(d.period.end_date) : '';
+        if (start && end) return `${start}〜${end}`;
+        return '';
+      })(),
+      daysCountLabel: (() => {
+        const days = d.period && Number.isFinite(Number(d.period.days_count)) ? Number(d.period.days_count) : null;
+        return days !== null ? `(${days}日間)` : '';
+      })(),
+      drivingTimeLabel: (() => {
+        const minutes = d.period ? d.period.total_minutes : null;
+        const label = formatMinutesToHm(minutes);
+        return label || '';
+      })(),
+      pageTitle: '運転診断結果レポート｜概要',
+      avgViolationRatePct: 10.9,
+      rank: { total: drivers.length, position: idx + 1 },
+      highlights_gaiyou: baseHighlights,
+      highRiskGuidanceLabel,
+      violationCount,
+      dangerCount,
+      sections: baseSections,
+      detailPages: mockDetailPages
+    };
+  });
 }
 
 // --- Endpoints ---
@@ -208,7 +223,7 @@ app.get('/', (req, res) => {
 
 // HTML Preview: All drivers
 app.get('/reports/all', (req, res) => {
-  const configPath = path.join(__dirname, 'report-config.json');
+  const configPath = path.join(__dirname, 'report-config-poc1.json');
 
   fs.readFile(configPath, 'utf8', (err, configRaw) => {
     if (err) {
@@ -219,7 +234,7 @@ app.get('/reports/all', (req, res) => {
 
     const { token, data: driversDataToUse } = resolveDriversData(req);
     // モック表示：gaiyou固定
-    const reports = buildMockReports(driversDataToUse);
+    const reports = buildMockReports(driversDataToUse, config);
     const staticMapKey = process.env.GOOGLE_STATIC_MAPS_KEY || '';
     res.render('pages/report', { reports: reports, staticMapKey, token });
   });
@@ -228,7 +243,7 @@ app.get('/reports/all', (req, res) => {
 // HTML Preview: Single driver
 app.get('/reports/:driverId', (req, res) => {
   const driverId = req.params.driverId;
-  const configPath = path.join(__dirname, 'report-config.json');
+  const configPath = path.join(__dirname, 'report-config-poc1.json');
 
   fs.readFile(configPath, 'utf8', (err, configRaw) => {
     if (err) {
@@ -240,7 +255,7 @@ app.get('/reports/:driverId', (req, res) => {
     const { token, data: driversDataToUse } = resolveDriversData(req);
     
     // モック表示：gaiyou固定
-    const reports = buildMockReports(driversDataToUse);
+    const reports = buildMockReports(driversDataToUse, config);
     const targetReport = reports.find(r => r.driverId === driverId);
     if (!targetReport) {
       return res.status(404).send('Driver not found');

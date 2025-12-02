@@ -1,10 +1,12 @@
       <section class="gaiyou-riskSummary">
         <p class="gaiyou-riskSummary__lead">事故リスクが高いと判定された指導項目</p>
         <div class="gaiyou-riskSummary__panel">
-          <div class="gaiyou-riskSummary__title">バック前確認</div>
+          <div class="gaiyou-riskSummary__title"><%= report.highRiskGuidanceLabel || '文言未設定' %></div>
           <div class="gaiyou-riskSummary__counts">
-            <div class="gaiyou-riskSummary__count"><span>違反疑い</span><strong>5件</strong></div>
-            <div class="gaiyou-riskSummary__count"><span>うち危険疑い</span><strong>3件</strong></div>
+            <div class="gaiyou-riskSummary__count"><span>違反疑い</span><strong><%= (report.violationCount ?? 0) %>件</strong></div>
+            <% if ((report.dangerCount ?? 0) > 0) { %>
+            <div class="gaiyou-riskSummary__count"><span>うち危険疑い</span><strong><%= report.dangerCount %>件</strong></div>
+            <% } %>
           </div>
         </div>
       </section>
