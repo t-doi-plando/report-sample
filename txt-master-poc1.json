@@ -1,0 +1,110 @@
+{
+  "left_turn": {
+    "before_left_turn": {
+      "insufficient_left_check": {
+        "check_list": "左折に入る前に、左をしっかり確認できているか",
+        "check_detail": "左折前のタイミングで、左側の安全確認が検出できませんでした",
+        "advice_comment": "左折時は自転車や歩行者が左側に入り込みやすいです。左側を確認することで、思わぬ接触のリスクをしっかり防ぐことができます。",
+        "check_summary": "左側の確認不足"
+      },
+      "insufficient_right_check": {
+        "check_list": "左折に入る前に、右をしっかり確認できているか",
+        "check_detail": "左折前のタイミングで、右側の安全確認が検出できませんでした",
+        "advice_comment": "右折車や追い越し車が接近することがあります。右側を確認することで、思わぬ接触のリスクをしっかり防ぐことができます。",
+        "check_summary": "右側の確認不足"
+      }
+    },
+    "during_left_turn": {
+      "insufficient_left_check": {
+        "check_list": "左折時に、左をしっかり確認できているか",
+        "check_detail": "左折中のタイミングで、左側の安全確認が検出できませんでした",
+        "advice_comment": "ミラーだけでは見えない歩行者や自転車がいる場合があります。曲がりながらも一度左を確認しましょう。",
+        "check_summary": "左側の確認不足"
+      },
+      "insufficient_right_check": {
+        "check_list": "左折時に、右をしっかり確認できているか",
+        "check_detail": "左折中のタイミングで、右側の安全確認が検出できませんでした",
+        "advice_comment": "右折車や後続車との間隔を見ておくと、ライン取りに余裕ができます。曲がりながらも一度右を確認しましょう。",
+        "check_summary": "右側の確認不足"
+      }
+    },
+    "turning_left_speed": {
+      "over_threshold_speed": {
+        "check_list": "左折時に、時速{turning_left_threshold}km/h未満までしっかり減速できているか",
+        "check_detail": "左折時の速度が{turning_left_speed_val}km/h でした",
+        "advice_comment": "左折までに予め速度を落としておくことで、巻き込み確認の余裕ができます。焦らずゆっくり入りましょう。",
+        "check_summary": "速度超過：+{calc: turning_left_speed_val - turning_left_threshold}km/h \n 基準値：{turning_left_threshold}km/h 未満"
+      },
+      "sudden_accel_or_decel": {
+        "check_list": "左折前から左折が終わるまで、一定の速度でスムーズに回れているか",
+        "check_detail": "{left_turn_timing_type}のタイミングで、基準値（秒間 {sudden_accel_or_decel_threshold}km/h）を超えた{left_turn_accel_decel_type}が{accel_or_decel_count}件検出されました",
+        "advice_comment": "",
+        "advice_comment_by_timing": {
+          "before_left_turn": {
+            "sudden_acceleration": "信号の変わり目や後続車のプレッシャーなどで急ぐと危険です。踏み込みを抑えて確実に曲がりましょう。",
+            "sudden_deceleration": "信号や歩行者を見て慌ててブレーキを踏むと後続が対応しづらく危険です。早めの判断で落ち着いて減速しましょう。"
+          },
+          "during_left_turn": {
+            "sudden_acceleration": "左折直後は歩行者や自転車がまだ近くにいるケースがあります。まず周囲を確認してからゆっくりアクセルを踏み込みましょう。",
+            "sudden_deceleration": "左折後は見通しが変わりやすく、慌ててブレーキを踏むと危険です。先を読んで減速状態をキープしたまま曲がりましょう。"
+          }
+        },
+        "check_summary": "{left_turn_timing_type}の{left_turn_accel_decel_type}（秒間 {turning_left_speed_diff_val}km/h）\n 基準値： 秒間±{sudden_accel_or_decel_threshold}km/h 未満"
+      }
+    }
+  },
+  "reverse": {
+    "before_reverse": {
+      "insufficient_pre_stop": {
+        "check_list": "バック前に、完全に停止できているか",
+        "check_detail": "バックを開始する前のタイミングで、完全停止（0km/h）が検出できませんでした",
+        "advice_comment": "車を止めてから後方を確認すると、後輪の位置や車体の角度や周囲の状況をつかめます。一度止まって落ち着いて確認する時間を取りましょう。",
+        "check_summary": "停止確認不足"
+      },
+      "insufficient_left_check": {
+        "check_list": "バック前に、左側のサイドミラーや、歩行者・障害物を確認しているか",
+        "check_detail": "バック開始前に、左側のサイドミラー、歩行者・障害物を確認する動きが検出されませんでした",
+        "advice_comment": "後方には人やフォークリフトが入り込んでしまう危険性があります。停止して左右それぞれ確認し、その後右後方を目視確認して、安全なスペースを確かめてからバックを始めましょう。",
+        "check_summary": "左側確認不足"
+      },
+      "insufficient_right_rear_check": {
+        "check_list": "バック前に、運転席の窓から顔を出して右後方の安全確認を行っているか",
+        "check_detail": "バック開始前に、運転席の窓から顔を出して右後方を安全確認する挙動が検出されませんでした",
+        "advice_comment": "後方には人やフォークリフトが入り込んでしまう危険性があります。停止して左右それぞれ確認し、その後右後方を目視確認して、安全なスペースを確かめてからバックを始めましょう。",
+        "check_summary": "右側後方確認不足"
+      },
+      "insufficient_right_check": {
+        "check_list": "バック前に、右側のサイドミラーや、歩行者・障害物を確認しているか",
+        "check_detail": "バック開始前に、右側のサイドミラー、歩行者・障害物を確認する動きが検出されませんでした",
+        "advice_comment": "後方には人やフォークリフトが入り込んでしまう危険性があります。停止して左右それぞれ確認し、その後右後方を目視確認して、安全なスペースを確かめてからバックを始めましょう。",
+        "check_summary": "右側確認不足"
+      }
+    },
+    "during_reverse": {
+      "over_threshold_speed": {
+        "check_list": "バック中の速度が速すぎず、ゆっくりと操作できているか（基準値{reverse_threshold}km/h未満）",
+        "check_detail": "バック中の速度が、{reverse_speed_val}km/h でした",
+        "advice_comment": "バック中は視界が限られ、少しの判断遅れが接触につながります。低速をキープし、周囲に急な動きがあっても余裕を持って対応しましょう。",
+        "check_summary": "速度超過：+{calc: reverse_speed_val - reverse_threshold}km/h \n 基準値：{reverse_threshold}km/h 未満"
+      },
+      "insufficient_left_check": {
+        "check_list": "バック中に、左側のサイドミラーや、歩行者・障害物を確認しているか",
+        "check_detail": "バック中に、左側のサイドミラー、歩行者・障害物を確認する動きが検出されませんでした",
+        "advice_comment": "後方は人やフォークリフトが車体の影に入りやすい位置です。ミラーと目視を組み合わせ、常に動きを確認しながらバックしましょう。",
+        "check_summary": "左側確認不足"
+      },
+      "insufficient_right_rear_check": {
+        "check_list": "バック中に、運転席の窓から顔を出して右後方の安全確認を行っているか",
+        "check_detail": "バック中に、運転席の窓から顔を出して右後方を安全確認する挙動が検出されませんでした",
+        "advice_comment": "後方は人やフォークリフトが車体の影に入りやすい位置です。ミラーと目視を組み合わせ、常に動きを確認しながらバックしましょう。",
+        "check_summary": "右側後方確認不足"
+      },
+      "insufficient_right_check": {
+        "check_list": "バック中に、右側のサイドミラーや、歩行者・障害物を確認しているか",
+        "check_detail": "バック中に、右側のサイドミラー、歩行者・障害物を確認する動きが検出されませんでした",
+        "advice_comment": "後方は人やフォークリフトが車体の影に入りやすい位置です。ミラーと目視を組み合わせ、常に動きを確認しながらバックしましょう。",
+        "check_summary": "右側確認不足"
+      }
+    }
+  }
+}
