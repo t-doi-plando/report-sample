@@ -199,7 +199,47 @@ function loadTxtMaster() {
   return txtMasterCache;
 }
 
-function buildMockReports(drivers, config) {
+function extractLatLngFromUrl(url) {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    const q = parsed.searchParams.get('q') || parsed.searchParams.get('query');
+    if (q) {
+      const match = q.match(/(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/);
+      if (match) {
+        return { lat: match[1], lng: match[2] };
+      }
+    }
+    // fallback: raw url scan
+    const rawMatch = url.match(/(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)/);
+    if (rawMatch) {
+      return { lat: rawMatch[1], lng: rawMatch[2] };
+    }
+  } catch (e) {
+    return null;
+  }
+  return null;
+}
+
+function buildStaticMapUrl(mapUrl, staticMapKey) {
+  const key = staticMapKey || process.env.GOOGLE_STATIC_MAPS_KEY || '';
+  if (!key) return '';
+  const coords = extractLatLngFromUrl(mapUrl);
+  if (!coords) return '';
+  const { lat, lng } = coords;
+  const base = 'https://maps.googleapis.com/maps/api/staticmap';
+  const params = new URLSearchParams({
+    center: `${lat},${lng}`,
+    zoom: '15',
+    size: '640x320',
+    maptype: 'roadmap',
+    markers: `color:red|${lat},${lng}`,
+    key
+  });
+  return `${base}?${params.toString()}`;
+}
+
+function buildMockReports(drivers, config, staticMapKey = '') {
   const itemMap = (config && config.itemMap) || {};
   const riskTypeLabelMap = (config && config.risk_type_label) || {};
   const txtMaster = loadTxtMaster();
@@ -290,7 +330,8 @@ function buildMockReports(drivers, config) {
         violationLabel: violationDetail || '詳細文言が未設定です',
         riskLabel,
         movieUrl: pickedScene.movie_url || pickedScene.movieUrl || '',
-        mapUrl: pickedScene.map_url || pickedScene.mapUrl || ''
+        mapUrl: pickedScene.map_url || pickedScene.mapUrl || '',
+        mapImageUrl: buildStaticMapUrl(pickedScene.map_url || pickedScene.mapUrl || '', staticMapKey)
       };
     })();
     return {
@@ -379,8 +420,8 @@ app.get('/reports/all', (req, res) => {
 
     const { token, data: driversDataToUse } = resolveDriversData(req);
     // モック表示：gaiyou固定
-    const reports = buildMockReports(driversDataToUse, config);
     const staticMapKey = process.env.GOOGLE_STATIC_MAPS_KEY || '';
+    const reports = buildMockReports(driversDataToUse, config, staticMapKey);
     res.render('pages/report', { reports: reports, staticMapKey, token });
   });
 });
@@ -400,12 +441,12 @@ app.get('/reports/:driverId', (req, res) => {
     const { token, data: driversDataToUse } = resolveDriversData(req);
     
     // モック表示：gaiyou固定
-    const reports = buildMockReports(driversDataToUse, config);
+    const staticMapKey = process.env.GOOGLE_STATIC_MAPS_KEY || '';
+    const reports = buildMockReports(driversDataToUse, config, staticMapKey);
     const targetReport = reports.find(r => r.driverId === driverId);
     if (!targetReport) {
       return res.status(404).send('Driver not found');
     }
-    const staticMapKey = process.env.GOOGLE_STATIC_MAPS_KEY || '';
     res.render('pages/report', { reports: [targetReport], staticMapKey, token });
   });
 });

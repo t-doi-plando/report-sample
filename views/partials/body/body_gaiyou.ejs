@@ -83,14 +83,31 @@
         <div class="gaiyou-scene__media">
           <div class="gaiyou-mediaFrame gaiyou-mediaFrame--video">
             <% if (scene.movieUrl) { %>
-              <a href="<%= scene.movieUrl %>" target="_blank" rel="noopener noreferrer">動画を開く</a>
+              <a class="gaiyou-mediaFrame__link" href="<%= scene.movieUrl %>" target="_blank" rel="noopener noreferrer">
+                <div class="gaiyou-mediaFrame__thumb">
+                  <img src="/img/pict/<%= report.driverId %>.jpg"
+                       alt="動画プレビュー"
+                       onerror="this.onerror=null;this.src='/img/pict/<%= report.driverId %>.png';" />
+                  <span class="gaiyou-mediaFrame__cta">＞ 動画で確認する</span>
+                </div>
+              </a>
             <% } else { %>
               <span>動画URL未設定</span>
             <% } %>
           </div>
           <div class="gaiyou-mediaFrame gaiyou-mediaFrame--map">
             <% if (scene.mapUrl) { %>
-              <a href="<%= scene.mapUrl %>" target="_blank" rel="noopener noreferrer">Google Mapsを開く</a>
+              <a class="gaiyou-mediaFrame__link" href="<%= scene.mapUrl %>" target="_blank" rel="noopener noreferrer">
+                <div class="gaiyou-mediaFrame__thumb">
+                  <% if (scene.mapImageUrl) { %>
+                    <img src="<%= scene.mapImageUrl %>" alt="地図プレビュー" onerror="this.style.display='none';this.nextElementSibling?.classList.add('gaiyou-mediaFrame__fallback--show');" />
+                    <div class="gaiyou-mediaFrame__fallback">Google Mapsを開く</div>
+                  <% } else { %>
+                    <div class="gaiyou-mediaFrame__fallback gaiyou-mediaFrame__fallback--show">Google Mapsを開く</div>
+                  <% } %>
+                  <span class="gaiyou-mediaFrame__cta gaiyou-mediaFrame__cta--map">＞ Google Mapsで確認する</span>
+                </div>
+              </a>
             <% } else { %>
               <span>地図URL未設定</span>
             <% } %>

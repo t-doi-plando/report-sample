@@ -510,7 +510,7 @@ body.print-a4 {
 }
 .gaiyou-mediaFrame{
   border-radius:4px;
-  min-height:30mm;
+  min-height:35mm;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -523,11 +523,60 @@ body.print-a4 {
 .gaiyou-mediaFrame--video{
   background-image:linear-gradient(135deg,#18263d,#314a7a);
   color:#fff;
+  padding:0;
+  overflow:hidden;
 }
 .gaiyou-mediaFrame--map{
   background-image:linear-gradient(135deg,#dfeaff,#f1f4ff);
-  color:#2f3a52;
+  color:#fff;
+  padding:0;
+  overflow:hidden;
 }
+.gaiyou-mediaFrame__link{
+  display:block;
+  width:100%;
+  height:100%;
+}
+.gaiyou-mediaFrame__thumb{
+  position:relative;
+  width:100%;
+  height:100%;
+}
+.gaiyou-mediaFrame__thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.gaiyou-mediaFrame__cta{
+  position:absolute;
+  right:2.2mm;
+  bottom:2.2mm;
+  background:rgba(0,0,0,0.65);
+  color:#fff;
+  padding:2mm 3mm;
+  border-radius:3px;
+  font-size:7pt;
+  font-weight:700;
+  letter-spacing:.05em;
+}
+.gaiyou-mediaFrame__cta--map{
+  background:rgba(0,0,0,0.65);
+}
+.gaiyou-mediaFrame__fallback{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  font-size:7pt;
+  letter-spacing:.05em;
+  color:#2f3a52;
+  background:linear-gradient(135deg,#dfeaff,#f1f4ff);
+  display:none;
+}
+.gaiyou-mediaFrame__fallback--show{display:flex;}
 .gaiyou-legend{
   margin-top:1mm;
   border:1px solid transparent;
