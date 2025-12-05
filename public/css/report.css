@@ -398,12 +398,16 @@ body.print-a4 {
   color:var(--ink-600);
   font-size:9pt;
 }
+.gaiyou-checklist header p.gaiyou-checklist__note{
+  font-size:7pt;
+}
 .gaiyou-checklist__cards{
   margin-top:0.6mm;
   display:flex;
   flex-direction:column;
   gap:1mm;
 }
+/* チェックカード: ベースとハイライト */
 .gaiyou-checkCard{
   border:1px solid transparent;
   border-radius:6px;
@@ -411,9 +415,13 @@ body.print-a4 {
   background:#fff;
   box-shadow:0 1px 3px rgba(16,31,63,0.05);
 }
-.gaiyou-checkCard--filled{
-  background:#fbe9e6;
+.gaiyou-checkCard--highlight{
+  background:#fef3f2;
   border-color:#f1b4ae;
+}
+.gaiyou-checkCard--filled{
+  background:#fff;
+  border-color:transparent;
 }
 .gaiyou-checkCard__head{
   display:flex;
@@ -426,6 +434,23 @@ body.print-a4 {
   border:2px solid #c8ced8;
   border-radius:2px;
   margin-top:0.4mm;
+  background:#fff;
+}
+.gaiyou-checkCard__checkbox--checked{
+  background:#2f3a52;
+  border-color:#2f3a52;
+  position:relative;
+}
+.gaiyou-checkCard__checkbox--checked::after{
+  content:'';
+  position:absolute;
+  top:40%;
+  left:22%;
+  width:45%;
+  height:20%;
+  border-left:2px solid #fff;
+  border-bottom:2px solid #fff;
+  transform:rotate(-45deg);
 }
 .gaiyou-checkCard__title{
   flex:1;
@@ -434,27 +459,127 @@ body.print-a4 {
   line-height:1.25;
   font-size:8.5pt;
 }
+/* タイトル＋件数の並びとチェックアイコン */
+.gaiyou-checkCard__row{
+  display:flex;
+  gap:3mm;
+  align-items:flex-start;
+  flex-wrap:wrap;
+  padding:0.4mm 0.6mm;
+  border-radius:4px;
+}
+.gaiyou-checkCard__row--highlight{
+  background:#e94c1c;
+  color:#fff;
+}
+.gaiyou-checkCard__row--offset{
+  margin-left:-1.6em;
+}
+.gaiyou-checkCard__checkRow{
+  display:flex;
+  align-items:flex-start;
+  gap:1.4mm;
+  margin-top:0.6mm;
+}
+.gaiyou-checkCard__row:not(.gaiyou-checkCard__row--highlight) .gaiyou-checkCard__checkRow span:last-child{
+  color:#c02b16;
+}
+.gaiyou-checkCard__checkRow:first-child{ margin-top:0; }
+.gaiyou-checkCard__checkIcon{
+  width:3.4mm;
+  height:3.4mm;
+  border:1.5px solid #c02b16;
+  border-radius:2px;
+  display:inline-block;
+  flex-shrink:0;
+  margin-top:0.6mm;
+}
+.gaiyou-checkCard__checkIcon--checked{
+  background:#2f3a52;
+  border-color:#2f3a52;
+  position:relative;
+}
+.gaiyou-checkCard__checkIcon--checked::after{
+  content:'';
+  position:absolute;
+  top:42%;
+  left:24%;
+  width:42%;
+  height:20%;
+  border-left:1.5px solid #fff;
+  border-bottom:1.5px solid #fff;
+  transform:rotate(-45deg);
+}
+.gaiyou-checkCard__row.gaiyou-checkCard__row--highlight .gaiyou-checkCard__checkIcon{
+  border-color:#fff;
+}
+.gaiyou-checkCard__row.gaiyou-checkCard__row--highlight .gaiyou-checkCard__checkIcon--checked{
+  background:#fff;
+  border-color:#fff;
+}
+.gaiyou-checkCard__row.gaiyou-checkCard__row--highlight .gaiyou-checkCard__checkIcon--checked::after{
+  border-color:#ff7043;
+}
 .gaiyou-checkCard__metric{
   margin-top:0.5mm;
   font-size:7pt;
   color:#c02b16;
   font-weight:600;
 }
-.gaiyou-checkCard__alert{
-  margin:2mm 0 0;
+.gaiyou-checkCard__metric--highlight{
+  color:#ffffff;
+}
+.gaiyou-checkCard__row:not(.gaiyou-checkCard__row--highlight) .gaiyou-checkCard__metric{
   color:#c02b16;
-  font-weight:700;
-  font-size:7pt;
-  border:1px solid rgba(192,43,22,0.25);
+}
+/* 詳細・警告ブロック共通 */
+.gaiyou-checkCard__block{
+  margin-top:1.2mm;
+}
+.gaiyou-checkCard__block--outlined{
+  border:1px solid #f1b4ae;
   border-radius:6px;
   padding:1.5mm 2mm;
   background:#fff;
 }
+.gaiyou-checkCard__block--warn{
+  background:#fef3f2;
+}
+.gaiyou-checkCard__alert{
+  margin:0;
+  color:#c02b16;
+  font-weight:700;
+  font-size:7pt;
+  background:#fff9f8;
+  border:none;
+  border-radius:0;
+  padding:0.8mm 1.8mm;
+  display:block;
+  margin-left:-2mm;
+  margin-right:-2mm;
+}
+.gaiyou-checkCard__alert--warn{
+  background:#fff9f8;
+  border:none;
+  border-radius:0;
+  padding:1.8mm 1.8mm;
+  display:block;
+  margin-left:-2mm;
+  margin-right:-2mm;
+}
 .gaiyou-checkCard__note{
-  margin:0.8mm 0 0;
+  margin:0;
   color:#424b63;
   font-size:7pt;
   line-height:1.4;
+}
+.gaiyou-checkCard__note--indent{
+  padding-left:0;
+}
+.gaiyou-checkCard__divider{
+  border:none;
+  border-top:1px solid #f1b4ae;
+  margin:1.2mm 0;
 }
 .gaiyou-scene{
   margin-top:0.8mm;
