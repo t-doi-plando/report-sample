@@ -30,7 +30,9 @@
                   <% if (!item.completed) { %>
                     <div class="gaiyou-checkCard__metric <%= item.isHighlighted ? 'gaiyou-checkCard__metric--highlight' : '' %>">
                       違反疑い件数　<%= item.violationHits ?? 0 %>/<%= report.violationCount ?? 0 %>件
+                      <% if ((item.dangerHits ?? 0) > 0) { %>
                       　うち危険疑い件数　<%= item.dangerHits ?? 0 %>件
+                      <% } %>
                     </div>
                   <% } %>
                 </div>
@@ -119,6 +121,6 @@
       <section class="gaiyou-legend">
         <div><strong>違反疑い：</strong>指導項目に関連した疑いのある回数です。各指導項目ごとに、速度超過や停止不完全などの違反項目があります。</div>
         <% if (scene && scene.riskLabel) { %>
-        <div><strong>危険疑い：</strong>違反疑いの際に発生した「急ブレーキ」または「接触未遂」の合計回数です。「急ブレーキ」「接触未遂」はあくまで事故事故となる可能性があります。</div>
+        <div><strong>危険疑い：</strong>違反疑いの際に発生した「急ブレーキ」または「接触未遂」の合計回数です。「急ブレーキ」「接触未遂」はあと少しで事故だった可能性があります。</div>
         <% } %>
       </section>

@@ -409,7 +409,7 @@
 	      "datetime": "2025-11-25T12:03:15+09:00",	
 	      "latest_violation_flg": 1,	
 	      "violation_type": "insufficient_right_rear_check",	
-	      "risk_type": "",	
+	      "risk_type": "hard_braking",	
 	      "reverse_speed_val": null,	
 	      "turning_left_speed_val": null,	
 	      "left_turn_timing_type": null,	
