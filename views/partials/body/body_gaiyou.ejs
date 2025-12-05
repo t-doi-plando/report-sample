@@ -13,45 +13,43 @@
 
       <section class="gaiyou-checklist">
         <header>
-          <h2>「バック前確認」の改善チェックリスト</h2>
-          <p>すべてにチェックマークがつくようにチェックリストを意識して運転しましょう。</p>
+          <%# チェックリストのタイトルおよびリード文 %>
+          <h2>「<%= report.highRiskGuidanceLabel || 'バック前確認' %>」の改善チェックリスト</h2>
+          <p class="gaiyou-checklist__note">すべてにチェックマークがつくようにチェックリストを意識して運転しましょう。</p>
         </header>
         <div class="gaiyou-checklist__cards">
+          <% (report.checkListItems || []).forEach(function(item){ %>
           <article class="gaiyou-checkCard">
             <div class="gaiyou-checkCard__head">
-              <div class="gaiyou-checkCard__checkbox" aria-hidden="true"></div>
               <div class="gaiyou-checkCard__title">
-                <div>バックに入る前に、完全に停止できているか</div>
-                <div class="gaiyou-checkCard__metric">違反疑い件数　1/5件</div>
+                <div class="gaiyou-checkCard__row gaiyou-checkCard__row--offset <%= item.isHighlighted ? 'gaiyou-checkCard__row--highlight' : '' %>">
+                  <div class="gaiyou-checkCard__checkRow">
+                    <span class="gaiyou-checkCard__checkIcon <%= item.completed ? 'gaiyou-checkCard__checkIcon--checked' : '' %>" aria-hidden="true"></span>
+                    <span><%= item.label %></span>
+                  </div>
+                  <% if (!item.completed) { %>
+                    <div class="gaiyou-checkCard__metric <%= item.isHighlighted ? 'gaiyou-checkCard__metric--highlight' : '' %>">
+                      違反疑い件数　<%= item.violationHits ?? 0 %>/<%= report.violationCount ?? 0 %>件
+                      　うち危険疑い件数　<%= item.dangerHits ?? 0 %>件
+                    </div>
+                  <% } %>
+                </div>
               </div>
             </div>
-            <p class="gaiyou-checkCard__alert">バックを開始する前のタイミングで、完全停止（0km/h）が検出できませんでした</p>
-            <p class="gaiyou-checkCard__note">車を止めてから数秒待ってると、後輪の位置や車両の角度や周囲の状況がつかめます。一度止まって落ち着いて後退する時間を取りましょう。</p>
-          </article>
-
-          <article class="gaiyou-checkCard gaiyou-checkCard--filled">
-            <div class="gaiyou-checkCard__head">
-              <div class="gaiyou-checkCard__checkbox" aria-hidden="true"></div>
-              <div class="gaiyou-checkCard__title">
-                <div>バックに入る前に、左後方の安全を確認できているか</div>
-                <div class="gaiyou-checkCard__metric">違反疑い件数　2/5件　うち危険疑い 2件</div>
+            <% if (!item.completed) { %>
+              <div class="gaiyou-checkCard__block gaiyou-checkCard__block--outlined">
+                <p class="gaiyou-checkCard__alert <%= item.alwaysWarnBg ? 'gaiyou-checkCard__alert--warn' : '' %>"><%= item.detail || '詳細文言が未設定です' %></p>
+                <% if (item.advice) { %>
+                <hr class="gaiyou-checkCard__divider" />
+                <p class="gaiyou-checkCard__note gaiyou-checkCard__note--indent"><%= item.advice %></p>
+                <% } %>
               </div>
-            </div>
-            <p class="gaiyou-checkCard__alert">バックを開始する前のタイミングで、左後方の安全確認が検出できませんでした</p>
-            <p class="gaiyou-checkCard__note">後方には人やフォークリフトが入り込んでしまう危険性があります。停止した左右をそれぞれ目視し、安全スペースを確保してからバックを始めましょう。</p>
+              <% if (item.extraNote) { %>
+              <p class="gaiyou-checkCard__note"><%= item.extraNote %></p>
+              <% } %>
+            <% } %>
           </article>
-
-          <article class="gaiyou-checkCard gaiyou-checkCard--filled">
-            <div class="gaiyou-checkCard__head">
-              <div class="gaiyou-checkCard__checkbox" aria-hidden="true"></div>
-              <div class="gaiyou-checkCard__title">
-                <div>バックに入る前に、右後方の安全を確認できているか</div>
-                <div class="gaiyou-checkCard__metric">違反疑い件数　2/5件</div>
-              </div>
-            </div>
-            <p class="gaiyou-checkCard__alert">バックを開始する前のタイミングで、右後方の安全確認が検出できませんでした</p>
-            <p class="gaiyou-checkCard__note">後方には人やフォークリフトが入り込んでしまう危険性があります。停止した左右をそれぞれ目視し、安全スペースを確保してからバックを始めましょう。</p>
-          </article>
+          <% }); %>
         </div>
       </section>
 

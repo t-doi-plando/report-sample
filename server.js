@@ -131,6 +131,17 @@ function formatNumberHuman(n) {
   return Number.isInteger(n) ? String(n) : String(Number(n.toFixed(1)));
 }
 
+function countAccelDecel(scene, allScenes) {
+  if (!scene) return 0;
+  const timing = getSceneValue(scene, 'left_turn_timing_type');
+  const kind = getSceneValue(scene, 'left_turn_accel_decel_type');
+  if (!timing || !kind) return 0;
+  return allScenes.filter((s) => (
+    getSceneValue(s, 'left_turn_timing_type') === timing &&
+    getSceneValue(s, 'left_turn_accel_decel_type') === kind
+  )).length;
+}
+
 function getSceneValue(scene, key) {
   if (!scene) return null;
   if (key in scene) return scene[key];
@@ -177,7 +188,7 @@ function applyTemplatePlaceholders(text, sources = [], labelMaps = {}) {
       return replaceCalc(expr);
     }
     const val = getValueFromSources(sourceList, trimmed);
-    if (val === null || val === undefined) return '';
+    if (val === null || val === undefined || val === '') return '未定義';
     const labelMap = labelMaps[trimmed];
     if (labelMap && val in labelMap) return String(labelMap[val]);
     return String(val);
@@ -242,6 +253,10 @@ function buildStaticMapUrl(mapUrl, staticMapKey) {
 function buildMockReports(drivers, config, staticMapKey = '') {
   const itemMap = (config && config.itemMap) || {};
   const riskTypeLabelMap = (config && config.risk_type_label) || {};
+  const labelMaps = {
+    left_turn_timing_type: (config && config.left_turn_timing_type_label) || {},
+    left_turn_accel_decel_type: (config && config.left_turn_accel_decel_type_label) || {}
+  };
   const txtMaster = loadTxtMaster();
   const mockDetailPages = [{
     pageNumber: 2,
@@ -271,13 +286,30 @@ function buildMockReports(drivers, config, staticMapKey = '') {
     }
   ];
   return drivers.map((d, idx) => {
+    // ドライバー単位で必要な統計・最新シーンを計算（表示はモック固定）
     const highRiskGuidanceLabel = itemMap[d.highRiskGuidanceType] || '文言未設定';
     const scenes = Array.isArray(d.scenes) ? d.scenes : [];
     const violationCount = scenes.length;
+    const violationHits = scenes.filter((s) => {
+      const v = s && (s.violation_type ?? s.violationType);
+      return v !== null && v !== undefined && v !== '';
+    }).length;
     const dangerCount = scenes.filter((s) => {
       const risk = s && (s.risk_type ?? s.riskType);
       return risk !== null && risk !== undefined && risk !== '';
     }).length;
+    const dangerHits = dangerCount;
+    const violationCountsByType = scenes.reduce((acc, s) => {
+      const vtype = s && (s.violation_type ?? s.violationType);
+      if (vtype) acc[vtype] = (acc[vtype] || 0) + 1;
+      return acc;
+    }, {});
+    const dangerCountsByType = scenes.reduce((acc, s) => {
+      const risk = s && (s.risk_type ?? s.riskType);
+      const vtype = s && (s.violation_type ?? s.violationType);
+      if (risk && vtype) acc[vtype] = (acc[vtype] || 0) + 1;
+      return acc;
+    }, {});
     const toTimestamp = (val) => {
       const dt = new Date(val);
       const t = dt.getTime();
@@ -292,30 +324,37 @@ function buildMockReports(drivers, config, staticMapKey = '') {
       return acc;
     }, null);
     const pickedScene = latestViolationScene ? latestViolationScene.scene : null;
+    const highlightTargetViolationType = (() => {
+      if (!pickedScene) return null;
+      const op = d.highRiskOperationType || d.high_risk_operation_type || '';
+      const guide = d.highRiskGuidanceType || '';
+      const vtype = pickedScene.violation_type ?? pickedScene.violationType ?? '';
+      // 同一 op/guidance の項目のみハイライト対象
+      if (!op || !guide || !vtype) return null;
+      if (op !== d.highRiskOperationType && op !== d.high_risk_operation_type) return null;
+      if (guide !== d.highRiskGuidanceType && guide !== d.high_risk_guidance_type) return null;
+      return vtype;
+    })();
+    const latestScenesByViolationType = scenes.reduce((acc, s) => {
+      const vtype = s && (s.violation_type ?? s.violationType);
+      if (!vtype) return acc;
+      const ts = toTimestamp(s && s.datetime);
+      if (ts === null) return acc;
+      if (!acc[vtype] || ts > acc[vtype].ts) acc[vtype] = { ts, scene: s };
+      return acc;
+    }, {});
+    const accelDecelCount = countAccelDecel(pickedScene, scenes);
+
     const latestScene = (() => {
       if (!pickedScene) return null;
       const opType = d.highRiskOperationType || d.high_risk_operation_type || '';
       const guideType = d.highRiskGuidanceType || '';
       const violationType = pickedScene.violation_type ?? pickedScene.violationType ?? '';
-      const accelDecelCount = (() => {
-        const timing = getSceneValue(pickedScene, 'left_turn_timing_type');
-        const kind = getSceneValue(pickedScene, 'left_turn_accel_decel_type');
-        if (!timing || !kind) return 0;
-        return scenes.filter((s) => (
-          getSceneValue(s, 'left_turn_timing_type') === timing &&
-          getSceneValue(s, 'left_turn_accel_decel_type') === kind
-        )).length;
-      })();
+      const section = txtMaster && txtMaster[opType] && txtMaster[opType][guideType];
+      const violationEntry = section && section[violationType];
       const violationDetail = (() => {
-        const op = txtMaster && txtMaster[opType];
-        const guide = op && op[guideType];
-        const entry = guide && guide[violationType];
-        const base = entry && entry.check_detail ? entry.check_detail : '詳細文言が未設定です';
+        const base = violationEntry && violationEntry.check_detail ? violationEntry.check_detail : '詳細文言が未設定です';
         const thresholds = (config && config.thresholds) || {};
-        const labelMaps = {
-          left_turn_timing_type: (config && config.left_turn_timing_type_label) || {},
-          left_turn_accel_decel_type: (config && config.left_turn_accel_decel_type_label) || {}
-        };
         const derived = { accel_or_decel_count: accelDecelCount };
         return applyTemplatePlaceholders(base, [pickedScene, thresholds, derived], labelMaps);
       })();
@@ -331,8 +370,57 @@ function buildMockReports(drivers, config, staticMapKey = '') {
         riskLabel,
         movieUrl: pickedScene.movie_url || pickedScene.movieUrl || '',
         mapUrl: pickedScene.map_url || pickedScene.mapUrl || '',
-        mapImageUrl: buildStaticMapUrl(pickedScene.map_url || pickedScene.mapUrl || '', staticMapKey)
+      mapImageUrl: buildStaticMapUrl(pickedScene.map_url || pickedScene.mapUrl || '', staticMapKey)
       };
+    })();
+    const opTypeForFlag = d.highRiskOperationType || d.high_risk_operation_type || '';
+    const guideTypeForFlag = d.highRiskGuidanceType || '';
+    const sectionForFlag = txtMaster && txtMaster[opTypeForFlag] && txtMaster[opTypeForFlag][guideTypeForFlag];
+    const checkListCompleted = (() => {
+      if (!sectionForFlag) return true;
+      return Object.keys(sectionForFlag).every((key) => !violationCountsByType[key]);
+    })();
+    const checkListItems = (() => {
+      const section = sectionForFlag;
+      const thresholds = (config && config.thresholds) || {};
+      const derivedFallback = { accel_or_decel_count: accelDecelCount };
+      if (!section) {
+        const label = applyTemplatePlaceholders('バックに入る前に、完全に停止できているか', [pickedScene, thresholds, derivedFallback], labelMaps);
+        return [{ label, completed: true }];
+      }
+      const keys = Object.keys(section);
+      return keys.map((k) => {
+        const entry = section[k];
+        const base = entry && entry.check_list ? entry.check_list : '';
+        const sampleScene = (latestScenesByViolationType[k] && latestScenesByViolationType[k].scene)
+          || scenes.find((s) => (s.violation_type ?? s.violationType) === k)
+          || pickedScene;
+        const derivedForItem = { accel_or_decel_count: countAccelDecel(sampleScene, scenes) };
+        const label = applyTemplatePlaceholders(base, [sampleScene, thresholds, derivedForItem], labelMaps);
+        const detailBase = entry && entry.check_detail ? entry.check_detail : '詳細文言が未設定です';
+        const detail = applyTemplatePlaceholders(detailBase, [sampleScene, thresholds, derivedForItem], labelMaps);
+        const adviceBase = (() => {
+          const timingKey = getSceneValue(sampleScene, 'left_turn_timing_type');
+          const accelKey = getSceneValue(sampleScene, 'left_turn_accel_decel_type');
+          const byTiming = entry && entry.advice_comment_by_timing && timingKey ? entry.advice_comment_by_timing[timingKey] : null;
+          const timingAdvice = byTiming && accelKey ? byTiming[accelKey] : '';
+          if (timingAdvice) return timingAdvice;
+          return entry && entry.advice_comment ? entry.advice_comment : '';
+        })();
+        const advice = adviceBase ? applyTemplatePlaceholders(adviceBase, [sampleScene, thresholds, derivedForItem], labelMaps) : '';
+        const completed = !violationCountsByType[k];
+        const vHits = violationCountsByType[k] || 0;
+        const dHits = dangerCountsByType[k] || 0;
+        const extraNote = (() => {
+          if (k !== 'sudden_accel_or_decel') return '';
+          const x = vHits || 0;
+          const y = Math.max(x - 1, 0);
+          return `違反疑い${x}件のうち上記を除く他${y}件は、別の要因で測定されました。詳細は「動画一覧」ページをご確認ください。`;
+        })();
+        const isHighlighted = highlightTargetViolationType === k;
+        const alwaysWarnBg = k === 'sudden_accel_or_decel';
+        return { label, detail, advice, completed, violationHits: vHits, dangerHits: dHits, extraNote, isHighlighted, alwaysWarnBg };
+      }).filter((v) => v.label && v.label.trim().length > 0);
     })();
     return {
       driverId: d.driverId || `mock-${idx}`,
@@ -360,8 +448,12 @@ function buildMockReports(drivers, config, staticMapKey = '') {
       highlights_gaiyou: baseHighlights,
       highRiskGuidanceLabel,
       violationCount,
+      violationHits,
       dangerCount,
+      dangerHits,
       latestScene,
+      checkListCompleted,
+      checkListItems,
       sections: baseSections,
       detailPages: mockDetailPages
     };
