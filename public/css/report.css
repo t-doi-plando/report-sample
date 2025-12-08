@@ -120,7 +120,13 @@ body.print-a4 {
   margin-top:1mm;
   display:flex;
   flex-direction:column;
-  gap:1mm;
+  gap:0.6mm;
+}
+.detail-risk__row{
+  display:flex;
+  align-items:baseline;
+  gap:3mm;
+  flex-wrap:wrap;
 }
 .detail-risk__lead{
   margin:0;
@@ -228,9 +234,15 @@ body.print-a4 {
   color:#0f1f3e;
   font-size:8pt;
   font-weight:700;
+  padding-left:10mm;
 }
 .detail-table__label{
   font-weight:700;
+  white-space:pre-line;
+  line-height:1.35;
+  min-height:calc(1.35em * 2); /* 1行でも2行分の高さを確保 */
+  display:flex;
+  align-items:center;
 }
 .detail-table__sub{
   font-size:7pt;
