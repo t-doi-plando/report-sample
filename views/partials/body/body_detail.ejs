@@ -1,6 +1,8 @@
       <section class="detail-risk">
-        <p class="detail-risk__lead">事故リスクが高いと判定された指導項目</p>
-        <div class="detail-risk__title">左折時速度</div>
+        <div class="detail-risk__row">
+          <span class="detail-risk__lead">事故リスクが高いと判定された指導項目</span>
+          <span class="detail-risk__title"><%= report.highRiskGuidanceLabel || '項目未設定' %></span>
+        </div>
       </section>
 
       <section class="detail-list">
@@ -15,115 +17,54 @@
             <div class="detail-table__cell detail-table__danger">危険疑い</div>
             <div class="detail-table__cell detail-table__links">リンク</div>
           </div>
-          <div class="detail-table__row detail-table__row--year">2025年</div>
-
-          <div class="detail-table__row detail-table__row--tone">
-            <div class="detail-table__cell detail-table__icon"></div>
-            <div class="detail-table__cell detail-table__date detail-table__date--day">
-              <div class="detail-table__day">9/1<span class="detail-table__dow">(月)</span></div>
-              <div class="detail-table__time">08:40</div>
-            </div>
-            <div class="detail-table__cell detail-table__violation">
-              <div class="detail-table__label">左折前の急加速（秒間 +12km）</div>
-            </div>
-            <div class="detail-table__cell detail-table__danger">
-              <span class="detail-tag detail-tag--danger">急ブレーキ</span>
-            </div>
-            <div class="detail-table__cell detail-table__links">
-              <div class="detail-links">
-                <span class="detail-linkBtn detail-linkBtn--primary">動画</span>
-                <span class="detail-linkBtn detail-linkBtn--ghost">地図</span>
+          <% const scenes = (page && page.scenes) || []; let prevYear = null; const hasLatest = scenes.some(s => s.isLatest); %>
+          <% scenes.forEach(function(scene){ %>
+            <% if (scene.year !== prevYear) { %>
+              <div class="detail-table__row detail-table__row--year"><%= scene.year %>年</div>
+              <% prevYear = scene.year; %>
+            <% } %>
+            <div class="detail-table__row detail-table__row--tone <%= scene.riskLabel ? 'detail-table__row--alert' : '' %>">
+              <div class="detail-table__cell detail-table__icon"><%= scene.isLatest ? '(!)' : '' %></div>
+              <div class="detail-table__cell detail-table__date detail-table__date--day">
+                <div class="detail-table__day"><%= scene.dateLabel || '' %></div>
+                <div class="detail-table__time"><%= scene.timeLabel || '' %></div>
+              </div>
+              <div class="detail-table__cell detail-table__violation">
+                <div class="detail-table__label"><%= scene.violationSummary || '詳細文言が未設定です' %></div>
+              </div>
+              <div class="detail-table__cell detail-table__danger">
+                <% if (scene.riskLabel) { %>
+                  <span class="detail-tag detail-tag--danger detail-tag--icon"><%= scene.riskLabel %></span>
+                <% } %>
+              </div>
+              <div class="detail-table__cell detail-table__links">
+                <div class="detail-links">
+                  <% if (scene.movieUrl) { %>
+                    <a class="detail-linkBtn detail-linkBtn--primary" href="<%= scene.movieUrl %>" target="_blank" rel="noopener noreferrer">動画</a>
+                  <% } else { %>
+                    <span class="detail-linkBtn detail-linkBtn--ghost">動画なし</span>
+                  <% } %>
+                  <% if (scene.mapUrl) { %>
+                    <a class="detail-linkBtn detail-linkBtn--ghost" href="<%= scene.mapUrl %>" target="_blank" rel="noopener noreferrer">地図</a>
+                  <% } else { %>
+                    <span class="detail-linkBtn detail-linkBtn--ghost">地図なし</span>
+                  <% } %>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div class="detail-table__row detail-table__row--tone">
-            <div class="detail-table__cell detail-table__icon"></div>
-            <div class="detail-table__cell detail-table__date detail-table__date--day">
-              <div class="detail-table__day">9/7<span class="detail-table__dow">(日)</span></div>
-              <div class="detail-table__time">08:21</div>
-            </div>
-            <div class="detail-table__cell detail-table__violation">
-              <div class="detail-table__label">左折前の急減速（秒間 -20km）</div>
-            </div>
-            <div class="detail-table__cell detail-table__danger">
-              <span class="detail-tag detail-tag--danger">急ブレーキ</span>
-            </div>
-            <div class="detail-table__cell detail-table__links">
-              <div class="detail-links">
-                <span class="detail-linkBtn detail-linkBtn--primary">動画</span>
-                <span class="detail-linkBtn detail-linkBtn--ghost">地図</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="detail-table__row">
-            <div class="detail-table__cell detail-table__icon"></div>
-            <div class="detail-table__cell detail-table__date detail-table__date--day">
-              <div class="detail-table__day">9/10<span class="detail-table__dow">(水)</span></div>
-              <div class="detail-table__time">09:40</div>
-            </div>
-            <div class="detail-table__cell detail-table__violation">
-              <div class="detail-table__label">速度超過：+3km/h</div>
-              <div class="detail-table__sub">基準値：10km/h未満</div>
-            </div>
-            <div class="detail-table__cell detail-table__danger"></div>
-            <div class="detail-table__cell detail-table__links">
-              <div class="detail-links">
-                <span class="detail-linkBtn detail-linkBtn--primary">動画</span>
-                <span class="detail-linkBtn detail-linkBtn--ghost">地図</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="detail-table__row">
-            <div class="detail-table__cell detail-table__icon"></div>
-            <div class="detail-table__cell detail-table__date detail-table__date--day">
-              <div class="detail-table__day">9/12<span class="detail-table__dow">(金)</span></div>
-              <div class="detail-table__time">14:45</div>
-            </div>
-            <div class="detail-table__cell detail-table__violation">
-              <div class="detail-table__label">速度超過：+5km/h</div>
-              <div class="detail-table__sub">基準値：10km/h未満</div>
-            </div>
-            <div class="detail-table__cell detail-table__danger"></div>
-            <div class="detail-table__cell detail-table__links">
-              <div class="detail-links">
-                <span class="detail-linkBtn detail-linkBtn--primary">動画</span>
-                <span class="detail-linkBtn detail-linkBtn--ghost">地図</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="detail-table__row detail-table__row--tone detail-table__row--alert">
-            <div class="detail-table__cell detail-table__icon">(!)</div>
-            <div class="detail-table__cell detail-table__date detail-table__date--day">
-              <div class="detail-table__day">9/14<span class="detail-table__dow">(日)</span></div>
-              <div class="detail-table__time">16:05</div>
-            </div>
-            <div class="detail-table__cell detail-table__violation">
-              <div class="detail-table__label">速度超過：+4km/h</div>
-              <div class="detail-table__sub">基準値：10km/h未満</div>
-            </div>
-            <div class="detail-table__cell detail-table__danger">
-              <span class="detail-tag detail-tag--danger detail-tag--icon">接触未遂</span>
-            </div>
-            <div class="detail-table__cell detail-table__links">
-              <div class="detail-links">
-                <span class="detail-linkBtn detail-linkBtn--primary">動画</span>
-                <span class="detail-linkBtn detail-linkBtn--ghost">地図</span>
-              </div>
-            </div>
-          </div>
+          <% }); %>
         </div>
+        <% if (hasLatest) { %>
         <div class="detail-note">
-          直近の違反疑いシーン（1ページ目）に表示されている動画になります。
+          (!)： 直近の違反疑いシーン（1ページ目）に表示されている動画になります。
         </div>
+        <% } %>
       </section>
-
+      <% if (page && page.includeMemo) { %>
       <section class="detail-memo">
         <div class="detail-memo__title">ドライバーメモ</div>
         <p class="detail-memo__desc">次回からの運転で気を付けようと思ったことや、今回のアドバイスを受けての感想などを記載してください。</p>
         <div class="detail-memo__box"></div>
         <div class="detail-memo__advisor">アドバイザー署名<span class="detail-memo__line"></span></div>
       </section>
+      <% } %>

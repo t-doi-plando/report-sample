@@ -125,6 +125,14 @@ function formatMinutesToHm(totalMinutes) {
   const rem = m % 60;
   return `${h}時間${rem}分`;
 }
+function formatTimeLabel(val) {
+  if (!val) return '';
+  const d = new Date(val);
+  if (Number.isNaN(d.getTime())) return '';
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mi = String(d.getMinutes()).padStart(2, '0');
+  return `${hh}:${mi}`;
+}
 
 function formatNumberHuman(n) {
   if (!Number.isFinite(n)) return '';
@@ -258,13 +266,6 @@ function buildMockReports(drivers, config, staticMapKey = '') {
     left_turn_accel_decel_type: (config && config.left_turn_accel_decel_type_label) || {}
   };
   const txtMaster = loadTxtMaster();
-  const mockDetailPages = [{
-    pageNumber: 2,
-    page: {},
-    section: { title: '詳細' },
-    index: 0,
-    totalPages: 1
-  }];
   const baseHighlights = [
     { kind: 'danger', badge: '危険疑い回数が多い項目', title: '左折前安全確認', text: 'バックを開始する前に完全停止できていませんでした。' },
     { kind: 'warn', badge: '違反疑い割合が高い項目', title: '左折中安全確認', text: '左後方の安全確認が不足しています。' },
@@ -422,6 +423,75 @@ function buildMockReports(drivers, config, staticMapKey = '') {
         return { label, detail, advice, completed, violationHits: vHits, dangerHits: dHits, extraNote, isHighlighted, alwaysWarnBg };
       }).filter((v) => v.label && v.label.trim().length > 0);
     })();
+
+    // 詳細ページ用: シーン一覧を組み立て（古い順）
+    const thresholds = (config && config.thresholds) || {};
+    const opForDetail = d.highRiskOperationType || d.high_risk_operation_type || '';
+    const guideForDetail = d.highRiskGuidanceType || '';
+    const detailScenes = scenes
+      .map((s) => {
+        const ts = toTimestamp(s && s.datetime);
+        if (ts === null) return null;
+        const section = txtMaster && txtMaster[opForDetail] && txtMaster[opForDetail][guideForDetail];
+        const entry = section && s && (section[s.violation_type ?? s.violationType]);
+        const derivedForItem = { accel_or_decel_count: countAccelDecel(s, scenes) };
+        const summaryBase = entry && entry.check_summary ? entry.check_summary : '詳細文言が未設定です';
+        const summary = applyTemplatePlaceholders(summaryBase, [s, thresholds, derivedForItem], labelMaps);
+        const riskRaw = s && (s.risk_type ?? s.riskType);
+        const riskLabel = riskRaw ? (riskTypeLabelMap[riskRaw] || String(riskRaw)) : '';
+        return {
+          ts,
+          year: new Date(ts).getFullYear(),
+          dateLabel: formatDateLabel(s.datetime),
+          timeLabel: formatTimeLabel(s.datetime),
+          violationSummary: summary,
+          riskLabel,
+          isLatest: !!(s && (s.latest_violation_flg ?? s.latestViolationFlg)),
+          movieUrl: s && (s.movie_url || s.movieUrl) || '',
+          mapUrl: s && (s.map_url || s.mapUrl) || ''
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.ts - b.ts);
+
+    const detailPagesRaw = (() => {
+      const result = [];
+      const limits = (config && config.detailPageLimits) || {};
+      const memoLimit = Number(limits.last_page_max) || 10;      // 最終ページ（メモ同居）上限
+      const normalLimit = Number(limits.normal_page_max) || 14;  // 通常ページ上限
+      let remaining = [...detailScenes];
+      let pageNo = 2; // 概要ページが1ページ目
+
+      // 通常ページを埋める（次ページに memo 同居できる残数になるまで）
+      while (remaining.length > normalLimit) {
+        const chunk = remaining.slice(0, normalLimit);
+        remaining = remaining.slice(chunk.length);
+        result.push({ pageNumber: pageNo++, scenes: chunk, includeMemo: false });
+      }
+
+      // 残りの扱い
+      const remLen = remaining.length;
+      if (remLen === 0) {
+        // シーンなしでもメモページを用意
+        result.push({ pageNumber: pageNo++, scenes: [], includeMemo: true });
+      } else if (remLen <= memoLimit) {
+        // 残りがメモ同居上限以内 -> シーン＋メモ
+        result.push({ pageNumber: pageNo++, scenes: remaining, includeMemo: true });
+      } else {
+        // 残りが memoLimit を超え normalLimit 以内 -> シーンのみのページを追加し、メモだけのページをさらに追加
+        result.push({ pageNumber: pageNo++, scenes: remaining, includeMemo: false });
+        result.push({ pageNumber: pageNo++, scenes: [], includeMemo: true });
+      }
+
+      return result;
+    })();
+    const detailPages = detailPagesRaw.map((p, idx) => ({
+      pageNumber: p.pageNumber,
+      page: { scenes: p.scenes, includeMemo: p.includeMemo },
+      section: { title: highRiskGuidanceLabel },
+      index: idx,
+      totalPages: detailPagesRaw.length
+    }));
     return {
       driverId: d.driverId || `mock-${idx}`,
       driverName: d.driverName || '氏名未設定',
@@ -455,7 +525,8 @@ function buildMockReports(drivers, config, staticMapKey = '') {
       checkListCompleted,
       checkListItems,
       sections: baseSections,
-      detailPages: mockDetailPages
+      detailPages,
+      guidancePageNumber: (detailPages.length ? detailPages[detailPages.length - 1].pageNumber + 1 : 2)
     };
   });
 }

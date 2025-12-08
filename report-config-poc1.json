@@ -22,5 +22,9 @@
     "left_turn_accel_decel_type_label": {
         "sudden_acceleration": "急加速",
         "sudden_deceleration": "急減速"
+    },
+    "detailPageLimits": {
+    "last_page_max": 12,
+    "normal_page_max": 16
     }
 }
