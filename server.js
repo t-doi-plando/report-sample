@@ -115,7 +115,8 @@ function formatDateTimeLabel(val) {
   const dd = String(d.getDate()).padStart(2, '0');
   const hh = String(d.getHours()).padStart(2, '0');
   const mi = String(d.getMinutes()).padStart(2, '0');
-  return `${yyyy}/${mm}/${dd} ${hh}:${mi}`;
+  const ss = String(d.getSeconds()).padStart(2, '0');
+  return `${yyyy}/${mm}/${dd} ${hh}:${mi}:${ss}`;
 }
 
 function formatMinutesToHm(totalMinutes) {
@@ -291,6 +292,9 @@ function buildMockReports(drivers, config, staticMapKey = '') {
     ? drivers.filter((d) => Array.isArray(d.scenes) && d.scenes.length > 0)
     : [];
   if (!driversWithScenes.length) return [];
+
+  // レポート生成日時（全ドライバー共通で利用）
+  const generatedAtLabel = formatDateTimeLabel(new Date().toISOString());
 
   return driversWithScenes.map((d, idx) => {
     // ドライバー単位で必要な統計・最新シーンを計算（表示はモック固定）
@@ -538,7 +542,8 @@ function buildMockReports(drivers, config, staticMapKey = '') {
       sections: baseSections,
       detailPages,
       guidancePageNumber: (detailPages.length ? detailPages[detailPages.length - 1].pageNumber + 1 : 2),
-      showMemo
+      showMemo,
+      generatedAtLabel
     };
   });
 }
