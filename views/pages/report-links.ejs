@@ -202,6 +202,7 @@
 
     // アップロード後のUI/リンク更新を一括で実行
     const handleUploadSuccess = (jsonData, fileName) => {
+      // サーバーにJSONを送信し、トークンを受け取って表示内容を再描画
       fetch('/upload-json-data', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -212,6 +213,7 @@
           showToast(data.message, 'success');
           const tokenValue = data.token || '';
           currentToken = tokenValue;
+          // トークンが変わるので、一覧リンクとファイル表示をまとめて更新
           updateGlobalLinks(currentToken);
           updateReportsList(jsonData);
           updateFileSelectionDisplay(fileName);

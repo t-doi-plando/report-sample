@@ -24,7 +24,8 @@
         "sudden_deceleration": "急減速"
     },
     "detailPageLimits": {
-    "last_page_max": 12,
-    "normal_page_max": 16
-    }
+        "last_page_max": 12,
+        "normal_page_max": 16 
+    },
+    "show_memo": false
 }

@@ -5,6 +5,8 @@
         </div>
       </section>
 
+      <% const scenes = (page && page.scenes) || []; let prevYear = null; const hasLatest = scenes.some(s => s.isLatest); const hasScenes = scenes.length > 0; %>
+      <% if (hasScenes) { %>
       <section class="detail-list">
         <div class="detail-list__header">
           <div class="detail-list__title">違反疑い動画一覧</div>
@@ -17,7 +19,6 @@
             <div class="detail-table__cell detail-table__danger">危険疑い</div>
             <div class="detail-table__cell detail-table__links">リンク</div>
           </div>
-          <% const scenes = (page && page.scenes) || []; let prevYear = null; const hasLatest = scenes.some(s => s.isLatest); %>
           <% scenes.forEach(function(scene){ %>
             <% if (scene.year !== prevYear) { %>
               <div class="detail-table__row detail-table__row--year"><%= scene.year %>年</div>
@@ -60,7 +61,8 @@
         </div>
         <% } %>
       </section>
-      <% if (page && page.includeMemo) { %>
+      <% } %>
+      <% if (page && page.includeMemo && report.showMemo) { %>
       <section class="detail-memo">
         <div class="detail-memo__title">ドライバーメモ</div>
         <p class="detail-memo__desc">次回からの運転で気を付けようと思ったことや、今回のアドバイスを受けての感想などを記載してください。</p>

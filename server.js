@@ -261,6 +261,7 @@ function buildStaticMapUrl(mapUrl, staticMapKey) {
 function buildMockReports(drivers, config, staticMapKey = '') {
   const itemMap = (config && config.itemMap) || {};
   const riskTypeLabelMap = (config && config.risk_type_label) || {};
+  const showMemo = !!(config && config.show_memo);
   const labelMaps = {
     left_turn_timing_type: (config && config.left_turn_timing_type_label) || {},
     left_turn_accel_decel_type: (config && config.left_turn_accel_decel_type_label) || {}
@@ -286,7 +287,12 @@ function buildMockReports(drivers, config, staticMapKey = '') {
       ]
     }
   ];
-  return drivers.map((d, idx) => {
+  const driversWithScenes = Array.isArray(drivers)
+    ? drivers.filter((d) => Array.isArray(d.scenes) && d.scenes.length > 0)
+    : [];
+  if (!driversWithScenes.length) return [];
+
+  return driversWithScenes.map((d, idx) => {
     // ドライバー単位で必要な統計・最新シーンを計算（表示はモック固定）
     const highRiskGuidanceLabel = itemMap[d.highRiskGuidanceType] || '文言未設定';
     const scenes = Array.isArray(d.scenes) ? d.scenes : [];
@@ -457,32 +463,37 @@ function buildMockReports(drivers, config, staticMapKey = '') {
     const detailPagesRaw = (() => {
       const result = [];
       const limits = (config && config.detailPageLimits) || {};
-      const memoLimit = Number(limits.last_page_max) || 10;      // 最終ページ（メモ同居）上限
-      const normalLimit = Number(limits.normal_page_max) || 14;  // 通常ページ上限
+      const normalLimit = Number(limits.normal_page_max) || 14;  // 通常ページ上限（メモ非表示時も共通）
       let remaining = [...detailScenes];
       let pageNo = 2; // 概要ページが1ページ目
 
-      // 通常ページを埋める（次ページに memo 同居できる残数になるまで）
+      if (!showMemo) {
+        // メモ非表示: 通常上限のみで分割し、メモページは作らない
+        while (remaining.length > 0) {
+          const chunk = remaining.slice(0, normalLimit);
+          remaining = remaining.slice(chunk.length);
+          result.push({ pageNumber: pageNo++, scenes: chunk, includeMemo: false });
+        }
+        if (!result.length) result.push({ pageNumber: pageNo++, scenes: [], includeMemo: false });
+        return result;
+      }
+
+      // ここから下はメモを復活させる場合のために保持（現状は showMemo=false なので通らない）
+      const memoLimit = Number(limits.last_page_max) || normalLimit; // 最終ページ（メモ同居）上限
       while (remaining.length > normalLimit) {
         const chunk = remaining.slice(0, normalLimit);
         remaining = remaining.slice(chunk.length);
         result.push({ pageNumber: pageNo++, scenes: chunk, includeMemo: false });
       }
-
-      // 残りの扱い
       const remLen = remaining.length;
       if (remLen === 0) {
-        // シーンなしでもメモページを用意
         result.push({ pageNumber: pageNo++, scenes: [], includeMemo: true });
       } else if (remLen <= memoLimit) {
-        // 残りがメモ同居上限以内 -> シーン＋メモ
         result.push({ pageNumber: pageNo++, scenes: remaining, includeMemo: true });
       } else {
-        // 残りが memoLimit を超え normalLimit 以内 -> シーンのみのページを追加し、メモだけのページをさらに追加
         result.push({ pageNumber: pageNo++, scenes: remaining, includeMemo: false });
         result.push({ pageNumber: pageNo++, scenes: [], includeMemo: true });
       }
-
       return result;
     })();
     const detailPages = detailPagesRaw.map((p, idx) => ({
@@ -526,7 +537,8 @@ function buildMockReports(drivers, config, staticMapKey = '') {
       checkListItems,
       sections: baseSections,
       detailPages,
-      guidancePageNumber: (detailPages.length ? detailPages[detailPages.length - 1].pageNumber + 1 : 2)
+      guidancePageNumber: (detailPages.length ? detailPages[detailPages.length - 1].pageNumber + 1 : 2),
+      showMemo
     };
   });
 }
