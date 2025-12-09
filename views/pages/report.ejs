@@ -10,6 +10,21 @@
   <link rel="stylesheet" href="/css/report.css" />
 </head>
 <body class="print-a4">
+  <% const generatedAtLabel = reports[0]?.generatedAtLabel || ""; %>
+  <style>
+    @page {
+      @bottom-center {
+        content: counter(page) " / " counter(pages);
+        font-size: 8pt;
+        color: var(--ink-400);
+      }
+      @bottom-right {
+        content: "<%= generatedAtLabel %>";
+        font-size: 8pt;
+        color: var(--ink-400);
+      }
+    }
+  </style>
   <% reports.forEach(report => { %>
     <% const detailPages = report.detailPages || []; %>
     <% const guidancePageNumber = report.guidancePageNumber || (detailPages.length ? detailPages[detailPages.length - 1].pageNumber + 1 : 2); %>
