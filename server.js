@@ -175,11 +175,17 @@ function applyTemplatePlaceholders(text, sources = [], labelMaps = {}) {
   if (!text || typeof text !== 'string') return '詳細文言が未設定です';
   const replaceCalc = (exprRaw) => {
     const expr = exprRaw.trim();
+    let invalid = false;
     const sanitized = expr.replace(/[a-zA-Z_][a-zA-Z0-9_]*/g, (name) => {
       const v = getValueFromSources(sourceList, name);
       const num = Number(v);
-      return Number.isFinite(num) ? String(num) : '0';
+      if (!Number.isFinite(num)) {
+        invalid = true; // 欠損や非数は「計算不可」扱い
+        return '0';
+      }
+      return String(num);
     });
+    if (invalid) return '計算不可';
     // 許可: 数字, 演算子, 括弧, 小数点, 空白
     if (/[^0-9+\-*/().\s]/.test(sanitized)) return '計算不可';
     try {
@@ -300,6 +306,11 @@ function buildMockReports(drivers, config, staticMapKey = '') {
     // ドライバー単位で必要な統計・最新シーンを計算（表示はモック固定）
     const highRiskGuidanceLabel = itemMap[d.highRiskGuidanceType] || '文言未設定';
     const scenes = Array.isArray(d.scenes) ? d.scenes : [];
+    const isLeftTurnSpeedContext = (d.highRiskOperationType || d.high_risk_operation_type) === 'left_turn'
+      && (d.highRiskGuidanceType || d.high_risk_guidance_type) === 'turning_left_speed';
+    const totalAccelDecelCount = isLeftTurnSpeedContext
+      ? scenes.filter((s) => (s && (s.violation_type ?? s.violationType)) === 'sudden_accel_or_decel').length
+      : 0;
     const violationCount = scenes.length;
     const violationHits = scenes.filter((s) => {
       const v = s && (s.violation_type ?? s.violationType);
@@ -423,9 +434,16 @@ function buildMockReports(drivers, config, staticMapKey = '') {
         const vHits = violationCountsByType[k] || 0;
         const dHits = dangerCountsByType[k] || 0;
         const extraNote = (() => {
-          if (k !== 'sudden_accel_or_decel') return '';
-          const x = vHits || 0;
-          const y = Math.max(x - 1, 0);
+          if (k !== 'sudden_accel_or_decel' || !isLeftTurnSpeedContext) return '';
+          const timingKey = getSceneValue(sampleScene, 'left_turn_timing_type');
+          const accelKey = getSceneValue(sampleScene, 'left_turn_accel_decel_type');
+          const patternCount = (!timingKey || !accelKey) ? 0 : scenes.filter((s) => {
+            return (s && (s.violation_type ?? s.violationType)) === 'sudden_accel_or_decel'
+              && getSceneValue(s, 'left_turn_timing_type') === timingKey
+              && getSceneValue(s, 'left_turn_accel_decel_type') === accelKey;
+          }).length;
+          const x = totalAccelDecelCount;
+          const y = Math.max(x - patternCount, 0);
           return `違反疑い${x}件のうち上記を除く他${y}件は、別の要因で測定されました。詳細は「動画一覧」ページをご確認ください。`;
         })();
         const isHighlighted = highlightTargetViolationType === k;

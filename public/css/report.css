@@ -651,12 +651,12 @@ body.print-a4 {
   margin:0;
   color:var(--blue-700);
   font-size:11px;
-  font-weight:500;
+  font-weight:700;
 }
 .gaiyou-scene header p{
   margin:0.6mm 0 0;
   color:#1E1E1E;
-  font-size:7.5px;
+  font-size:11px;
   font-weight:500;
 }
 .gaiyou-scene__meta{
