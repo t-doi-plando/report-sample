@@ -98,7 +98,9 @@
                   <img src="/img/pict/<%= report.driverId %>.jpg"
                        alt="動画プレビュー"
                        onerror="this.onerror=null;this.src='/img/pict/<%= report.driverId %>.png';" />
-                  <span class="gaiyou-mediaFrame__cta">＞ 動画で確認する</span>
+                  <span class="gaiyou-mediaFrame__cta">
+                    <img src="/img/icon/movie_link_button.png" alt="動画で確認するボタン" class="gaiyou-mediaFrame__ctaImg" />
+                  </span>
                 </div>
               </a>
             <% } else { %>
@@ -115,7 +117,9 @@
                   <% } else { %>
                     <div class="gaiyou-mediaFrame__fallback gaiyou-mediaFrame__fallback--show">Google Mapsを開く</div>
                   <% } %>
-                  <span class="gaiyou-mediaFrame__cta gaiyou-mediaFrame__cta--map">＞ Google Mapsで確認する</span>
+                  <span class="gaiyou-mediaFrame__cta gaiyou-mediaFrame__cta--map">
+                    <img src="/img/icon/map_link_button.png" alt="地図で確認するボタン" class="gaiyou-mediaFrame__ctaImg" />
+                  </span>
                 </div>
               </a>
             <% } else { %>
