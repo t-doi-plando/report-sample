@@ -890,7 +890,7 @@
 	      "datetime": "2025-11-24T12:03:15+09:00",	
 	      "latest_violation_flg": 0,	
 	      "violation_type": "over_threshold_speed",	
-	      "risk_type": "",	
+	      "risk_type": "hard_braking",	
 	      "reverse_speed_val": 999,	
 	      "turning_left_speed_val": null,	
 	      "left_turn_timing_type": null,	
@@ -951,5 +951,60 @@
 	    "days_count": 21,	
 	    "total_minutes": 10080	
 	  }
-	}	
+	},	
+	{	
+	  "driver_id": "D0000007",	
+	  "driver_name": "テスト　未チェック",	
+	  "company_name": "SSX",	
+	  "branch_name": "八王子北支店",	
+	  "period": {	
+	    "start_date": "2025-11-24",	
+	    "end_date": "2026-01-05",	
+	    "days_count": 20,	
+	    "total_minutes": 9600	
+	  },	
+	  "high_risk_operation_type": "reverse",	
+	  "high_risk_guidance_type": "during_reverse",	
+	  "scenes": [	
+	   {	
+	      "datetime": "2025-11-24T12:03:15+09:00",	
+	      "latest_violation_flg": 0,	
+	      "violation_type": "over_threshold_speed",	
+	      "risk_type": "hard_braking",	
+	      "reverse_speed_val": 999,	
+	      "turning_left_speed_val": null,	
+	      "left_turn_timing_type": null,	
+	      "left_turn_accel_decel_type": null,	
+	      "turning_left_speed_diff_val": null,	
+	      "movie_url": "http://yahoo.co.jp",	
+	      "map_url": "https://www.google.com/maps/search/?api=1&query=35.681236,139.767125"	
+	    },
+		{	
+	      "datetime": "2025-11-26T12:03:15+09:00",	
+	      "latest_violation_flg": 0,	
+	      "violation_type": "insufficient_right_check",	
+	      "risk_type": "",	
+	      "reverse_speed_val": null,	
+	      "turning_left_speed_val": null,	
+	      "left_turn_timing_type": null,	
+	      "left_turn_accel_decel_type": null,	
+	      "turning_left_speed_diff_val": null,	
+	      "movie_url": "http://yahoo.co.jp",	
+	      "map_url": "https://www.google.com/maps/search/?api=1&query=35.681236,139.767125"	
+	    },
+		{	
+	      "datetime": "2025-11-25T12:03:15+09:00",	
+	      "latest_violation_flg": 1,	
+	      "violation_type": "insufficient_right_rear_check",	
+	      "risk_type": "hard_braking",	
+	      "reverse_speed_val": null,	
+	      "turning_left_speed_val": null,	
+	      "left_turn_timing_type": null,	
+	      "left_turn_accel_decel_type": null,	
+	      "turning_left_speed_diff_val": null,	
+	      "movie_url": "http://yahoo.co.jp",	
+	      "map_url": "https://www.google.com/maps/search/?api=1&query=35.681236,139.767125"	
+	    }
+	  ]	
+	}
 ]		

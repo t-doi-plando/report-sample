@@ -33,15 +33,21 @@
             <div class="gaiyou-checkCard__head">
               <div class="gaiyou-checkCard__title">
                 <div class="gaiyou-checkCard__row gaiyou-checkCard__row--offset <%= item.isHighlighted ? 'gaiyou-checkCard__row--highlight' : '' %>">
-                  <div class="gaiyou-checkCard__checkRow">
-                    <span class="gaiyou-checkCard__checkIcon <%= item.completed ? 'gaiyou-checkCard__checkIcon--checked' : '' %>" aria-hidden="true"></span>
+                  <div class="gaiyou-checkCard__checkRow <%= item.completed ? 'gaiyou-checkCard__checkRow--completed' : '' %>">
+                    <img
+                      src="<%= item.completed ? '/img/icon/checked.svg' : '/img/icon/check.svg' %>"
+                      alt=""
+                      class="gaiyou-checkCard__checkIconImg"
+                    />
                     <span><%= item.label %></span>
                   </div>
                   <% if (!item.completed) { %>
                     <div class="gaiyou-checkCard__metric <%= item.isHighlighted ? 'gaiyou-checkCard__metric--highlight' : '' %>">
-                      違反疑い件数　<%= item.violationHits ?? 0 %>/<%= report.violationCount ?? 0 %>件
+                      <span class="gaiyou-checkCard__metricLabel">違反疑い件数</span>
+                      <span class="gaiyou-checkCard__metricValue"><%= item.violationHits ?? 0 %>/<%= report.violationCount ?? 0 %>件</span>
                       <% if ((item.dangerHits ?? 0) > 0) { %>
-                      　うち危険疑い件数　<%= item.dangerHits ?? 0 %>件
+                      　<span class="gaiyou-checkCard__metricLabel gaiyou-checkCard__metricLabel--plain">うち危険疑い件数</span>
+                      <span class="gaiyou-checkCard__metricValue"><%= item.dangerHits ?? 0 %>件</span>
                       <% } %>
                     </div>
                   <% } %>
@@ -50,10 +56,23 @@
             </div>
             <% if (!item.completed) { %>
               <div class="gaiyou-checkCard__block gaiyou-checkCard__block--outlined">
-                <p class="gaiyou-checkCard__alert <%= item.alwaysWarnBg ? 'gaiyou-checkCard__alert--warn' : '' %>"><%= item.detail || '詳細文言が未設定です' %></p>
-                <% if (item.advice) { %>
-                <hr class="gaiyou-checkCard__divider" />
-                <p class="gaiyou-checkCard__note gaiyou-checkCard__note--indent"><%= item.advice %></p>
+                <div class="gaiyou-checkCard__warnArea">
+                  <p class="gaiyou-checkCard__alert <%= item.alwaysWarnBg ? 'gaiyou-checkCard__alert--warn' : '' %>">
+                    <img src="/img/icon/caution.svg" alt="" class="gaiyou-checkCard__alertIcon" />
+                    <span><%= item.detail || '詳細文言が未設定です' %></span>
+                  </p>
+                  <% if (item.advice) { %>
+                  <hr class="gaiyou-checkCard__divider" />
+                  <% } %>
+                </div>
+                <% if (item.advice) { 
+                  const sentences = (item.advice || '').split('。').map(s => s.trim()).filter(Boolean);
+                %>
+                <p class="gaiyou-checkCard__note gaiyou-checkCard__note--indent">
+                  <% sentences.forEach(function(sentence, idx){ %>
+                    <%= sentence %>。<% if (idx < sentences.length - 1) { %><br /><% } %>
+                  <% }); %>
+                </p>
                 <% } %>
               </div>
               <% if (item.extraNote) { %>
