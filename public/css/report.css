@@ -558,7 +558,7 @@ body.print-a4 {
   filter:brightness(0) invert(1);
 }
 .gaiyou-checkCard__metric{
-  margin-top:0.5mm;
+  margin-top:0.1mm;
   font-size:7.5px;
   color:#c02b16;
   font-weight:600;
@@ -566,8 +566,8 @@ body.print-a4 {
 .gaiyou-checkCard__metricLabel{
   display:inline-flex;
   align-items:center;
-  padding:0.3mm 1.6mm;
-  border-radius:999px;
+  padding:0.8mm 1.6mm;
+  border-radius:250px;
   background:#fff2f1;
   color:#c02b16;
   font-weight:700;
