@@ -8,10 +8,8 @@
       <% const scenes = (page && page.scenes) || []; let prevYear = null; const hasLatest = scenes.some(s => s.isLatest); const hasScenes = scenes.length > 0; %>
       <% if (hasScenes) { %>
       <section class="detail-list">
-        <div class="detail-list__header">
-          <div class="detail-list__title">違反疑い動画一覧</div>
-        </div>
         <div class="detail-table">
+          <div class="detail-table__caption">違反疑い動画一覧</div>
           <div class="detail-table__row detail-table__row--header">
             <div class="detail-table__cell detail-table__icon"></div>
             <div class="detail-table__cell detail-table__date">発生日時</div>
@@ -21,32 +19,80 @@
           </div>
           <% scenes.forEach(function(scene){ %>
             <% if (scene.year !== prevYear) { %>
-              <div class="detail-table__row detail-table__row--year"><%= scene.year %>年</div>
+              <div class="detail-table__row detail-table__row--year">
+                <span class="detail-table__yearNumber"><%= scene.year %></span><span class="detail-table__yearUnit">年</span>
+              </div>
               <% prevYear = scene.year; %>
             <% } %>
             <div class="detail-table__row detail-table__row--tone <%= scene.riskLabel ? 'detail-table__row--alert' : '' %>">
-              <div class="detail-table__cell detail-table__icon"><%= scene.isLatest ? '(!)' : '' %></div>
+              <div class="detail-table__cell detail-table__icon">
+                <% if (scene.isLatest) { %>
+                  <img src="/img/icon/recent_red.svg" alt="最新" class="detail-table__recentIcon" />
+                <% } %>
+              </div>
               <div class="detail-table__cell detail-table__date detail-table__date--day">
-                <div class="detail-table__day"><%= scene.dateLabel || '' %></div>
+                <% const dateFull = scene.dateLabel || ''; 
+                   const dateParts = dateFull.split('/');
+                   const mdLabel = (dateParts.length >= 3) ? `${dateParts[1]}/${dateParts[2]}` : dateFull; 
+                   const weekdayRaw = scene.weekdayLabel || scene.dowLabel || '';
+                   let weekdayResolved = weekdayRaw;
+                   if (!weekdayResolved && dateParts.length >= 3) {
+                     const y = Number(dateParts[0]); const m = Number(dateParts[1]); const d = Number(dateParts[2]);
+                     if (Number.isFinite(y) && Number.isFinite(m) && Number.isFinite(d)) {
+                       const w = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+                       const WN = ['日','月','火','水','木','金','土'];
+                       weekdayResolved = WN[w] || '';
+                     }
+                   }
+                   const vSummaryRaw = scene.violationSummary || '詳細文言が未設定です';
+                   const vSummaryParts = vSummaryRaw.split('\n');
+                %>
+                <div class="detail-table__dayMd"><%= mdLabel %></div>
+                <% if (weekdayResolved) { 
+                     const dowClass = weekdayResolved === '土' ? 'detail-table__dow--sat'
+                                   : weekdayResolved === '日' ? 'detail-table__dow--sun'
+                                   : '';
+                %>
+                  <div class="detail-table__dow <%= dowClass %>">(<%= weekdayResolved %>)</div>
+                <% } %>
                 <div class="detail-table__time"><%= scene.timeLabel || '' %></div>
               </div>
-              <div class="detail-table__cell detail-table__violation">
-                <div class="detail-table__label"><%= scene.violationSummary || '詳細文言が未設定です' %></div>
-              </div>
+                <div class="detail-table__cell detail-table__violation">
+                  <div class="detail-table__label">
+                    <span class="detail-table__labelLine detail-table__labelLine--primary"><%= vSummaryParts[0] %></span>
+                    <% if (vSummaryParts.length > 1) { %>
+                      <span class="detail-table__labelLine detail-table__labelLine--sub"><%= vSummaryParts.slice(1).join(' ') %></span>
+                    <% } %>
+                  </div>
+                </div>
               <div class="detail-table__cell detail-table__danger">
                 <% if (scene.riskLabel) { %>
-                  <span class="detail-tag detail-tag--danger detail-tag--icon"><%= scene.riskLabel %></span>
+                  <% const riskLabel = scene.riskLabel || ''; 
+                     const riskIcon = riskLabel.includes('急ブレーキ') ? '/img/icon/hard_brake.svg'
+                                   : (riskLabel.includes('接触未遂') ? '/img/icon/near_miss_contact.svg' : null);
+                  %>
+                  <% if (riskIcon) { %>
+                    <span class="detail-tag detail-tag--danger detail-tag--icon detail-tag--iconOnly">
+                      <img src="<%= riskIcon %>" alt="<%= riskLabel %>" class="detail-tag__iconImg" />
+                    </span>
+                  <% } else { %>
+                    <span class="detail-tag detail-tag--danger detail-tag--icon"><%= riskLabel %></span>
+                  <% } %>
                 <% } %>
               </div>
               <div class="detail-table__cell detail-table__links">
                 <div class="detail-links">
                   <% if (scene.movieUrl) { %>
-                    <a class="detail-linkBtn detail-linkBtn--primary" href="<%= scene.movieUrl %>" target="_blank" rel="noopener noreferrer">動画</a>
+                    <a class="detail-linkBtn detail-linkBtn--primary detail-linkBtn--icon" href="<%= scene.movieUrl %>" target="_blank" rel="noopener noreferrer">
+                      <img src="/img/icon/movie.svg" alt="動画" class="detail-linkBtn__icon" />
+                    </a>
                   <% } else { %>
                     <span class="detail-linkBtn detail-linkBtn--ghost">動画なし</span>
                   <% } %>
                   <% if (scene.mapUrl) { %>
-                    <a class="detail-linkBtn detail-linkBtn--ghost" href="<%= scene.mapUrl %>" target="_blank" rel="noopener noreferrer">地図</a>
+                    <a class="detail-linkBtn detail-linkBtn--ghost detail-linkBtn--icon" href="<%= scene.mapUrl %>" target="_blank" rel="noopener noreferrer">
+                      <img src="/img/icon/map.svg" alt="地図" class="detail-linkBtn__icon" />
+                    </a>
                   <% } else { %>
                     <span class="detail-linkBtn detail-linkBtn--ghost">地図なし</span>
                   <% } %>
@@ -57,7 +103,8 @@
         </div>
         <% if (hasLatest) { %>
         <div class="detail-note">
-          (!)： 直近の違反疑いシーン（1ページ目）に表示されている動画になります。
+          <img src="/img/icon/recent_gray.svg" alt="最新" class="detail-note__icon" />
+          ：直近の違反疑いシーン（1ページ目）に表示されている動画になります。
         </div>
         <% } %>
       </section>
