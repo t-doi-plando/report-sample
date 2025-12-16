@@ -12,7 +12,7 @@
   @bottom-right {
     content: counter(page) " / " counter(pages);
     font-family: "Noto Sans JP","Yu Gothic","Meiryo",system-ui,sans-serif;
-    font-size: 9pt;
+    font-size: 11px;
     color: var(--ink-400);
   }
 }
@@ -78,7 +78,7 @@ body.print-a4 {
   font-weight:700;
 }
 .gaiyou-hero__org{
-  font-size:7.5pt;
+  font-size:11px;
   font-weight:500;
   letter-spacing:.08em;
   white-space:nowrap;
@@ -86,7 +86,7 @@ body.print-a4 {
 .gaiyou-metaRow{
   display:flex;
   gap:1.6mm;
-  padding:1.2mm 0 2.8mm;
+  padding:1.2mm 0 1.2mm;
   color:#1E1E1E;
 }
 .gaiyou-metaRow__item{
@@ -109,7 +109,7 @@ body.print-a4 {
   border-radius:50px;
   background:var(--meta-bg);
   font-weight:700;
-  font-size:7.5px;
+  font-size:9px;
   color:#1E1E1E;
 }
 .gaiyou-metaRow__value{
@@ -135,11 +135,11 @@ body.print-a4 {
 .detail-risk__lead{
   margin:0;
   color:var(--blue-700);
-  font-size:8pt;
+  font-size:11px;
   font-weight:700;
 }
 .detail-risk__title{
-  font-size:14px;
+  font-size:20px;
   font-weight:700;
   color:var(--ink-900);
 }
@@ -159,11 +159,25 @@ body.print-a4 {
   justify-content:space-between;
 }
 .detail-list__title{
-  font-size:9pt;
+  font-size:11px;
   font-weight:700;
-  color:#1b2b47;
+  color: var(--blue-700);
+}
+.detail-table__caption{
+  font-size:11px;
+  font-weight:700;
+  color:var(--blue-700);
+  padding:2.0mm 2.0mm 0.4mm;
+}
+.detail-table__row--header{
+  border-bottom:1px solid #e4e8f1;
 }
 .detail-table{
+  --detail-col-icon:10mm;
+  --detail-col-date:40mm;
+  --detail-col-violation:1.0fr;
+  --detail-col-danger:25mm;
+  --detail-col-links:34mm;
   display:flex;
   flex-direction:column;
   border-radius:4px;
@@ -172,31 +186,47 @@ body.print-a4 {
 }
 .detail-table__row{
   display:grid;
-  grid-template-columns:10mm 26mm 1fr 28mm 32mm;
+  grid-template-columns:var(--detail-col-icon) var(--detail-col-date) var(--detail-col-violation) var(--detail-col-danger) var(--detail-col-links);
   align-items:stretch;
+  column-gap:2mm;
 }
 .detail-table__row--header{
-  background:#f5f7fb;
-  font-weight:700;
+  font-weight:500;
   color:#4a5670;
-  font-size:7.5pt;
+  font-size:9px;
+
+}
+.detail-table__row--header .detail-table__cell{
+  align-items:flex-start;
+  text-align:left;
 }
 .detail-table__row--year{
   grid-template-columns:1fr;
-  background:#f5f7fb;
   color:#4a5670;
   font-weight:700;
-  font-size:7.2pt;
+  font-size:11px;
   padding:1.6mm 2mm;
+  display:flex;
+  align-items:baseline;
+  gap:0.6mm;
+  border-bottom:1px solid #e4e8f1;
+}
+.detail-table__yearNumber{
+  font-size:11px;
+}
+.detail-table__yearUnit{
+  font-size:9px;
 }
 .detail-table__row--tone{
-  background:#fef6f6;
+  background:transparent;
+  border-bottom:1px solid #e4e8f1;
 }
 .detail-table__row--alert{
-  background:#fff5f1;
+  background:#fff3f0;
+  border-bottom:1px solid #e4e8f1;
 }
 .detail-table__cell{
-  padding:1.4mm 1.6mm;
+  padding:1mm 1.2mm;
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -207,12 +237,16 @@ body.print-a4 {
   justify-content:center;
   font-weight:800;
   color:#b4261c;
-  font-size:9pt;
+  font-size:11px;
+}
+.detail-table__recentIcon{
+  width:20px;
+  display:block;
 }
 .detail-table__date{
-  font-weight:800;
+  font-weight:500;
   color:#0f1f3e;
-  font-size:9pt;
+  font-size:11px;
   align-items:flex-start;
   justify-content:flex-start;
   text-align:left;
@@ -220,76 +254,99 @@ body.print-a4 {
 .detail-table__date--day{
   align-items:center;
   flex-direction:row;
-  gap:1mm;
+  gap:0.6mm;
 }
-.detail-table__day{
-  font-weight:800;
-  font-size:10pt;
+.detail-table__dayMd{
+  font-weight:700;
+  font-size:18px;
 }
 .detail-table__dow{
-  font-size:7pt;
-  margin-left:1mm;
+  font-size:11px;
+  font-weight: 700;
+  margin-left:0.4mm;
+}
+.detail-table__dow--sat{
+  color:var(--blue-700);
+}
+.detail-table__dow--sun{
+  color:#c02b16;
 }
 .detail-table__time{
-  font-size:7pt;
+  font-size:15px;
+  font-weight: 700;
   color:#4a5670;
+  margin-left:1.6mm;
 }
 .detail-table__violation{
   color:#0f1f3e;
-  font-size:8pt;
-  font-weight:700;
-  padding-left:10mm;
+  font-size:11px;
+  font-weight:500;
+  padding-left:1mm;
 }
 .detail-table__label{
   font-weight:700;
-  white-space:pre-line;
   line-height:1.35;
   min-height:calc(1.35em * 2); /* 1行でも2行分の高さを確保 */
   display:flex;
-  align-items:center;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.detail-table__labelLine--primary{
+  font-weight:700;
+}
+.detail-table__labelLine--sub{
+  font-size:9px;
+  font-weight:500;
+  margin-top:0.2mm;
+  color:#666;
 }
 .detail-table__sub{
-  font-size:7pt;
+  font-size:11px;
   color:#6a748a;
 }
 .detail-table__danger{
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;
+  padding-left:0;
 }
 .detail-tag{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:1mm 2mm;
+  padding:0.5mm 1mm;
+  margin-right:4mm;
   border-radius:999px;
-  font-size:7pt;
+  font-size:11px;
   font-weight:800;
   color:#8b1d19;
-  background:#fbe1df;
+  background:transparent;
   gap:1mm;
 }
-.detail-tag--danger{ background:#fbe1df; color:#8b1d19; }
 .detail-tag--icon{ padding-left:2.4mm; padding-right:2.4mm; }
+.detail-tag--iconOnly{
+  padding:0;
+  margin-right:4mm;
+}
+.detail-tag__iconImg{
+  width:90px;
+  display:block;
+}
+.detail-tag__label{
+  display:inline-flex;
+  align-items:center;
+}
 .detail-table__links{
   align-items:flex-end;
 }
 .detail-links{
   display:flex;
-  gap:1.6mm;
+  gap:1.2mm;
   align-items:center;
   justify-content:flex-end;
 }
-.detail-linkBtn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-width:16mm;
-  padding:1mm 2mm;
-  border-radius:4px;
-  font-weight:700;
-  font-size:7pt;
-  border:1px solid #1e6edc;
-  color:#1e6edc;
+.detail-linkBtn__icon{
+  width:55px;
+  display:block;
 }
 .detail-linkBtn--primary{
   background:#1e6edc;
@@ -300,8 +357,16 @@ body.print-a4 {
 }
 .detail-note{
   margin-top:1mm;
-  font-size:7pt;
+  font-size:9px;
   color:#4a5670;
+  display:flex;
+  align-items:center;
+  gap:1mm;
+}
+.detail-note__icon{
+  width:12px;
+  height:12px;
+  display:block;
 }
 .detail-memo{
   margin-top:1.4mm;
@@ -333,7 +398,7 @@ body.print-a4 {
 .detail-memo__advisor{
   margin-top:3mm;
   padding-bottom:1mm;
-  font-size:7pt;
+  font-size:11px;
   color:#1b2b47;
   display:flex;
   align-items:flex-end;
@@ -452,7 +517,7 @@ body.print-a4 {
   font-size:9pt;
 }
 .gaiyou-checklist header p.gaiyou-checklist__note{
-  font-size:7.5px;
+  font-size:9px;
   font-weight:500;
   color:#1E1E1E;
 }
@@ -559,7 +624,7 @@ body.print-a4 {
 }
 .gaiyou-checkCard__metric{
   margin-top:0.1mm;
-  font-size:7.5px;
+  font-size:9px;
   color:#c02b16;
   font-weight:600;
 }
@@ -677,13 +742,13 @@ body.print-a4 {
 .gaiyou-scene header p{
   margin:0.1mm 0 0;
   color:#1E1E1E;
-  font-size:7.5px;
+  font-size:9px;
   font-weight:500;
 }
 .gaiyou-scene__meta{
   display:flex;
   flex-direction:column;
-  gap:1.2mm;
+  gap:0.5mm;
 }
 .gaiyou-scene__metaItem{
   display:flex;
@@ -701,7 +766,7 @@ body.print-a4 {
   border-radius:50px;
   background:var(--meta-bg);
   font-weight:700;
-  font-size:7.5px;
+  font-size:9px;
   color:#1E1E1E;
   margin:0;
 }
