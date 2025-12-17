@@ -7,7 +7,7 @@
 /* ===== A4・印刷設定 ===== */
 @page {
   size: A4;
-  margin: 15mm 12mm; /* ページ余白の設定 */
+  margin: 15mm 12mm; /* ページ余白の設定（上下を少し詰める） */
 
   @bottom-right {
     content: counter(page) " / " counter(pages);
@@ -113,7 +113,7 @@ body.print-a4 {
   color:#1E1E1E;
 }
 .gaiyou-metaRow__value{
-  font-weight:700;
+  font-weight:500;
   color:#1E1E1E;
 }
 
@@ -174,10 +174,10 @@ body.print-a4 {
 }
 .detail-table{
   --detail-col-icon:10mm;
-  --detail-col-date:40mm;
-  --detail-col-violation:1.0fr;
-  --detail-col-danger:25mm;
-  --detail-col-links:34mm;
+  --detail-col-date:35mm;
+  --detail-col-violation:0.9fr;
+  --detail-col-danger:30mm;
+  --detail-col-links:36mm;
   display:flex;
   flex-direction:column;
   border-radius:4px;
@@ -203,7 +203,7 @@ body.print-a4 {
 .detail-table__row--year{
   grid-template-columns:1fr;
   color:#4a5670;
-  font-weight:700;
+  font-weight:500;
   font-size:11px;
   padding:1.6mm 2mm;
   display:flex;
@@ -246,7 +246,7 @@ body.print-a4 {
 .detail-table__date{
   font-weight:500;
   color:#0f1f3e;
-  font-size:11px;
+  font-size:9px;
   align-items:flex-start;
   justify-content:flex-start;
   text-align:left;
@@ -257,7 +257,7 @@ body.print-a4 {
   gap:0.6mm;
 }
 .detail-table__dayMd{
-  font-weight:700;
+  font-weight:500;
   font-size:18px;
 }
 .detail-table__dow{
@@ -273,13 +273,13 @@ body.print-a4 {
 }
 .detail-table__time{
   font-size:15px;
-  font-weight: 700;
+  font-weight: 500;
   color:#4a5670;
   margin-left:1.6mm;
 }
 .detail-table__violation{
   color:#0f1f3e;
-  font-size:11px;
+  font-size:9px;
   font-weight:500;
   padding-left:1mm;
 }
@@ -292,7 +292,8 @@ body.print-a4 {
   align-items:flex-start;
 }
 .detail-table__labelLine--primary{
-  font-weight:700;
+    font-size:11px;
+  font-weight:500;
 }
 .detail-table__labelLine--sub{
   font-size:9px;
@@ -305,16 +306,16 @@ body.print-a4 {
   color:#6a748a;
 }
 .detail-table__danger{
-  align-items:center;
+  align-items:flex-start;
   justify-content:flex-start;
-  padding-left:0;
+  padding-top:2px;
 }
 .detail-tag{
   display:inline-flex;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;
   padding:0.5mm 1mm;
-  margin-right:4mm;
+  margin-right:2mm;
   border-radius:999px;
   font-size:11px;
   font-weight:800;
@@ -326,11 +327,14 @@ body.print-a4 {
 .detail-tag--iconOnly{
   padding:0;
   margin-right:4mm;
+  margin-top:5px;
 }
 .detail-tag__iconImg{
-  width:90px;
+  height:22.5px;
   display:block;
+  transform-origin:center;
 }
+
 .detail-tag__label{
   display:inline-flex;
   align-items:center;
