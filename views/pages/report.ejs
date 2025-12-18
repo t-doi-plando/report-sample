@@ -13,15 +13,20 @@
   <% const generatedAtLabel = reports[0]?.generatedAtLabel || ""; %>
   <style>
     @page {
+      size: A4;
+      margin: 0 0 7.5mm 0; /* さらに1mm増やす */
       @bottom-center {
         content: counter(page) " / " counter(pages);
         font-size: 8pt;
-        color: var(--ink-400);
+        color: var(--ink-900);
+        margin-bottom: 2.0mm;
       }
       @bottom-right {
         content: "<%= generatedAtLabel %>";
         font-size: 8pt;
-        color: var(--ink-400);
+        color: var(--ink-900);
+        margin-bottom: 2.0mm;
+        padding-right: 10mm;
       }
     }
   </style>
@@ -30,12 +35,16 @@
     <% const guidancePageNumber = report.guidancePageNumber || (detailPages.length ? detailPages[detailPages.length - 1].pageNumber + 1 : 2); %>
     <main class="sheet" id="<%= report.driverId %>-page-1 %>">
       <%- include('../partials/header/header_gaiyou', { report: report }) %>
-      <%- include('../partials/body/body_gaiyou', { report: report }) %>
+      <div class="report-bodyWrap">
+        <%- include('../partials/body/body_gaiyou', { report: report }) %>
+      </div>
     </main>
     <% detailPages.forEach(function(pageEntry) { %>
       <main class="sheet sheet--break" id="<%= report.driverId %>-page-<%= pageEntry.pageNumber %>">
         <%- include('../partials/header/header_detail', { report: report, section: pageEntry.section, pageIndex: pageEntry.index, totalPages: pageEntry.totalPages }) %>
-        <%- include('../partials/body/body_detail', { report: report, section: pageEntry.section, page: pageEntry.page, pageIndex: pageEntry.index, totalPages: pageEntry.totalPages }) %>
+        <div class="report-bodyWrap">
+          <%- include('../partials/body/body_detail', { report: report, section: pageEntry.section, page: pageEntry.page, pageIndex: pageEntry.index, totalPages: pageEntry.totalPages }) %>
+        </div>
       </main>
     <% }) %>
 

@@ -1,7 +1,9 @@
       <section class="detail-risk">
-        <div class="detail-risk__row">
-          <span class="detail-risk__lead">事故リスクが高いと判定された指導項目</span>
-          <span class="detail-risk__title"><%= report.highRiskGuidanceLabel || '項目未設定' %></span>
+        <div class="detail-risk__box">
+          <div class="detail-risk__row detail-risk__row--inline">
+            <span class="detail-risk__lead">事故リスクが高いと判定された指導項目</span>
+            <span class="detail-risk__title"><%= report.highRiskGuidanceLabel || '項目未設定' %></span>
+          </div>
         </div>
       </section>
 
@@ -17,6 +19,7 @@
             <div class="detail-table__cell detail-table__danger">危険疑い</div>
             <div class="detail-table__cell detail-table__links">リンク</div>
           </div>
+          <hr class="detail-table__headerDivider" />
           <% scenes.forEach(function(scene){ %>
             <% if (scene.year !== prevYear) { %>
               <div class="detail-table__row detail-table__row--year">
@@ -58,9 +61,10 @@
                 <div class="detail-table__time"><%= scene.timeLabel || '' %></div>
               </div>
                 <div class="detail-table__cell detail-table__violation">
-                  <div class="detail-table__label">
+                  <% const hasSubLine = vSummaryParts.length > 1; %>
+                  <div class="detail-table__label <%= hasSubLine ? 'detail-table__label--twoLine' : 'detail-table__label--singleLine' %>">
                     <span class="detail-table__labelLine detail-table__labelLine--primary"><%= vSummaryParts[0] %></span>
-                    <% if (vSummaryParts.length > 1) { %>
+                    <% if (hasSubLine) { %>
                       <span class="detail-table__labelLine detail-table__labelLine--sub"><%= vSummaryParts.slice(1).join(' ') %></span>
                     <% } %>
                   </div>
@@ -103,8 +107,10 @@
         </div>
         <% if (hasLatest) { %>
         <div class="detail-note">
-          <img src="/img/icon/recent_gray.svg" alt="最新" class="detail-note__icon" />
-          ：直近の違反疑いシーン（1ページ目）に表示されている動画になります。
+          <div class="detail-note__iconWrap">
+            <img src="/img/icon/recent_gray.svg" alt="最新" class="detail-note__icon" />
+          </div>
+          <div class="detail-note__text">： 直近の違反疑いシーン（1ページ目）に表示されている動画になります。</div>
         </div>
         <% } %>
       </section>
