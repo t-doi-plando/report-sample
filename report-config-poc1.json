@@ -25,7 +25,7 @@
     },
     "detailPageLimits": {
         "last_page_max": 12,
-        "normal_page_max": 16 
+        "normal_page_max": 14
     },
     "show_memo": false
 }

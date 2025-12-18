@@ -464,7 +464,17 @@ function buildMockReports(drivers, config, staticMapKey = '') {
         const entry = section && s && (section[s.violation_type ?? s.violationType]);
         const derivedForItem = { accel_or_decel_count: countAccelDecel(s, scenes) };
         const summaryBase = entry && entry.check_summary ? entry.check_summary : '詳細文言が未設定です';
-        const summary = applyTemplatePlaceholders(summaryBase, [s, thresholds, derivedForItem], labelMaps);
+        const accelKey = getSceneValue(s, 'left_turn_accel_decel_type');
+        const diffRaw = getSceneValue(s, 'turning_left_speed_diff_val');
+        let signedDiff = diffRaw;
+        const diffNum = Number(diffRaw);
+        if (Number.isFinite(diffNum)) {
+          const absVal = Math.abs(diffNum);
+          if (accelKey === 'sudden_acceleration') signedDiff = `+${absVal}`;
+          else if (accelKey === 'sudden_deceleration') signedDiff = `-${absVal}`;
+        }
+        const sceneForSummary = { ...s, turning_left_speed_diff_val: signedDiff };
+        const summary = applyTemplatePlaceholders(summaryBase, [sceneForSummary, thresholds, derivedForItem], labelMaps);
         const riskRaw = s && (s.risk_type ?? s.riskType);
         const riskLabel = riskRaw ? (riskTypeLabelMap[riskRaw] || String(riskRaw)) : '';
         return {
