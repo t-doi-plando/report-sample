@@ -115,7 +115,7 @@ body.print-a4 {
   align-items:center;
   justify-content:center;
   min-width:16mm;
-  padding:1.3mm 2.1mm;
+  padding:0.8mm 2.1mm;
   border-radius:50px;
   background:var(--meta-bg);
   font-weight:500;
@@ -240,7 +240,7 @@ body.print-a4 {
   font-weight:700;
   color:var(--blue-700);
   padding:2.0mm 2.0mm 3.4mm; /* 下側を3mm増やして見出しとの間隔を空ける */
-  margin-left:2.5mm;
+  margin-left:3.5mm;
 }
 
 .detail-table{
@@ -310,11 +310,11 @@ body.print-a4 {
 }
 .detail-table__yearNumber{
   font-size:15px;
-  transform:translateX(2.5mm); /* 年行を右に寄せる */
+  transform:translateX(3.5mm); /* 年行を右に寄せる */
 }
 .detail-table__yearUnit{
   font-size:10px;
-  transform:translateX(2.5mm); /* 年行を右に寄せる */
+  transform:translateX(3.0mm); /* 年行を右に寄せる */
 }
 .detail-table__row--tone{
   background:transparent;
@@ -325,7 +325,7 @@ body.print-a4 {
   border-bottom:1px solid #e4e8f1; /* 行下に水平線 */
 }
 .detail-table__cell{
-  padding:2mm 1.2mm; /* 上下を揃える */
+  padding:2.0mm 1.2mm; /* 全体を0.2mm上げるため上下パディングを減らす */
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -341,7 +341,7 @@ body.print-a4 {
 .detail-table__recentIcon{
   width:20px;
   display:block;
-  transform:translateX(-0.5mm) translateY(0.5mm); /* さらに0.5mm右へ */
+  transform:translateX(-0.40mm) translateY(0.5mm); /* さらに0.05mm右へ調整 */
 
 }
 .detail-table__date{
@@ -561,7 +561,7 @@ body.print-a4 {
   background:#fff;
   border-radius:4px;
   border:1px solid #e4e8f1;
-  padding:4.5mm 3mm;
+  padding:4.1mm 3mm;
   display:flex;
   flex-direction:column;
   gap:3mm;
@@ -764,6 +764,8 @@ body.print-a4 {
 }
 .gaiyou-checkCard__row--offset{
   margin-left:-1.6em;
+  padding-top: 4.5px;
+  transform: translateX(1.0mm);
 }
 .gaiyou-checkCard__checkRow{
   display:flex;
@@ -786,13 +788,11 @@ body.print-a4 {
   height:4mm;
   display:block;
   flex-shrink:0;
-  margin-top:0.5mm; /* チェック欄のアイコンをわずかに下げる */
 }
 .gaiyou-checkCard__row--highlight .gaiyou-checkCard__checkIconImg{
   filter:brightness(0) invert(1);
 }
 .gaiyou-checkCard__metric{
-  margin-top:0.1mm;
   font-size:10px;
   color:#c02b16;
   font-weight:600;
@@ -821,6 +821,7 @@ body.print-a4 {
 }
 .gaiyou-checkCard__metric--highlight{
   color:#ffffff;
+  margin-top:-1.5px;
 }
 .gaiyou-checkCard__row:not(.gaiyou-checkCard__row--highlight) .gaiyou-checkCard__metric{
   color:#c02b16;
@@ -927,6 +928,7 @@ body.print-a4 {
   display:flex;
   flex-direction:column;
   gap:0.5mm;
+  transform:translateY(-2.0mm); /* 発生日・違反疑い・危険疑いをわずかに上げる */
 }
 .gaiyou-scene__metaItem{
   display:flex;
@@ -1007,6 +1009,7 @@ body.print-a4 {
   display:block;
   transform:scale(0.9);
   transform-origin:center;
+  border-radius:5px; /* サムネイルの角をわずかに丸くする */
 }
 .gaiyou-mediaFrame__cta{
   position:absolute;
