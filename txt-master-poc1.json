@@ -57,7 +57,7 @@
     "before_reverse": {
       "insufficient_pre_stop": {
         "check_list": "バック前に、完全に停止できているか",
-        "check_detail": "バックを開始する前のタイミングで、完全停止（0km/h）が検出できませんでした",
+        "check_detail": "バック開始前に、完全停止（0km/h）が検出できませんでした",
         "advice_comment": "車を止めてから後方を確認すると、後輪の位置や車体の角度や周囲の状況をつかめます。一度止まって落ち着いて確認する時間を取りましょう。",
         "check_summary": "停止確認不足"
       },

@@ -689,7 +689,7 @@
 	      "risk_type": "",	
 	      "reverse_speed_val": null,	
 	      "turning_left_speed_val": null,	
-	      "left_turn_timing_type": "before_left_turn",	
+	      "left_turn_timing_type": "during_left_turn",	
 	      "left_turn_accel_decel_type": "sudden_acceleration",	
 	      "turning_left_speed_diff_val": 9,	
 	      "movie_url": "http://yahoo.co.jp",	
