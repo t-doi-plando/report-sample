@@ -603,10 +603,18 @@ app.post('/reset-json-data', (req, res) => {
 // Root: Dashboard page
 app.get('/', (req, res) => {
   const { token, data } = resolveDriversData(req);
+  const pattern = /^[0-9A-Za-z]{8}$/; // 半角英数字8桁
+  const driversWithValidity = (data || []).map((d) => {
+    const id = d && typeof d.driverId === 'string' ? d.driverId : '';
+    const driverIdValid = !!id && pattern.test(id);
+    const driverIdMissing = !id;
+    const driverIdInvalidFormat = !!id && !pattern.test(id);
+    return { ...d, driverIdValid, driverIdMissing, driverIdInvalidFormat };
+  });
   try {
     res.render('pages/report-links', {
       reportTitle: '運転診断レポート一覧',
-      drivers: data,
+      drivers: driversWithValidity,
       token
     });
   } catch (readErr) {

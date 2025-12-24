@@ -52,6 +52,11 @@
               <a href="/download/<%= driver.driverId %><%= token ? ('?t=' + token) : '' %>" class="download-pdf">PDFダウンロード</a>
               <a href="/reports/<%= driver.driverId %><%= token ? ('?t=' + token) : '' %>" class="view-html" target="_blank">HTMLプレビュー</a>
             </div>
+            <% if (driver.driverIdMissing) { %>
+              <div class="error-inline">DriverIDが未設定です。</div>
+            <% } else if (driver.driverIdInvalidFormat) { %>
+              <div class="error-inline">DriverIDは半角英数字8桁で設定してください（現在: <%= driver.driverId %>）</div>
+            <% } %>
           </li>
         <% }); %>
       </ul>
@@ -130,6 +135,16 @@
       return duplicates;
     };
 
+    const driverIdPattern = /^[0-9A-Za-z]{8}$/;
+    const withDriverValidation = (driver = {}) => {
+      const rawId = (driver && typeof driver.driverId === 'string') ? driver.driverId : '';
+      const driverId = rawId || '';
+      const driverIdMissing = driverId.length === 0;
+      const driverIdInvalidFormat = !!driverId && !driverIdPattern.test(driverId);
+      const driverIdValid = !!driverId && driverIdPattern.test(driverId);
+      return { ...driver, driverId, driverIdMissing, driverIdInvalidFormat, driverIdValid };
+    };
+
     // ドライバー一覧を再描画
     function updateReportsList(drivers) {
       individualReportsList.innerHTML = ''; // 表示中のリストをリセット
@@ -141,15 +156,20 @@
         return;
       }
 
-      drivers.forEach(driver => {
+      drivers.forEach(item => {
+        const driver = withDriverValidation(item);
         const li = document.createElement('li');
         const tSuffix = currentToken ? `?t=${currentToken}` : '';
+        const errorHtml = driver.driverIdMissing
+          ? '<div class="error-inline">DriverIDが未設定です。</div>'
+          : (driver.driverIdInvalidFormat ? `<div class="error-inline">DriverIDは半角英数字8桁で設定してください（現在: ${driver.driverId}）</div>` : '');
         li.innerHTML = `
-          <span class=\"driver-label\">${driver.driverName} (${driver.officeName})</span>
+          <span class=\"driver-label\">${driver.companyName || ''} / ${driver.officeName || ''} / ${driver.driverName || ''}</span>
           <div class="button-group">
             <a href="/download/${driver.driverId}${tSuffix}" class="download-pdf">PDFダウンロード</a>
             <a href="/reports/${driver.driverId}${tSuffix}" class="view-html" target="_blank">HTMLプレビュー</a>
           </div>
+          ${errorHtml}
         `;
         individualReportsList.appendChild(li);
       });

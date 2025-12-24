@@ -84,6 +84,14 @@ body.print-a4 {
   padding-left:0;
   transform:translateX(-8mm);
 }
+.gaiyou-hero__orgName{
+  font-size:inherit;
+  font-weight:inherit;
+  letter-spacing:inherit;
+}
+.gaiyou-hero__orgName--long{
+  font-size:75%;
+}
 .gaiyou-metaRow{
   display:flex;
   gap:1.6mm;
@@ -126,6 +134,9 @@ body.print-a4 {
 .gaiyou-metaRow__value{
   font-weight:500;
   color:#1E1E1E;
+}
+.gaiyou-metaRow__value--long{
+  font-size:66.6667%;
 }
 .gaiyou-metaRow__item:nth-child(2) .gaiyou-metaRow__value{
   white-space:nowrap; /* 稼働日数の値を折り返さない */
