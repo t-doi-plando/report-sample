@@ -225,6 +225,21 @@ function loadTxtMaster() {
   return txtMasterCache;
 }
 
+// report-config (POC) をキャッシュ読み込み
+let reportConfigCache = null;
+function loadReportConfig() {
+  if (reportConfigCache) return reportConfigCache;
+  const configPath = path.join(__dirname, 'report-config-poc1.json');
+  try {
+    const raw = fs.readFileSync(configPath, 'utf8');
+    reportConfigCache = JSON.parse(raw);
+  } catch (err) {
+    console.error('Failed to load report-config-poc1.json', err);
+    reportConfigCache = {};
+  }
+  return reportConfigCache;
+}
+
 function extractLatLngFromUrl(url) {
   if (!url) return null;
   try {
@@ -604,18 +619,73 @@ app.post('/reset-json-data', (req, res) => {
 app.get('/', (req, res) => {
   const { token, data } = resolveDriversData(req);
   const pattern = /^[0-9A-Za-z]{8}$/; // 半角英数字8桁
+  const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+  const isValidIsoDate = (val) => {
+    if (!val || !datePattern.test(val)) return false;
+    const d = new Date(val);
+    return !Number.isNaN(d.getTime());
+  };
+  const sceneDatetimePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+09:00$/;
+  const isValidSceneDatetime = (val) => {
+    if (!val || typeof val !== 'string') return false;
+    return sceneDatetimePattern.test(val);
+  };
+  const txtMaster = loadTxtMaster();
+  const validOpTypes = new Set(Object.keys(txtMaster || {}));
+  const reportConfig = loadReportConfig();
+  const validGuidanceTypes = new Set(Object.keys((reportConfig && reportConfig.itemMap) || {}));
   const driversWithValidity = (data || []).map((d) => {
     const id = d && typeof d.driverId === 'string' ? d.driverId : '';
     const driverIdValid = !!id && pattern.test(id);
     const driverIdMissing = !id;
     const driverIdInvalidFormat = !!id && !pattern.test(id);
-    return { ...d, driverIdValid, driverIdMissing, driverIdInvalidFormat };
+    const startRaw = d?.period?.start_date || '';
+    const endRaw = d?.period?.end_date || '';
+    const periodMissing = !startRaw || !endRaw;
+    const periodInvalidFormat = !periodMissing && (!isValidIsoDate(startRaw) || !isValidIsoDate(endRaw));
+    const daysRaw = d?.period?.days_count;
+    const daysMissing = daysRaw === undefined || daysRaw === null || `${daysRaw}` === '';
+    const daysInvalidFormat = !daysMissing && !(Number.isInteger(Number(daysRaw)) && /^\d{3}$/.test(String(daysRaw)));
+    const minutesRaw = d?.period?.total_minutes;
+    const minutesMissing = minutesRaw === undefined || minutesRaw === null || `${minutesRaw}` === '';
+    const minutesInvalidFormat = !minutesMissing && !Number.isInteger(Number(minutesRaw));
+    const opType = d?.highRiskOperationType || d?.high_risk_operation_type || '';
+    const highRiskOpInvalid = !!opType && !validOpTypes.has(opType);
+    const guidanceType = d?.highRiskGuidanceType || d?.high_risk_guidance_type || '';
+    const highRiskGuidanceInvalid = !!guidanceType && !validGuidanceTypes.has(guidanceType);
+    const scenes = Array.isArray(d?.scenes) ? d.scenes : null;
+    const sceneDatetimeInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+      if (!s || typeof s !== 'object') return true;
+      return !isValidSceneDatetime(s.datetime);
+    }));
+    const sceneLatestFlagInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+      if (!s || typeof s !== 'object') return true;
+      return !(s.latest_violation_flg === 0 || s.latest_violation_flg === 1);
+    }));
+    return {
+      ...d,
+      driverIdValid,
+      driverIdMissing,
+      driverIdInvalidFormat,
+      periodMissing,
+      periodInvalidFormat,
+      daysMissing,
+      daysInvalidFormat,
+      minutesMissing,
+      minutesInvalidFormat,
+      highRiskOpInvalid,
+      highRiskGuidanceInvalid,
+      sceneDatetimeInvalid,
+      sceneLatestFlagInvalid
+    };
   });
   try {
     res.render('pages/report-links', {
       reportTitle: '運転診断レポート一覧',
       drivers: driversWithValidity,
-      token
+      token,
+      validOperationTypes: Array.from(validOpTypes),
+      validGuidanceTypes: Array.from(validGuidanceTypes)
     });
   } catch (readErr) {
     console.error(readErr);

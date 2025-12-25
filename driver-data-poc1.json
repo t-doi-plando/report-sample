@@ -5,9 +5,9 @@
 	  "company_name": "SSX",	
 	  "branch_name": "八王子北支店",	
 	  "period": {	
-	    "start_date": "2025-11-24",	
-	    "end_date": "2026-01-05",	
-	    "days_count": 20,	
+	    "start_date": "2025-11-01",	
+	    "end_date": "2025-11-30",	
+	    "days_count": 200,	
 	    "total_minutes": 9600	
 	  },	
 	  "high_risk_operation_type": "left_turn",	
@@ -25,6 +25,20 @@
 	      "turning_left_speed_diff_val": 5,	
 	      "movie_url": "http://yahoo.co.jp",	
 	      "map_url": "https://www.google.com/maps/search/?api=1&query=35.681236,139.767125"	
-	    }]
+	    },
+		{	
+	      "datetime": "2025-11-24T12:03:15+09:00",	
+	      "latest_violation_flg": 1,	
+	      "violation_type": "over_threshold_speed",	
+	      "risk_type": "near_miss",	
+	      "reverse_speed_val": null,	
+	      "turning_left_speed_val": 99,	
+	      "left_turn_timing_type": null,	
+	      "left_turn_accel_decel_type": null,	
+	      "turning_left_speed_diff_val": null,	
+	      "movie_url": "http://yahoo.co.jp",	
+	      "map_url": "https://www.google.com/maps/search/?api=1&query=35.681236,139.767125"	
+	    }
+	]
 	}
 ]		

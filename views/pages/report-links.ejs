@@ -57,6 +57,33 @@
             <% } else if (driver.driverIdInvalidFormat) { %>
               <div class="error-inline">DriverIDは半角英数字8桁で設定してください（現在: <%= driver.driverId %>）</div>
             <% } %>
+            <% if (driver.periodMissing) { %>
+              <div class="error-inline">稼働期間の開始日・終了日が未設定です。yyyy-mm-dd形式で設定してください。</div>
+            <% } else if (driver.periodInvalidFormat) { %>
+              <div class="error-inline">稼働期間の開始日・終了日はyyyy-mm-dd形式で設定してください（現在: <%= (driver.period && driver.period.start_date) || '-' %> 〜 <%= (driver.period && driver.period.end_date) || '-' %>）</div>
+            <% } %>
+            <% if (driver.daysMissing) { %>
+              <div class="error-inline">稼働日数（日数）が未設定です。3桁の整数で設定してください。</div>
+            <% } else if (driver.daysInvalidFormat) { %>
+              <div class="error-inline">稼働日数（日数）は3桁の整数で設定してください（現在: <%= (driver.period && driver.period.days_count) ?? '-' %>）</div>
+            <% } %>
+            <% if (driver.minutesMissing) { %>
+              <div class="error-inline">稼働時間（分）が未設定です。整数で設定してください。</div>
+            <% } else if (driver.minutesInvalidFormat) { %>
+              <div class="error-inline">稼働時間（分）は整数で設定してください（現在: <%= (driver.period && driver.period.total_minutes) ?? '-' %>）</div>
+            <% } %>
+            <% if (driver.highRiskOpInvalid) { %>
+              <div class="error-inline">high_risk_operation_type はtxt-master-poc1.jsonの第1階層キーに存在する値を設定してください（現在: <%= driver.high_risk_operation_type || driver.highRiskOperationType || '-' %>）</div>
+            <% } %>
+            <% if (driver.highRiskGuidanceInvalid) { %>
+              <div class="error-inline">high_risk_guidance_type は report-config-poc1.json の itemMap に存在するキーを設定してください（現在: <%= driver.high_risk_guidance_type || driver.highRiskGuidanceType || '-' %>）</div>
+            <% } %>
+            <% if (driver.sceneDatetimeInvalid) { %>
+              <div class="error-inline">scenes 内の datetime は yyyy-mm-ddThh:mm:ss+09:00 形式で設定してください。</div>
+            <% } %>
+            <% if (driver.sceneLatestFlagInvalid) { %>
+              <div class="error-inline">scenes 内の latest_violation_flg は 0 または 1 を設定してください。</div>
+            <% } %>
           </li>
         <% }); %>
       </ul>
@@ -67,6 +94,8 @@
   <script>
     // サーバーレンダリング時のトークン。未設定時は空文字列
     let currentToken = <%- (token ? JSON.stringify(token) : '""') %>;
+    const validOperationTypes = <%- JSON.stringify(validOperationTypes || []) %>;
+    const validGuidanceTypes = <%- JSON.stringify(validGuidanceTypes || []) %>;
     function showToast(message, type = 'success') {
       const toastContainer = document.getElementById('toast-container');
       const toast = document.createElement('div');
@@ -136,13 +165,89 @@
     };
 
     const driverIdPattern = /^[0-9A-Za-z]{8}$/;
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+    const isValidIsoDate = (val) => {
+      if (!val || !datePattern.test(val)) return false;
+      const d = new Date(val);
+      return !Number.isNaN(d.getTime());
+    };
+    const isValidThreeDigitInt = (val) => {
+      if (val === undefined || val === null || `${val}` === '') return false;
+      const str = String(val);
+      if (!/^\d{3}$/.test(str)) return false;
+      const num = Number(str);
+      return Number.isInteger(num);
+    };
+    const isValidInteger = (val) => {
+      if (val === undefined || val === null || `${val}` === '') return false;
+      const num = Number(val);
+      return Number.isInteger(num);
+    };
+    const isValidOpType = (val) => {
+      if (!val) return false;
+      return validOperationTypes.includes(val);
+    };
+    const isValidGuidanceType = (val) => {
+      if (!val) return false;
+      return validGuidanceTypes.includes(val);
+    };
+    const sceneDatetimePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+09:00$/;
+    const isValidSceneDatetime = (val) => {
+      if (!val || typeof val !== 'string') return false;
+      return sceneDatetimePattern.test(val);
+    };
+    const isValidLatestFlag = (val) => {
+      return val === 0 || val === 1;
+    };
+
     const withDriverValidation = (driver = {}) => {
       const rawId = (driver && typeof driver.driverId === 'string') ? driver.driverId : '';
       const driverId = rawId || '';
       const driverIdMissing = driverId.length === 0;
       const driverIdInvalidFormat = !!driverId && !driverIdPattern.test(driverId);
       const driverIdValid = !!driverId && driverIdPattern.test(driverId);
-      return { ...driver, driverId, driverIdMissing, driverIdInvalidFormat, driverIdValid };
+      const period = driver && driver.period ? driver.period : {};
+      const startRaw = period.start_date || '';
+      const endRaw = period.end_date || '';
+      const periodMissing = !startRaw || !endRaw;
+      const periodInvalidFormat = !periodMissing && (!isValidIsoDate(startRaw) || !isValidIsoDate(endRaw));
+      const daysRaw = period.days_count;
+      const daysMissing = daysRaw === undefined || daysRaw === null || `${daysRaw}` === '';
+      const daysInvalidFormat = !daysMissing && !isValidThreeDigitInt(daysRaw);
+      const minutesRaw = period.total_minutes;
+      const minutesMissing = minutesRaw === undefined || minutesRaw === null || `${minutesRaw}` === '';
+      const minutesInvalidFormat = !minutesMissing && !isValidInteger(minutesRaw);
+      const opType = driver.highRiskOperationType || driver.high_risk_operation_type || '';
+      const highRiskOpInvalid = !!opType && !isValidOpType(opType);
+      const guidanceType = driver.highRiskGuidanceType || driver.high_risk_guidance_type || '';
+      const highRiskGuidanceInvalid = !!guidanceType && !isValidGuidanceType(guidanceType);
+      const scenes = Array.isArray(driver.scenes) ? driver.scenes : null;
+      const sceneDatetimeInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+        if (!s || typeof s !== 'object') return true;
+        return !isValidSceneDatetime(s.datetime);
+      }));
+      const sceneLatestFlagInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+        if (!s || typeof s !== 'object') return true;
+        return !isValidLatestFlag(s.latest_violation_flg);
+      }));
+      return {
+        ...driver,
+        driverId,
+        driverIdMissing,
+        driverIdInvalidFormat,
+        driverIdValid,
+        periodMissing,
+        periodInvalidFormat,
+        daysMissing,
+        daysInvalidFormat,
+        minutesMissing,
+        minutesInvalidFormat,
+        highRiskOpInvalid,
+        highRiskGuidanceInvalid,
+        sceneDatetimeInvalid,
+        sceneLatestFlagInvalid,
+        period
+      };
     };
 
     // ドライバー一覧を再描画
@@ -160,9 +265,40 @@
         const driver = withDriverValidation(item);
         const li = document.createElement('li');
         const tSuffix = currentToken ? `?t=${currentToken}` : '';
-        const errorHtml = driver.driverIdMissing
-          ? '<div class="error-inline">DriverIDが未設定です。</div>'
-          : (driver.driverIdInvalidFormat ? `<div class="error-inline">DriverIDは半角英数字8桁で設定してください（現在: ${driver.driverId}）</div>` : '');
+        const errors = [];
+        if (driver.driverIdMissing) {
+          errors.push('DriverIDが未設定です。');
+        } else if (driver.driverIdInvalidFormat) {
+          errors.push(`DriverIDは半角英数字8桁で設定してください（現在: ${driver.driverId}）`);
+        }
+        if (driver.periodMissing) {
+          errors.push('稼働期間の開始日・終了日が未設定です。yyyy-mm-dd形式で設定してください。');
+        } else if (driver.periodInvalidFormat) {
+          errors.push(`稼働期間の開始日・終了日はyyyy-mm-dd形式で設定してください（現在: ${driver.period.start_date || '-'} 〜 ${driver.period.end_date || '-'})`);
+        }
+        if (driver.daysMissing) {
+          errors.push('稼働日数（日数）が未設定です。3桁の整数で設定してください。');
+        } else if (driver.daysInvalidFormat) {
+          errors.push(`稼働日数（日数）は3桁の整数で設定してください（現在: ${driver.period.days_count ?? '-'})`);
+        }
+        if (driver.minutesMissing) {
+          errors.push('稼働時間（分）が未設定です。整数で設定してください。');
+        } else if (driver.minutesInvalidFormat) {
+          errors.push(`稼働時間（分）は整数で設定してください（現在: ${driver.period.total_minutes ?? '-'})`);
+        }
+        if (driver.highRiskOpInvalid) {
+          errors.push(`high_risk_operation_type はtxt-master-poc1.jsonの第1階層キーに存在する値を設定してください（現在: ${driver.high_risk_operation_type || driver.highRiskOperationType || '-'})`);
+        }
+        if (driver.highRiskGuidanceInvalid) {
+          errors.push(`high_risk_guidance_type は report-config-poc1.json の itemMap に存在するキーを設定してください（現在: ${driver.high_risk_guidance_type || driver.highRiskGuidanceType || '-'})`);
+        }
+        if (driver.sceneDatetimeInvalid) {
+          errors.push('scenes 内の datetime は yyyy-mm-ddThh:mm:ss+09:00 形式で設定してください。');
+        }
+        if (driver.sceneLatestFlagInvalid) {
+          errors.push('scenes 内の latest_violation_flg は 0 または 1 を設定してください。');
+        }
+        const errorHtml = errors.map(msg => `<div class="error-inline">${msg}</div>`).join('');
         li.innerHTML = `
           <span class=\"driver-label\">${driver.companyName || ''} / ${driver.officeName || ''} / ${driver.driverName || ''}</span>
           <div class="button-group">
