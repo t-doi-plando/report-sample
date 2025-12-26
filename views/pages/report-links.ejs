@@ -84,6 +84,27 @@
             <% if (driver.sceneLatestFlagInvalid) { %>
               <div class="error-inline">scenes 内の latest_violation_flg は 0 または 1 を設定してください。</div>
             <% } %>
+            <% if (driver.sceneViolationInvalid) { %>
+              <div class="error-inline">scenes 内の violation_type は txt-master-poc1.json の第3階層キーに存在する値を設定してください。</div>
+            <% } %>
+            <% if (driver.sceneRiskInvalid) { %>
+              <div class="error-inline">scenes 内の risk_type は "hard_braking" または "near_miss" を設定してください。</div>
+            <% } %>
+            <% if (driver.sceneLeftTurnTimingInvalid) { %>
+              <div class="error-inline">scenes 内の left_turn_timing_type は "before_left_turn" または "during_left_turn" を設定してください。</div>
+            <% } %>
+            <% if (driver.sceneSpeedInvalid) { %>
+              <div class="error-inline">scenes 内の reverse_speed_val / turning_left_speed_val は整数で設定してください（未設定も可）。</div>
+            <% } %>
+            <% if (driver.sceneLeftTurnDiffInvalid) { %>
+              <div class="error-inline">scenes 内の turning_left_speed_diff_val は整数で設定してください（未設定も可）。</div>
+            <% } %>
+            <% if (driver.sceneLeftTurnAccelDecelInvalid) { %>
+              <div class="error-inline">scenes 内の left_turn_accel_decel_type は "sudden_acceleration" または "sudden_deceleration" を設定してください。</div>
+            <% } %>
+            <% if (driver.sceneUrlMissing) { %>
+              <div class="error-inline">scenes 内の movie_url / map_url を設定してください。</div>
+            <% } %>
           </li>
         <% }); %>
       </ul>
@@ -96,6 +117,11 @@
     let currentToken = <%- (token ? JSON.stringify(token) : '""') %>;
     const validOperationTypes = <%- JSON.stringify(validOperationTypes || []) %>;
     const validGuidanceTypes = <%- JSON.stringify(validGuidanceTypes || []) %>;
+    const validViolationTypesByOp = <%- JSON.stringify(validViolationTypesByOp || {}) %>;
+    const validViolationTypesFlat = <%- JSON.stringify(validViolationTypesFlat || []) %>;
+    const allowedRiskTypes = <%- JSON.stringify(allowedRiskTypes || []) %>;
+    const allowedLeftTurnTimings = <%- JSON.stringify(allowedLeftTurnTimings || []) %>;
+    const allowedLeftTurnAccelDecel = <%- JSON.stringify(allowedLeftTurnAccelDecel || []) %>;
     function showToast(message, type = 'success') {
       const toastContainer = document.getElementById('toast-container');
       const toast = document.createElement('div');
@@ -199,6 +225,22 @@
     const isValidLatestFlag = (val) => {
       return val === 0 || val === 1;
     };
+    const isValidViolationType = (_op, _phase, vio) => {
+      if (!vio) return false;
+      return validViolationTypesFlat.includes(vio);
+    };
+    const isValidRiskType = (val) => {
+      if (!val) return false;
+      return allowedRiskTypes.includes(val);
+    };
+    const isValidLeftTurnTiming = (val) => {
+      if (!val) return true; // 未設定は許容
+      return allowedLeftTurnTimings.includes(val);
+    };
+    const isValidLeftTurnAccelDecel = (val) => {
+      if (!val) return true; // 未設定は許容
+      return allowedLeftTurnAccelDecel.includes(val);
+    };
 
     const withDriverValidation = (driver = {}) => {
       const rawId = (driver && typeof driver.driverId === 'string') ? driver.driverId : '';
@@ -230,6 +272,44 @@
         if (!s || typeof s !== 'object') return true;
         return !isValidLatestFlag(s.latest_violation_flg);
       }));
+      const sceneViolationInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+        if (!s || typeof s !== 'object') return true;
+        const vio = s.violation_type;
+        return !isValidViolationType(null, null, vio);
+      }));
+      const sceneRiskInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+        if (!s || typeof s !== 'object') return true;
+        const risk = s.risk_type;
+        return !isValidRiskType(risk);
+      }));
+      const sceneLeftTurnTimingInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+        if (!s || typeof s !== 'object') return true;
+        const timing = s.left_turn_timing_type;
+        return !isValidLeftTurnTiming(timing);
+      }));
+      const sceneSpeedInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+        if (!s || typeof s !== 'object') return true;
+        const rev = s.reverse_speed_val;
+        const turn = s.turning_left_speed_val;
+        const revOk = rev === null || rev === undefined || Number.isInteger(Number(rev));
+        const turnOk = turn === null || turn === undefined || Number.isInteger(Number(turn));
+        return !(revOk && turnOk);
+      }));
+      const sceneLeftTurnDiffInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+        if (!s || typeof s !== 'object') return true;
+        const diff = s.turning_left_speed_diff_val;
+        if (diff === null || diff === undefined || diff === '') return false;
+        return !Number.isInteger(Number(diff));
+      }));
+      const sceneLeftTurnAccelDecelInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+        if (!s || typeof s !== 'object') return true;
+        const val = s.left_turn_accel_decel_type;
+        return !isValidLeftTurnAccelDecel(val);
+      }));
+      const sceneUrlMissing = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+        if (!s || typeof s !== 'object') return true;
+        return !(s.movie_url && s.map_url);
+      }));
       return {
         ...driver,
         driverId,
@@ -246,6 +326,13 @@
         highRiskGuidanceInvalid,
         sceneDatetimeInvalid,
         sceneLatestFlagInvalid,
+        sceneViolationInvalid,
+        sceneRiskInvalid,
+        sceneLeftTurnTimingInvalid,
+        sceneSpeedInvalid,
+        sceneLeftTurnDiffInvalid,
+        sceneLeftTurnAccelDecelInvalid,
+        sceneUrlMissing,
         period
       };
     };
@@ -297,6 +384,27 @@
         }
         if (driver.sceneLatestFlagInvalid) {
           errors.push('scenes 内の latest_violation_flg は 0 または 1 を設定してください。');
+        }
+        if (driver.sceneViolationInvalid) {
+          errors.push('scenes 内の violation_type は txt-master-poc1.json の第3階層キーに存在する値を設定してください。');
+        }
+        if (driver.sceneRiskInvalid) {
+          errors.push('scenes 内の risk_type は "hard_braking" または "near_miss" を設定してください。');
+        }
+        if (driver.sceneLeftTurnTimingInvalid) {
+          errors.push('scenes 内の left_turn_timing_type は "before_left_turn" または "during_left_turn" を設定してください。');
+        }
+        if (driver.sceneSpeedInvalid) {
+          errors.push('scenes 内の reverse_speed_val / turning_left_speed_val は整数で設定してください（未設定も可）。');
+        }
+        if (driver.sceneLeftTurnDiffInvalid) {
+          errors.push('scenes 内の turning_left_speed_diff_val は整数で設定してください（未設定も可）。');
+        }
+        if (driver.sceneLeftTurnAccelDecelInvalid) {
+          errors.push('scenes 内の left_turn_accel_decel_type は "sudden_acceleration" または "sudden_deceleration" を設定してください。');
+        }
+        if (driver.sceneUrlMissing) {
+          errors.push('scenes 内の movie_url / map_url を設定してください。');
         }
         const errorHtml = errors.map(msg => `<div class="error-inline">${msg}</div>`).join('');
         li.innerHTML = `
