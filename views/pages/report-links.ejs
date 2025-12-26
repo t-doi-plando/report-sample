@@ -190,6 +190,23 @@
       return duplicates;
     };
 
+    // snake_case -> camelCase 正規化（dashboard 用）
+    const normalizeDriversDataClient = (raw = []) => {
+      if (!Array.isArray(raw)) return [];
+      return raw.map((rec) => ({
+        driverId: rec.driver_id || rec.driverId || '',
+        driverName: rec.driver_name || rec.driverName || '',
+        officeName: rec.branch_name || rec.officeName || '',
+        companyName: rec.company_name || rec.companyName || '',
+        highRiskOperationType: rec.high_risk_operation_type || rec.highRiskOperationType || '',
+        highRiskGuidanceType: rec.high_risk_guidance_type || rec.highRiskGuidanceType || '',
+        period: rec.period || null,
+        events: Array.isArray(rec.events) ? rec.events : [],
+        scenes: Array.isArray(rec.scenes) ? rec.scenes : [],
+        stats: rec.stats || {}
+      }));
+    };
+
     const driverIdPattern = /^[0-9A-Za-z]{8}$/;
     const datePattern = /^\d{4}-\d{2}-\d{2}$/;
     const isValidIsoDate = (val) => {
@@ -467,10 +484,11 @@
     // アップロード後のUI/リンク更新を一括で実行
     const handleUploadSuccess = (jsonData, fileName) => {
       // サーバーにJSONを送信し、トークンを受け取って表示内容を再描画
+      const normalized = normalizeDriversDataClient(jsonData);
       fetch('/upload-json-data', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(jsonData),
+        body: JSON.stringify(normalized),
       })
         .then(response => response.json())
         .then(data => {
@@ -479,7 +497,7 @@
           currentToken = tokenValue;
           // トークンが変わるので、一覧リンクとファイル表示をまとめて更新
           updateGlobalLinks(currentToken);
-          updateReportsList(jsonData);
+          updateReportsList(normalized);
           updateFileSelectionDisplay(fileName);
         })
         .catch(error => {
@@ -514,14 +532,14 @@
       const reader = new FileReader();
 
       reader.onload = function(e) {
-        const jsonData = parseJsonSafely(e.target.result);
-        if (!jsonData) {
-          showToast('選択されたファイルは有効なJSONではありません。', 'error');
-          console.error('JSON parse error');
-          return;
-        }
-        processUploadedData(jsonData, fileName);
-      };
+      const jsonData = parseJsonSafely(e.target.result);
+      if (!jsonData) {
+        showToast('選択されたファイルは有効なJSONではありません。', 'error');
+        console.error('JSON parse error');
+        return;
+      }
+      processUploadedData(normalizeDriversDataClient(jsonData), fileName);
+    };
 
       reader.readAsText(file);
     });
