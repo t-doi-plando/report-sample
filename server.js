@@ -625,6 +625,9 @@ app.get('/', (req, res) => {
     const d = new Date(val);
     return !Number.isNaN(d.getTime());
   };
+  const allowedRiskTypes = new Set(['hard_braking', 'near_miss']);
+  const allowedLeftTurnTimings = new Set(['before_left_turn', 'during_left_turn']);
+  const allowedLeftTurnAccelDecel = new Set(['sudden_acceleration', 'sudden_deceleration']);
   const sceneDatetimePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+09:00$/;
   const isValidSceneDatetime = (val) => {
     if (!val || typeof val !== 'string') return false;
@@ -634,6 +637,26 @@ app.get('/', (req, res) => {
   const validOpTypes = new Set(Object.keys(txtMaster || {}));
   const reportConfig = loadReportConfig();
   const validGuidanceTypes = new Set(Object.keys((reportConfig && reportConfig.itemMap) || {}));
+  const validViolationTypesByOp = (() => {
+    const map = {};
+    const flat = new Set();
+    if (txtMaster && typeof txtMaster === 'object') {
+      Object.entries(txtMaster).forEach(([opKey, child]) => {
+        if (child && typeof child === 'object') {
+          const phaseMap = {};
+          Object.entries(child).forEach(([phaseKey, violations]) => {
+            if (violations && typeof violations === 'object') {
+                const keys = Object.keys(violations);
+                keys.forEach((k) => flat.add(k));
+              phaseMap[phaseKey] = new Set(keys);
+            }
+          });
+          map[opKey] = phaseMap;
+        }
+      });
+    }
+    return { map, flat };
+  })();
   const driversWithValidity = (data || []).map((d) => {
     const id = d && typeof d.driverId === 'string' ? d.driverId : '';
     const driverIdValid = !!id && pattern.test(id);
@@ -662,6 +685,48 @@ app.get('/', (req, res) => {
       if (!s || typeof s !== 'object') return true;
       return !(s.latest_violation_flg === 0 || s.latest_violation_flg === 1);
     }));
+    const sceneViolationInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+      if (!s || typeof s !== 'object') return true;
+      const vio = s.violation_type;
+      if (!vio) return true;
+      return !validViolationTypesByOp.flat.has(vio);
+    }));
+    const sceneRiskInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+      if (!s || typeof s !== 'object') return true;
+      const risk = s.risk_type;
+      if (!risk) return true;
+      return !allowedRiskTypes.has(risk);
+    }));
+    const sceneLeftTurnTimingInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+      if (!s || typeof s !== 'object') return true;
+      const timing = s.left_turn_timing_type;
+      if (!timing) return false; // 未設定は許容
+      return !allowedLeftTurnTimings.has(timing);
+    }));
+    const sceneSpeedInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+      if (!s || typeof s !== 'object') return true;
+      const rev = s.reverse_speed_val;
+      const turn = s.turning_left_speed_val;
+      const revOk = rev === null || rev === undefined || Number.isInteger(Number(rev));
+      const turnOk = turn === null || turn === undefined || Number.isInteger(Number(turn));
+      return !(revOk && turnOk);
+    }));
+    const sceneLeftTurnDiffInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+      if (!s || typeof s !== 'object') return true;
+      const diff = s.turning_left_speed_diff_val;
+      if (diff === null || diff === undefined || diff === '') return false; // 未設定は許容
+      return !Number.isInteger(Number(diff));
+    }));
+    const sceneLeftTurnAccelDecelInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+      if (!s || typeof s !== 'object') return true;
+      const val = s.left_turn_accel_decel_type;
+      if (!val) return false; // 未設定は許容
+      return !allowedLeftTurnAccelDecel.has(val);
+    }));
+    const sceneUrlMissing = !!(scenes && scenes.length > 0 && scenes.some((s) => {
+      if (!s || typeof s !== 'object') return true;
+      return !(s.movie_url && s.map_url);
+    }));
     return {
       ...d,
       driverIdValid,
@@ -676,16 +741,34 @@ app.get('/', (req, res) => {
       highRiskOpInvalid,
       highRiskGuidanceInvalid,
       sceneDatetimeInvalid,
-      sceneLatestFlagInvalid
+      sceneLatestFlagInvalid,
+      sceneViolationInvalid,
+      sceneRiskInvalid,
+      sceneLeftTurnTimingInvalid,
+      sceneSpeedInvalid,
+      sceneLeftTurnDiffInvalid,
+      sceneLeftTurnAccelDecelInvalid,
+      sceneUrlMissing
     };
   });
   try {
+    const validViolationTypesByOpPlain = Object.fromEntries(
+      Object.entries(validViolationTypesByOp.map || {}).map(([opKey, phaseMap]) => [
+        opKey,
+        Object.fromEntries(Object.entries(phaseMap || {}).map(([phaseKey, set]) => [phaseKey, Array.from(set || [])]))
+      ])
+    );
     res.render('pages/report-links', {
       reportTitle: '運転診断レポート一覧',
       drivers: driversWithValidity,
       token,
       validOperationTypes: Array.from(validOpTypes),
-      validGuidanceTypes: Array.from(validGuidanceTypes)
+      validGuidanceTypes: Array.from(validGuidanceTypes),
+      validViolationTypesByOp: validViolationTypesByOpPlain,
+      allowedRiskTypes: Array.from(allowedRiskTypes),
+      allowedLeftTurnTimings: Array.from(allowedLeftTurnTimings),
+      allowedLeftTurnAccelDecel: Array.from(allowedLeftTurnAccelDecel),
+      validViolationTypesFlat: Array.from(validViolationTypesByOp.flat || [])
     });
   } catch (readErr) {
     console.error(readErr);
