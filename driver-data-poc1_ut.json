@@ -1,0 +1,70 @@
+[		
+	{	
+	  "driver_id": "D0000001",	
+	  "driver_name": "安全　太郎ああああ",	
+	  "company_name": "SSX",	
+	  "branch_name": "八王子北支店",	
+	  "period": {	
+	    "start_date": "2025-11-01",	
+	    "end_date": "2025-11-30",	
+	    "days_count": 200,	
+	    "total_minutes": 9600	
+	  },	
+	  "high_risk_operation_type": "left_turn",	
+	  "high_risk_guidance_type": "turning_left_speed",	
+	  "scenes": [	
+	   {	
+	      "datetime": "2025-11-24T12:03:15+09:00",	
+	      "latest_violation_flg": 1,	
+	      "violation_type": "sudden_accel_or_decel",	
+	      "risk_type": "hard_braking",	
+	      "reverse_speed_val": null,	
+	      "turning_left_speed_val": null,	
+	      "left_turn_timing_type": "during_left_turn",	
+	      "left_turn_accel_decel_type": "sudden_acceleration",	
+	      "turning_left_speed_diff_val": 5,	
+	      "movie_url": "http://yahoo.co.jp",	
+	      "map_url": "https://www.google.com/maps/search/?api=1&query=35.681236,139.767125"	
+	    },	   {	
+	      "datetime": "2025-11-24T12:03:15+09:00",	
+	      "latest_violation_flg": 1,	
+	      "violation_type": "sudden_accel_or_decel",	
+	      "risk_type": "hard_braking",	
+	      "reverse_speed_val": null,	
+	      "turning_left_speed_val": null,	
+	      "left_turn_timing_type": "during_left_turn",	
+	      "left_turn_accel_decel_type": "sudden_acceleration",	
+	      "turning_left_speed_diff_val": 5,	
+	      "movie_url": "http://yahoo.co.jp",	
+	      "map_url": "https://www.google.com/maps/search/?api=1&query=35.681236,139.767125"	
+	    },
+		{	
+	      "datetime": "2025-11-24T12:03:15+09:00",	
+	      "latest_violation_flg": 0,	
+	      "violation_type": "over_threshold_speed",	
+	      "risk_type": "near_miss",	
+	      "reverse_speed_val": null,	
+	      "turning_left_speed_val": 99,	
+	      "left_turn_timing_type": null,	
+	      "left_turn_accel_decel_type": null,	
+	      "turning_left_speed_diff_val": null,	
+	      "movie_url": "http://yahoo.co.jp",	
+	      "map_url": "https://www.google.com/maps/search/?api=1&query=35.681236,139.767125"
+	    },
+		{	
+	      "datetime": "2025-11-24T12:03:15+09:00",	
+	      "latest_violation_flg": 0,	
+	      "violation_type": "over_threshold_speed",	
+	      "risk_type": "near_miss",	
+	      "reverse_speed_val": null,	
+	      "turning_left_speed_val": 99,	
+	      "left_turn_timing_type": null,	
+	      "left_turn_accel_decel_type": null,	
+	      "turning_left_speed_diff_val": null,	
+	      "movie_url": "http://yahoo.co.jp",	
+	      "map_url": "https://www.google.com/maps/search/?api=1&query=35.681236,139.767125"
+	    }
+
+	]
+	}
+]		

@@ -771,7 +771,7 @@ body.print-a4 {
   color:#fff;
   border-radius:0;
   padding-right:1mm;
-  margin-right:5mm;
+
 }
 .gaiyou-checkCard__row--offset{
   margin-left:-1.6em;
@@ -939,11 +939,10 @@ body.print-a4 {
   display:flex;
   flex-direction:column;
   gap:0.5mm;
-  transform:translateY(-2.0mm); /* 発生日・違反疑い・危険疑いをわずかに上げる */
 }
 .gaiyou-scene__metaItem{
   display:flex;
-  gap:1.2mm;
+  gap:2.0mm;
   align-items:baseline;
   flex-wrap:wrap;
   margin-bottom:0.2mm;
@@ -959,7 +958,7 @@ body.print-a4 {
   font-weight:500;
   font-size:10px;
   color:#1E1E1E;
-  margin:0;
+  margin:0.5mm;
   letter-spacing:0.01em;
 }
 .gaiyou-scene__meta dd{
@@ -974,6 +973,7 @@ body.print-a4 {
   grid-template-columns:repeat(2,1fr);
   gap:1.0mm;
   margin-top:-5mm; /* bring media closer to hazard label block */
+  justify-items:center; /* 固定サイズのサムネイルを中央寄せ */
 }
 .gaiyou-mediaFrame{
   border-radius:0;
@@ -993,7 +993,9 @@ body.print-a4 {
   color:#fff;
   padding:0;
   overflow:hidden;
-  margin-left:-4mm; /* bring media closer to hazard label block */
+  margin-left:1.0mm; /* bring media closer to hazard label block */
+  width:380px;
+  height:170px;
 }
 .gaiyou-mediaFrame--map{
   background-image:none;
@@ -1001,6 +1003,8 @@ body.print-a4 {
   padding:0;
   overflow:hidden;
   margin-left:-8mm; /* bring media closer to hazard label block */
+  width:265px;
+  height:170px;
 }
 .gaiyou-mediaFrame__link{
   display:block;
@@ -1009,23 +1013,23 @@ body.print-a4 {
 }
 .gaiyou-mediaFrame__thumb{
   position:relative;
-  width:93%;
-  height:93%;
-  overflow:visible; /* ボタンの縁が切れないようにする */
+  overflow:hidden; /* ボタンや画像が枠外へ出ないようにする */
 }
 .gaiyou-mediaFrame__thumb img{
   width:100%;
   height:100%;
-  object-fit:cover;
+  object-position:center;
   display:block;
-  transform:scale(0.9);
-  transform-origin:center;
+  transform:none;
   border-radius:5px; /* サムネイルの角をわずかに丸くする */
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
+
 .gaiyou-mediaFrame__cta{
   position:absolute;
-  right:20px; /* 左へ2mm移動 */
-  bottom:20px; /* 上へ3mm移動 */
+  right:10px; 
+  bottom:10px; 
   background:transparent;
   padding:0;
   border-radius:0;
@@ -1062,7 +1066,7 @@ body.print-a4 {
   border:1px solid #e4e8f1;
   border-radius:5px;
   background:#fff;
-  padding:1.3mm 2.5mm; /* 上下を2mm増やす */
+  padding:2.5mm 2.5mm; /* 上下を2mm増やす */
   display:flex;
   flex-direction:column;
   color:#4b5571;

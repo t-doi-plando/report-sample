@@ -668,7 +668,7 @@ app.get('/', (req, res) => {
     const periodInvalidFormat = !periodMissing && (!isValidIsoDate(startRaw) || !isValidIsoDate(endRaw));
     const daysRaw = d?.period?.days_count;
     const daysMissing = daysRaw === undefined || daysRaw === null || `${daysRaw}` === '';
-    const daysInvalidFormat = !daysMissing && !(Number.isInteger(Number(daysRaw)) && /^\d{3}$/.test(String(daysRaw)));
+    const daysInvalidFormat = !daysMissing && !Number.isInteger(Number(daysRaw));
     const minutesRaw = d?.period?.total_minutes;
     const minutesMissing = minutesRaw === undefined || minutesRaw === null || `${minutesRaw}` === '';
     const minutesInvalidFormat = !minutesMissing && !Number.isInteger(Number(minutesRaw));
@@ -694,7 +694,7 @@ app.get('/', (req, res) => {
     const sceneRiskInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
       if (!s || typeof s !== 'object') return true;
       const risk = s.risk_type;
-      if (!risk) return true;
+      if (!risk) return false; // 未設定は許容
       return !allowedRiskTypes.has(risk);
     }));
     const sceneLeftTurnTimingInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
