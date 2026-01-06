@@ -63,9 +63,9 @@
               <div class="error-inline">稼働期間の開始日・終了日はyyyy-mm-dd形式で設定してください（現在: <%= (driver.period && driver.period.start_date) || '-' %> 〜 <%= (driver.period && driver.period.end_date) || '-' %>）</div>
             <% } %>
             <% if (driver.daysMissing) { %>
-              <div class="error-inline">稼働日数（日数）が未設定です。3桁の整数で設定してください。</div>
+              <div class="error-inline">稼働日数（日数）が未設定です。整数で設定してください。</div>
             <% } else if (driver.daysInvalidFormat) { %>
-              <div class="error-inline">稼働日数（日数）は3桁の整数で設定してください（現在: <%= (driver.period && driver.period.days_count) ?? '-' %>）</div>
+              <div class="error-inline">稼働日数（日数）は整数で設定してください（現在: <%= (driver.period && driver.period.days_count) ?? '-' %>）</div>
             <% } %>
             <% if (driver.minutesMissing) { %>
               <div class="error-inline">稼働時間（分）が未設定です。整数で設定してください。</div>
@@ -214,11 +214,9 @@
       const d = new Date(val);
       return !Number.isNaN(d.getTime());
     };
-    const isValidThreeDigitInt = (val) => {
+    const isValidIntegerValue = (val) => {
       if (val === undefined || val === null || `${val}` === '') return false;
-      const str = String(val);
-      if (!/^\d{3}$/.test(str)) return false;
-      const num = Number(str);
+      const num = Number(val);
       return Number.isInteger(num);
     };
     const isValidInteger = (val) => {
@@ -272,7 +270,7 @@
       const periodInvalidFormat = !periodMissing && (!isValidIsoDate(startRaw) || !isValidIsoDate(endRaw));
       const daysRaw = period.days_count;
       const daysMissing = daysRaw === undefined || daysRaw === null || `${daysRaw}` === '';
-      const daysInvalidFormat = !daysMissing && !isValidThreeDigitInt(daysRaw);
+      const daysInvalidFormat = !daysMissing && !isValidIntegerValue(daysRaw);
       const minutesRaw = period.total_minutes;
       const minutesMissing = minutesRaw === undefined || minutesRaw === null || `${minutesRaw}` === '';
       const minutesInvalidFormat = !minutesMissing && !isValidInteger(minutesRaw);
@@ -297,6 +295,7 @@
       const sceneRiskInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
         if (!s || typeof s !== 'object') return true;
         const risk = s.risk_type;
+        if (!risk) return false; // 未設定は許容
         return !isValidRiskType(risk);
       }));
       const sceneLeftTurnTimingInvalid = !!(scenes && scenes.length > 0 && scenes.some((s) => {
@@ -381,9 +380,9 @@
           errors.push(`稼働期間の開始日・終了日はyyyy-mm-dd形式で設定してください（現在: ${driver.period.start_date || '-'} 〜 ${driver.period.end_date || '-'})`);
         }
         if (driver.daysMissing) {
-          errors.push('稼働日数（日数）が未設定です。3桁の整数で設定してください。');
+          errors.push('稼働日数（日数）が未設定です。整数で設定してください。');
         } else if (driver.daysInvalidFormat) {
-          errors.push(`稼働日数（日数）は3桁の整数で設定してください（現在: ${driver.period.days_count ?? '-'})`);
+          errors.push(`稼働日数（日数）は整数で設定してください（現在: ${driver.period.days_count ?? '-'})`);
         }
         if (driver.minutesMissing) {
           errors.push('稼働時間（分）が未設定です。整数で設定してください。');

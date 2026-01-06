@@ -2,3 +2,5 @@ node_modules/
 package-lock.json
 .env
 NiceToHave.md
+public/img/pict/
+test_json/
