@@ -377,7 +377,18 @@ function buildMockReports(drivers, config, staticMapKey = '') {
       if (!vtype) return acc;
       const ts = toTimestamp(s && s.datetime);
       if (ts === null) return acc;
-      if (!acc[vtype] || ts > acc[vtype].ts) acc[vtype] = { ts, scene: s };
+      const isFlagged = !!(s && (s.latest_violation_flg ?? s.latestViolationFlg));
+      const current = acc[vtype];
+      if (!current) {
+        acc[vtype] = { ts, scene: s, flagged: isFlagged };
+        return acc;
+      }
+      // 優先度: latest_violation_flg が 1 のものを優先し、同じ優先度なら日時が新しい方
+      if (current.flagged !== isFlagged) {
+        if (isFlagged) acc[vtype] = { ts, scene: s, flagged: isFlagged };
+        return acc;
+      }
+      if (ts > current.ts) acc[vtype] = { ts, scene: s, flagged: isFlagged };
       return acc;
     }, {});
     const accelDecelCount = countAccelDecel(pickedScene, scenes);
@@ -393,7 +404,18 @@ function buildMockReports(drivers, config, staticMapKey = '') {
         const base = violationEntry && violationEntry.check_detail ? violationEntry.check_detail : '詳細文言が未設定です';
         const thresholds = (config && config.thresholds) || {};
         const derived = { accel_or_decel_count: accelDecelCount };
-        return applyTemplatePlaceholders(base, [pickedScene, thresholds, derived], labelMaps);
+        const applied = applyTemplatePlaceholders(base, [pickedScene, thresholds, derived], labelMaps);
+        // 左折×速度（急加減速）の概要文言では件数を省く
+        const shouldStripCount =
+          opType === 'left_turn' &&
+          guideType === 'turning_left_speed' &&
+          violationType === 'sudden_accel_or_decel';
+        if (shouldStripCount) {
+          // 「が 2件検出されました」等を「が検出されました」に置換
+          const stripped = applied.replace(/が\s*\d+\s*件検出されました/g, 'が検出されました');
+          return stripped;
+        }
+        return applied;
       })();
       const riskRaw = pickedScene.risk_type ?? pickedScene.riskType ?? '';
       const riskLabel = (() => {
@@ -499,6 +521,7 @@ function buildMockReports(drivers, config, staticMapKey = '') {
           timeLabel: formatTimeLabel(s.datetime),
           violationSummary: summary,
           riskLabel,
+          riskType: riskRaw || '',
           isLatest: !!(s && (s.latest_violation_flg ?? s.latestViolationFlg)),
           movieUrl: s && (s.movie_url || s.movieUrl) || '',
           mapUrl: s && (s.map_url || s.mapUrl) || ''
@@ -625,7 +648,7 @@ app.get('/', (req, res) => {
     const d = new Date(val);
     return !Number.isNaN(d.getTime());
   };
-  const allowedRiskTypes = new Set(['hard_braking', 'near_miss']);
+  const allowedRiskTypes = new Set(['hard_braking', 'near_miss', 'near_miss_hard_braking']);
   const allowedLeftTurnTimings = new Set(['before_left_turn', 'during_left_turn']);
   const allowedLeftTurnAccelDecel = new Set(['sudden_acceleration', 'sudden_deceleration']);
   const sceneDatetimePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+09:00$/;

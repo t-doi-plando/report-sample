@@ -33,7 +33,7 @@
         "check_list": "左折時に、時速{turning_left_threshold}km/h未満までしっかり減速できているか",
         "check_detail": "左折時の速度が{turning_left_speed_val}km/h でした",
         "advice_comment": "左折までに予め速度を落としておくことで、巻き込み確認の余裕ができます。焦らずゆっくり入りましょう。",
-        "check_summary": "速度超過：+{calc: turning_left_speed_val - turning_left_threshold}km/h \n 基準値：{turning_left_threshold}km/h 未満"
+        "check_summary": "速度超過：+{calc: turning_left_speed_val - (turning_left_threshold - 1)}km/h \n 基準値：{turning_left_threshold}km/h 未満"
       },
       "sudden_accel_or_decel": {
         "check_list": "左折前から左折が終わるまで、一定の速度でスムーズに回れているか",
@@ -85,7 +85,7 @@
         "check_list": "バック中の速度が速すぎず、ゆっくりと操作できているか（基準値{reverse_threshold}km/h未満）",
         "check_detail": "バック中の速度が、{reverse_speed_val}km/h でした",
         "advice_comment": "バック中は視界が限られ、少しの判断遅れが接触につながります。低速をキープし、周囲に急な動きがあっても余裕を持って対応しましょう。",
-        "check_summary": "速度超過：+{calc: reverse_speed_val - reverse_threshold}km/h \n 基準値：{reverse_threshold}km/h 未満"
+        "check_summary": "速度超過：+{calc: reverse_speed_val - (reverse_threshold - 1)}km/h \n 基準値：{reverse_threshold}km/h 未満"
       },
       "insufficient_left_check": {
         "check_list": "バック中に、左側のサイドミラーや、歩行者・障害物を確認しているか",

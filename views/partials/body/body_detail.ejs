@@ -71,9 +71,11 @@
                 </div>
               <div class="detail-table__cell detail-table__danger">
                 <% if (scene.riskLabel) { %>
-                  <% const riskLabel = scene.riskLabel || ''; 
-                     const riskIcon = riskLabel.includes('急ブレーキ') ? '/img/icon/hard_brake.svg'
-                                   : (riskLabel.includes('接触未遂') ? '/img/icon/near_miss_contact.svg' : null);
+                  <% const riskLabel = scene.riskLabel || '';
+                     const riskType = scene.riskType || '';
+                     const riskIcon = riskType === 'hard_braking' ? '/img/icon/hard_brake.svg'
+                                   : (riskType === 'near_miss' ? '/img/icon/near_miss_contact.svg'
+                                   : (riskType === 'near_miss_hard_braking' ? '/img/icon/near_miss_hard_braking.svg' : null));
                   %>
                   <% if (riskIcon) { %>
                     <span class="detail-tag detail-tag--danger detail-tag--icon detail-tag--iconOnly">

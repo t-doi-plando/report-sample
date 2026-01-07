@@ -258,7 +258,7 @@ body.print-a4 {
   --detail-col-icon:10mm;
   --detail-col-date:41mm;
   --detail-col-violation:60mm;
-  --detail-col-danger:40mm;
+  --detail-col-danger:41mm;
   --detail-col-links:35mm;
   display:flex;
   flex-direction:column;

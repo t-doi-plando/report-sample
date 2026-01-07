@@ -17,7 +17,7 @@
 	      "datetime": "2025-11-24T12:03:15+09:00",	
 	      "latest_violation_flg": 1,	
 	      "violation_type": "sudden_accel_or_decel",	
-	      "risk_type": "hard_braking",	
+	      "risk_type": "near_miss_hard_braking",	
 	      "reverse_speed_val": null,	
 	      "turning_left_speed_val": null,	
 	      "left_turn_timing_type": "before_left_turn",	
@@ -671,9 +671,9 @@
 	  "scenes": [	
 	   {	
 	      "datetime": "2025-11-24T12:03:15+09:00",	
-	      "latest_violation_flg": 0,	
+	      "latest_violation_flg": 1,	
 	      "violation_type": "over_threshold_speed",	
-	      "risk_type": "hard_braking",	
+	      "risk_type": "near_miss_hard_braking",	
 	      "reverse_speed_val": null,	
 	      "turning_left_speed_val": 199,	
 	      "left_turn_timing_type": null,	
@@ -684,9 +684,9 @@
 	    },
 		{	
 	      "datetime": "2025-11-27T12:03:15+09:00",	
-	      "latest_violation_flg": 1,	
+	      "latest_violation_flg": 0,	
 	      "violation_type": "sudden_accel_or_decel",	
-	      "risk_type": "",	
+	      "risk_type": "hard_braking",	
 	      "reverse_speed_val": null,	
 	      "turning_left_speed_val": null,	
 	      "left_turn_timing_type": "during_left_turn",	
